@@ -1,5 +1,5 @@
 export const FOOTER_TEXT = {
-  DEFAULT_EMAIL: "hello@skillbirdge.com",
+  DEFAULT_EMAIL: "hello@skillbridge.com",
   DEFAULT_PHONE: "+91 91813 23 2309",
   DEFAULT_LOCATION: "Somewhere in the World",
   DEFAULT_COPYRIGHT: "YourBank All Rights Reserved",

@@ -12,7 +12,7 @@ const defaultConfig: FooterConfig = {
     { label: "Security", href: "/security" },
   ],
   contact: {
-    email: "hello@skillbirdge.com",
+    email: "hello@skillbridge.com",
     phone: "+91 91813 23 2309",
     location: "Somewhere in the World",
   },
@@ -29,15 +29,21 @@ function LogoIcon(props: React.SVGProps<SVGSVGElement>) {
     <svg
       width="40"
       height="40"
-      viewBox="0 0 36 36"
+      viewBox="0 0 40 40"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >
-      <rect width="36" height="36" rx="8" fill="#CAFF33" />
+      <rect width="40" height="40" rx="8" fill="#CAFF33" />
       <path
-        d="M18 8C13.58 8 10 11.58 10 16V26H14V16C14 13.79 15.79 12 18 12C20.21 12 22 13.79 22 16V26H26V16C26 11.58 22.42 8 18 8Z"
-        fill="#1A1A1A"
+        d="M20 8L32 20L20 32L8 20L20 8Z"
+        fill="#CAFF33"
+        stroke="#1E1E1E"
+        strokeWidth="2"
+      />
+      <path
+        d="M20 14L26 20L20 26L14 20L20 14Z"
+        fill="#1E1E1E"
       />
     </svg>
   );
@@ -46,10 +52,10 @@ function LogoIcon(props: React.SVGProps<SVGSVGElement>) {
 function MailIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" {...props}>
-      <rect width="24" height="24" rx="4" fill="#262626" />
+      <rect width="24" height="24" rx="4" fill="#CAFF33" />
       <path
         d="M4 6H20V18H4V6ZM12 12L4 6V18H20V6L12 12ZM12 12L20 6H4L12 12Z"
-        fill="#CAFF33"
+        fill="#1A1A1A"
       />
     </svg>
   );
@@ -58,10 +64,10 @@ function MailIcon(props: React.SVGProps<SVGSVGElement>) {
 function PhoneIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" {...props}>
-      <rect width="24" height="24" rx="4" fill="#262626" />
+      <rect width="24" height="24" rx="4" fill="#CAFF33" />
       <path
         d="M6.5 4C6.5 4 8.5 4 9.5 5C10.5 6 10.5 8 10.5 8C10.5 8 10 9.5 8.5 10C8.5 10 9 11 10 12C11 13 12 13.5 12 13.5C12.5 12 14 11.5 14 11.5C14 11.5 16 11.5 17 12.5C18 13.5 18 15.5 18 15.5C18 15.5 17.5 17.5 15.5 18.5C13.5 19.5 10.5 18.5 8 16C5.5 13.5 4.5 10.5 5.5 8.5C6.5 6.5 8.5 6 8.5 6L6.5 4Z"
-        fill="#CAFF33"
+        fill="#1A1A1A"
       />
     </svg>
   );
@@ -70,10 +76,10 @@ function PhoneIcon(props: React.SVGProps<SVGSVGElement>) {
 function LocationIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" {...props}>
-      <rect width="24" height="24" rx="4" fill="#262626" />
+      <rect width="24" height="24" rx="4" fill="#CAFF33" />
       <path
         d="M12 2C8.13 2 5 5.13 5 9C5 14 12 22 12 22C12 22 19 14 19 9C19 5.13 15.87 2 12 2ZM12 11.5C11.17 11.5 10.5 10.83 10.5 10C10.5 9.17 11.17 8.5 12 8.5C12.83 8.5 13.5 9.17 13.5 10C13.5 10.83 12.83 11.5 12 11.5Z"
-        fill="#CAFF33"
+        fill="#1A1A1A"
       />
     </svg>
   );
@@ -229,7 +235,7 @@ export function Footer() {
                   key={social.name}
                   href={social.url}
                   data-testid={`footer-social-${social.name}`}
-                  className="flex h-[52px] w-[52px] items-center justify-center rounded-full border border-[#262626] bg-[#1A1A1A] text-[#CAFF33] transition-colors hover:border-[#CAFF33]"
+                  className="flex h-[52px] w-[52px] items-center justify-center rounded-full bg-[#CAFF33] text-[#1A1A1A] transition-opacity hover:opacity-80"
                   aria-label={social.name}
                 >
                   <Icon className="h-6 w-6" />

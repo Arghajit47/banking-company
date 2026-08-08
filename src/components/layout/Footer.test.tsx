@@ -109,7 +109,7 @@ describe("Footer", () => {
     footerMock = { ...baseMock, data: undefined, error: new Error("Network error") };
     render(<Footer />);
 
-    expect(screen.getByTestId("footer-email")).toHaveTextContent("hello@skillbirdge.com");
+    expect(screen.getByTestId("footer-email")).toHaveTextContent("hello@skillbridge.com");
     expect(screen.getByTestId("footer-copyright")).toHaveTextContent("YourBank All Rights Reserved");
   });
 
@@ -118,7 +118,7 @@ describe("Footer", () => {
     render(<Footer />);
 
     expect(screen.getByTestId("footer-nav-home")).toHaveTextContent("Home");
-    expect(screen.getByTestId("footer-email")).toHaveTextContent("hello@skillbirdge.com");
+    expect(screen.getByTestId("footer-email")).toHaveTextContent("hello@skillbridge.com");
   });
 
   it("renders fallback during initial hydration guard when unmounted", () => {

@@ -15,22 +15,25 @@ const navLinks = [
 function LogoIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
-      width="36"
-      height="36"
-      viewBox="0 0 36 36"
+      width="40"
+      height="40"
+      viewBox="0 0 40 40"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"
       {...props}
     >
-      <rect width="36" height="36" rx="8" fill="#CAFF33" />
+      <rect width="40" height="40" rx="8" fill="#CAFF33" />
       <path
-        d="M10 18h16M18 10v16"
+        d="M20 8L32 20L20 32L8 20L20 8Z"
+        fill="#CAFF33"
         stroke="#1E1E1E"
-        strokeWidth="3"
-        strokeLinecap="round"
+        strokeWidth="2"
       />
-      <circle cx="18" cy="18" r="5" stroke="#1E1E1E" strokeWidth="2" />
+      <path
+        d="M20 14L26 20L20 26L14 20L20 14Z"
+        fill="#1E1E1E"
+      />
     </svg>
   );
 }
@@ -102,7 +105,7 @@ function NavbarLink({
             ? "text-sm leading-[21px] desktop:text-lg"
             : "text-base leading-6"
         }
-        ${active ? "px-5 py-2.5 bg-[#1A1A1A] border border-[#262626] rounded-full desktop:px-6 desktop:py-3" : "px-2 py-1"}
+        ${active ? "rounded-full bg-[#262626] px-6 py-3" : "px-2 py-1"}
       `}
       aria-current={active ? "page" : undefined}
     >
