@@ -1,6 +1,7 @@
 /** Centralized constants for the test-automation suite — single source of truth. */
 export * from "./homepage-constants";
 export * from "./api-constants";
+export * from "./footer-constants";
 
 // Banking Company Netlify deploy target
 export const BASE_URL = "https://banking-company-440.netlify.app";
