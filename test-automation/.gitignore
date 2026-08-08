@@ -1,0 +1,6 @@
+node_modules/
+test-results/
+lighthouse-reports
+playwright-report/
+.env
+pulse-report/
