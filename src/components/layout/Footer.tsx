@@ -1,13 +1,28 @@
 "use client";
 
 import Link from "next/link";
+import { useFooterConfig, type FooterConfig } from "@/lib/footer";
+import { useMounted } from "@/lib/use-mounted";
 
-const navLinks = [
-  { label: "Home", href: "/" },
-  { label: "Careers", href: "/careers" },
-  { label: "About", href: "/about" },
-  { label: "Security", href: "/security" },
-];
+const defaultConfig: FooterConfig = {
+  navLinks: [
+    { label: "Home", href: "/" },
+    { label: "Careers", href: "/careers" },
+    { label: "About", href: "/about" },
+    { label: "Security", href: "/security" },
+  ],
+  contact: {
+    email: "hello@skillbirdge.com",
+    phone: "+91 91813 23 2309",
+    location: "Somewhere in the World",
+  },
+  social: [
+    { name: "facebook", url: "#" },
+    { name: "x", url: "#" },
+    { name: "linkedin", url: "#" },
+  ],
+  copyright: "YourBank All Rights Reserved",
+};
 
 function LogoIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
@@ -64,17 +79,12 @@ function LocationIcon(props: React.SVGProps<SVGSVGElement>) {
   );
 }
 
-function SocialIcon({ children }: { children: React.ReactNode }) {
-  return (
-    <button
-      type="button"
-      className="flex h-[52px] w-[52px] items-center justify-center rounded-full border border-[#262626] bg-[#1A1A1A] text-[#CAFF33] transition-colors hover:border-[#CAFF33]"
-      aria-label="social"
-    >
-      {children}
-    </button>
-  );
-}
+const socialIconMap: Record<string, React.ComponentType<React.SVGProps<SVGSVGElement>>> = {
+  facebook: FacebookIcon,
+  x: TwitterIcon,
+  twitter: TwitterIcon,
+  linkedin: LinkedInIcon,
+};
 
 function FacebookIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
@@ -100,7 +110,34 @@ function LinkedInIcon(props: React.SVGProps<SVGSVGElement>) {
   );
 }
 
+function SkeletonText({
+  children,
+  isLoading,
+  className = "",
+}: {
+  children: React.ReactNode;
+  isLoading: boolean;
+  className?: string;
+}) {
+  if (!isLoading) return <>{children}</>;
+  return (
+    <span
+      className={`inline-block animate-pulse rounded bg-[#262626] text-transparent ${className}`}
+      aria-hidden="true"
+    >
+      {children}
+    </span>
+  );
+}
+
 export function Footer() {
+  const mounted = useMounted();
+  const { data, error, isLoading } = useFooterConfig();
+
+  const config =
+    error || !data || data.navLinks.length === 0 ? defaultConfig : data;
+  const showSkeleton = !mounted || isLoading;
+
   return (
     <footer
       data-testid="footer"
@@ -124,14 +161,16 @@ export function Footer() {
             data-testid="footer-nav"
             className="flex flex-wrap items-center justify-center gap-8 md:gap-[78px]"
           >
-            {navLinks.map((link) => (
+            {config.navLinks.map((link) => (
               <Link
-                key={link.href}
+                key={link.href + link.label}
                 href={link.href}
                 data-testid={`footer-nav-${link.label.toLowerCase()}`}
                 className="text-lg font-normal text-white transition-opacity hover:opacity-70"
               >
-                {link.label}
+                <SkeletonText isLoading={showSkeleton} className="min-w-[60px]">
+                  {link.label}
+                </SkeletonText>
               </Link>
             ))}
           </nav>
@@ -145,27 +184,33 @@ export function Footer() {
           className="flex flex-col flex-wrap items-center justify-center gap-6 md:flex-row md:gap-10 xl:gap-[60px]"
         >
           <Link
-            href="mailto:hello@skillbirdge.com"
+            href={`mailto:${config.contact.email}`}
             data-testid="footer-email"
             className="flex items-center gap-[18px] text-lg text-white transition-opacity hover:opacity-70"
           >
             <MailIcon />
-            hello@skillbirdge.com
+            <SkeletonText isLoading={showSkeleton} className="min-w-[180px]">
+              {config.contact.email}
+            </SkeletonText>
           </Link>
           <Link
-            href="tel:+9191813232309"
+            href={`tel:${config.contact.phone.replace(/\s/g, "")}`}
             data-testid="footer-phone"
             className="flex items-center gap-[18px] text-lg text-white transition-opacity hover:opacity-70"
           >
             <PhoneIcon />
-            +91 91813 23 2309
+            <SkeletonText isLoading={showSkeleton} className="min-w-[160px]">
+              {config.contact.phone}
+            </SkeletonText>
           </Link>
           <span
             data-testid="footer-location"
             className="flex items-center gap-[18px] text-lg text-white"
           >
             <LocationIcon />
-            Somewhere in the World
+            <SkeletonText isLoading={showSkeleton} className="min-w-[180px]">
+              {config.contact.location}
+            </SkeletonText>
           </span>
         </div>
 
@@ -177,22 +222,29 @@ export function Footer() {
             data-testid="footer-socials"
             className="flex items-center gap-3"
           >
-            <SocialIcon>
-              <FacebookIcon className="h-6 w-6" />
-            </SocialIcon>
-            <SocialIcon>
-              <TwitterIcon className="h-6 w-6" />
-            </SocialIcon>
-            <SocialIcon>
-              <LinkedInIcon className="h-6 w-6" />
-            </SocialIcon>
+            {config.social.map((social) => {
+              const Icon = socialIconMap[social.name] ?? FacebookIcon;
+              return (
+                <Link
+                  key={social.name}
+                  href={social.url}
+                  data-testid={`footer-social-${social.name}`}
+                  className="flex h-[52px] w-[52px] items-center justify-center rounded-full border border-[#262626] bg-[#1A1A1A] text-[#CAFF33] transition-colors hover:border-[#CAFF33]"
+                  aria-label={social.name}
+                >
+                  <Icon className="h-6 w-6" />
+                </Link>
+              );
+            })}
           </div>
 
           <p
             data-testid="footer-copyright"
             className="text-center text-lg text-white"
           >
-            YourBank All Rights Reserved
+            <SkeletonText isLoading={showSkeleton} className="min-w-[220px]">
+              {config.copyright}
+            </SkeletonText>
           </p>
 
           <div
