@@ -13,6 +13,8 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-lexend: var(--font-lexend);
+  --breakpoint-laptop: 1440px;
+  --breakpoint-desktop: 1920px;
 }
 
 @media (prefers-color-scheme: dark) {
