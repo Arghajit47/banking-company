@@ -10,6 +10,7 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "test": "vitest run",
+    "db:prepare": "prisma generate && prisma db push --accept-data-loss --skip-generate && prisma db seed",
     "db:generate": "prisma generate",
     "db:push": "prisma db push --accept-data-loss --skip-generate",
     "db:migrate": "prisma migrate dev",
