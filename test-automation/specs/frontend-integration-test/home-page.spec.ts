@@ -16,4 +16,8 @@ test.describe("Home Page Navbar Auth Integration", () => {
   test("mobile menu shows auth CTAs", async ({ homepage }) => {
     await homepage.assertMobileAuthToggle();
   });
+
+  test("footer renders with API-driven contact details", async ({ footerPage }) => {
+    await footerPage.assertFooterRendersFromApi();
+  });
 });
