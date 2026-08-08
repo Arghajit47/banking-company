@@ -1,7 +1,9 @@
 "use client";
 
 import { useState, useCallback, useEffect } from "react";
+import Image from "next/image";
 import Link from "next/link";
+import { useAuthStatus } from "@/lib/auth";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -111,6 +113,9 @@ function NavbarLink({
 
 export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { data: auth } = useAuthStatus();
+
+  const isLoggedIn = auth?.isLoggedIn ?? false;
 
   const toggleMenu = useCallback(() => setMenuOpen((open) => !open), []);
   const closeMenu = useCallback(() => setMenuOpen(false), []);
@@ -171,20 +176,46 @@ export function Navbar() {
           className="hidden items-center gap-6 md:flex"
           data-testid="desktop-auth"
         >
-          <button
-            type="button"
-            data-testid="nav-sign-up"
-            className="text-sm leading-[21px] font-medium text-white transition hover:text-[#CAFF33] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#CAFF33] desktop:text-lg"
-          >
-            Sign Up
-          </button>
-          <button
-            type="button"
-            data-testid="nav-login"
-            className="rounded-[82px] bg-[#CAFF33] px-6 py-3 text-sm font-semibold text-[#1E1E1E] transition hover:brightness-110 hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#1A1A1A] desktop:px-[30px] desktop:py-[14px] desktop:text-lg"
-          >
-            Login
-          </button>
+          {isLoggedIn ? (
+            <div className="flex items-center gap-3" data-testid="nav-user">
+              {auth?.user?.avatarUrl && (
+                <Image
+                  src={auth.user.avatarUrl}
+                  alt=""
+                  width={32}
+                  height={32}
+                  className="rounded-full object-cover"
+                />
+              )}
+              <span className="text-sm font-medium text-white desktop:text-lg">
+                {auth?.user?.name ?? "User"}
+              </span>
+              <button
+                type="button"
+                data-testid="nav-logout"
+                className="text-sm font-medium text-white transition hover:text-[#CAFF33] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#CAFF33] desktop:text-lg"
+              >
+                Logout
+              </button>
+            </div>
+          ) : (
+            <>
+              <button
+                type="button"
+                data-testid="nav-sign-up"
+                className="text-sm leading-[21px] font-medium text-white transition hover:text-[#CAFF33] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#CAFF33] desktop:text-lg"
+              >
+                Sign Up
+              </button>
+              <button
+                type="button"
+                data-testid="nav-login"
+                className="rounded-[82px] bg-[#CAFF33] px-6 py-3 text-sm font-semibold text-[#1E1E1E] transition hover:brightness-110 hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#1A1A1A] desktop:px-[30px] desktop:py-[14px] desktop:text-lg"
+              >
+                Login
+              </button>
+            </>
+          )}
         </div>
 
         {/* Mobile Hamburger */}
@@ -223,20 +254,44 @@ export function Navbar() {
             ))}
           </div>
           <div className="flex flex-col gap-4 pt-2">
-            <button
-              type="button"
-              data-testid="mobile-sign-up"
-              className="w-full rounded-md py-2 text-center text-base font-medium text-white transition hover:text-[#CAFF33] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#CAFF33]"
-            >
-              Sign Up
-            </button>
-            <button
-              type="button"
-              data-testid="mobile-login"
-              className="w-full rounded-[82px] bg-[#CAFF33] py-3 text-center text-base font-semibold text-[#1E1E1E] transition hover:brightness-110 hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#1A1A1A]"
-            >
-              Login
-            </button>
+            {isLoggedIn ? (
+              <div className="flex items-center gap-3" data-testid="mobile-user">
+                {auth?.user?.avatarUrl && (
+                  <Image
+                    src={auth.user.avatarUrl}
+                    alt=""
+                    width={32}
+                    height={32}
+                    className="rounded-full object-cover"
+                  />
+                )}
+                <span className="text-base font-medium text-white">{auth?.user?.name ?? "User"}</span>
+                <button
+                  type="button"
+                  data-testid="mobile-logout"
+                  className="w-full rounded-md py-2 text-center text-base font-medium text-white transition hover:text-[#CAFF33] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#CAFF33]"
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <>
+                <button
+                  type="button"
+                  data-testid="mobile-sign-up"
+                  className="w-full rounded-md py-2 text-center text-base font-medium text-white transition hover:text-[#CAFF33] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#CAFF33]"
+                >
+                  Sign Up
+                </button>
+                <button
+                  type="button"
+                  data-testid="mobile-login"
+                  className="w-full rounded-[82px] bg-[#CAFF33] py-3 text-center text-base font-semibold text-[#1E1E1E] transition hover:brightness-110 hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#1A1A1A]"
+                >
+                  Login
+                </button>
+              </>
+            )}
           </div>
         </div>
       )}

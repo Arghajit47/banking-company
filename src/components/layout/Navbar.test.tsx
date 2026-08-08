@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   render,
   screen,
@@ -8,19 +8,51 @@ import {
 } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import * as matchers from "@testing-library/jest-dom/matchers";
+import { SWRConfig } from "swr";
 import { Navbar } from "./Navbar";
 
 expect.extend(matchers);
 
+const renderWithSWR = (ui: React.ReactNode) =>
+  render(
+    <SWRConfig value={{ provider: () => new Map(), suspense: false }}>{ui}</SWRConfig>
+  );
+
+const mockAuthLoggedOut: {
+  data: { isLoggedIn: boolean; user: { name: string; avatarUrl: string | null } | null };
+  error: undefined;
+  isLoading: boolean;
+  isValidating: boolean;
+  mutate: ReturnType<typeof vi.fn>;
+} = {
+  data: { isLoggedIn: false, user: null },
+  error: undefined,
+  isLoading: false,
+  isValidating: false,
+  mutate: vi.fn(),
+};
+
+const mockAuthLoggedIn = {
+  ...mockAuthLoggedOut,
+  data: { isLoggedIn: true, user: { name: "Argha", avatarUrl: null } },
+};
+
+let currentMock = mockAuthLoggedOut;
+
+vi.mock("@/lib/auth", () => ({
+  useAuthStatus: () => currentMock,
+}));
+
 afterEach(() => {
   cleanup();
+  currentMock = mockAuthLoggedOut;
 });
 
 const links = ["Home", "Careers", "About", "Security"];
 
 describe("Navbar (desktop)", () => {
   it("renders all nav links on desktop", () => {
-    render(<Navbar />);
+    renderWithSWR(<Navbar />);
 
     links.forEach((label) => {
       expect(
@@ -31,15 +63,24 @@ describe("Navbar (desktop)", () => {
     });
   });
 
-  it("renders Sign Up and Login buttons on desktop", () => {
-    render(<Navbar />);
+  it("renders Sign Up and Login buttons on desktop when logged out", () => {
+    renderWithSWR(<Navbar />);
 
     expect(screen.getByTestId("nav-sign-up")).toBeTruthy();
     expect(screen.getByTestId("nav-login")).toBeTruthy();
   });
 
+  it("renders user info when logged in", () => {
+    currentMock = mockAuthLoggedIn;
+
+    renderWithSWR(<Navbar />);
+
+    expect(screen.getByTestId("nav-user")).toBeTruthy();
+    expect(screen.getByText("Argha")).toBeTruthy();
+  });
+
   it("Home link has active styling indicator", () => {
-    const { container } = render(<Navbar />);
+    const { container } = renderWithSWR(<Navbar />);
     const homeLink = container.querySelector('[data-testid="nav-link-home"]');
 
     expect(homeLink).toBeTruthy();
@@ -51,7 +92,7 @@ describe("Navbar (desktop)", () => {
 
 describe("Navbar (mobile)", () => {
   it("hides desktop nav links and shows hamburger on mobile", () => {
-    render(<Navbar />);
+    renderWithSWR(<Navbar />);
 
     const desktopNav = screen.getByTestId("desktop-nav-links");
     expect(desktopNav.className).toContain("hidden");
@@ -61,7 +102,7 @@ describe("Navbar (mobile)", () => {
   });
 
   it("clicking hamburger reveals menu with links, Sign Up and Login", async () => {
-    render(<Navbar />);
+    renderWithSWR(<Navbar />);
     const user = userEvent.setup();
 
     const toggle = screen.getByTestId("nav-mobile-toggle");
@@ -84,7 +125,7 @@ describe("Navbar (mobile)", () => {
   });
 
   it("keyboard Escape closes mobile menu", async () => {
-    render(<Navbar />);
+    renderWithSWR(<Navbar />);
     const user = userEvent.setup();
 
     const toggle = screen.getByTestId("nav-mobile-toggle");
@@ -102,7 +143,7 @@ describe("Navbar (mobile)", () => {
 
 describe("Navbar accessibility", () => {
   it("hamburger has aria-expanded, aria-controls and toggles label", async () => {
-    render(<Navbar />);
+    renderWithSWR(<Navbar />);
     const user = userEvent.setup();
 
     const toggle = screen.getByTestId("nav-mobile-toggle");
@@ -116,7 +157,7 @@ describe("Navbar accessibility", () => {
   });
 
   it("keyboard navigation focuses toggle and links", async () => {
-    render(<Navbar />);
+    renderWithSWR(<Navbar />);
     const user = userEvent.setup();
 
     const expectedFocusOrder = [

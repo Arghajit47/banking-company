@@ -13,6 +13,14 @@ const meta: Meta<typeof Navbar> = {
         { name: "light", value: "#FFFFFF" },
       ],
     },
+    mockData: [
+      {
+        url: "/api/auth/status",
+        method: "GET",
+        status: 200,
+        response: { isLoggedIn: false, user: null },
+      },
+    ],
   },
 };
 
@@ -47,5 +55,22 @@ export const MobileOpen: Story = {
     if (toggle) {
       toggle.click();
     }
+  },
+};
+
+export const LoggedIn: Story = {
+  parameters: {
+    viewport: { defaultViewport: "desktop" },
+    mockData: [
+      {
+        url: "/api/auth/status",
+        method: "GET",
+        status: 200,
+        response: {
+          isLoggedIn: true,
+          user: { name: "Jane Doe", avatarUrl: null },
+        },
+      },
+    ],
   },
 };
