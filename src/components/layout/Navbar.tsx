@@ -97,10 +97,10 @@ function NavbarLink({
         rounded-md text-white transition hover:text-[#CAFF33] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#CAFF33]
         ${
           desktop
-            ? "text-sm leading-[21px] lg:text-base xl:text-lg"
+            ? "text-sm leading-[21px] desktop:text-lg"
             : "text-base leading-6"
         }
-        ${active ? "px-5 py-2.5 bg-[#1A1A1A] border border-[#262626] rounded-full lg:px-6 lg:py-3 xl:px-6 xl:py-3" : "px-2 py-1"}
+        ${active ? "px-5 py-2.5 bg-[#1A1A1A] border border-[#262626] rounded-full desktop:px-6 desktop:py-3" : "px-2 py-1"}
       `}
       aria-current={active ? "page" : undefined}
     >
@@ -135,7 +135,7 @@ export function Navbar() {
     >
       <nav
         aria-label="Primary navigation"
-        className="mx-auto flex h-[68px] max-w-[1920px] items-center justify-between px-4 lg:h-[73px] lg:px-20 xl:h-[95px] xl:px-[162px]"
+        className="mx-auto flex h-[68px] max-w-[1920px] items-center justify-between px-4 laptop:h-[73px] laptop:px-20 desktop:h-[95px] desktop:px-[162px]"
       >
         {/* Logo */}
         <Link
@@ -144,8 +144,8 @@ export function Navbar() {
           data-testid="navbar-logo"
           aria-label="YourBanK home"
         >
-          <LogoIcon className="h-8 w-8 lg:h-9 lg:w-9" />
-          <span className="text-lg font-medium text-white lg:text-xl">
+          <LogoIcon className="h-8 w-8 desktop:h-9 desktop:w-9" />
+          <span className="text-lg font-medium text-white desktop:text-xl">
             YourBanK
           </span>
         </Link>
@@ -174,14 +174,14 @@ export function Navbar() {
           <button
             type="button"
             data-testid="nav-sign-up"
-            className="text-sm leading-[21px] font-medium text-white transition hover:text-[#CAFF33] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#CAFF33] lg:text-base xl:text-lg"
+            className="text-sm leading-[21px] font-medium text-white transition hover:text-[#CAFF33] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#CAFF33] desktop:text-lg"
           >
             Sign Up
           </button>
           <button
             type="button"
             data-testid="nav-login"
-            className="rounded-[82px] bg-[#CAFF33] px-6 py-3 text-sm font-semibold text-[#1E1E1E] transition hover:brightness-110 hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#1A1A1A] lg:px-7 lg:py-3.5 lg:text-base xl:px-[30px] xl:py-[14px] xl:text-lg"
+            className="rounded-[82px] bg-[#CAFF33] px-6 py-3 text-sm font-semibold text-[#1E1E1E] transition hover:brightness-110 hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#1A1A1A] desktop:px-[30px] desktop:py-[14px] desktop:text-lg"
           >
             Login
           </button>
