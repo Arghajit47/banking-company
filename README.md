@@ -1,36 +1,129 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Banking Company
 
-## Getting Started
+A modern, full-stack website for a fictional banking company. Built as a foundation for component-driven development with integrated backend data, isolated UI stories, and Netlify deployment.
 
-First, run the development server:
+## Tech Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **Framework:** [Next.js 15](https://nextjs.org/) (App Router, React 19)
+- **Language:** [TypeScript](https://www.typescriptlang.org/)
+- **Styling:** [Tailwind CSS v4](https://tailwindcss.com/)
+- **Database / ORM:** [Prisma](https://www.prisma.io/) + SQLite (local) / PostgreSQL (production)
+- **UI Workshop:** [Storybook](https://storybook.js.org/)
+- **Testing:** [Vitest](https://vitest.dev/) + Playwright (Storybook test runner)
+- **Deployment:** [Netlify](https://www.netlify.com/)
+
+## Local Development Setup
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/Arghajit47/banking-company.git
+   cd banking-company
+   ```
+
+2. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+3. Copy the example environment file and adjust values if needed:
+
+   ```bash
+   cp .env.example .env.local
+   ```
+
+   The default SQLite path works out of the box for local development.
+
+4. Generate the Prisma client and set up the local database:
+
+   ```bash
+   npm run db:generate
+   npm run db:push
+   npm run db:seed
+   ```
+
+5. Start the development server:
+
+   ```bash
+   npm run dev
+   ```
+
+   Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## Environment Variables
+
+| Variable | Required | DEV value | PROD value | Notes |
+|----------|----------|-----------|------------|-------|
+| `DATABASE_URL` | Yes | `file:./prisma/dev.db` | PostgreSQL URL from Netlify | SQLite locally; PostgreSQL on Netlify. |
+| `NEXT_PUBLIC_APP_ENV` | No | `development` | `production` | Public marker for environment checks. |
+| `NEXT_PUBLIC_API_BASE` | No | `/api` | `/api` | Optional public API base path. |
+
+- Copy `.env.example` to `.env.local` for local values.
+- **Never commit `.env.local` or real secrets.**
+- On Netlify, add `DATABASE_URL` under Site configuration > Environment variables.
+
+## Available NPM Scripts
+
+| Script | Command | Purpose |
+|--------|---------|---------|
+| `dev` | `next dev` | Start the Next.js dev server. |
+| `build` | `next build` | Create a production build. |
+| `start` | `next start` | Start the production server. |
+| `lint` | `eslint` | Run ESLint across the project. |
+| `test` | `vitest run` | Run the Vitest suite. |
+| `storybook` | `storybook dev -p 6006` | Run the Storybook dev server. |
+| `build-storybook` | `storybook build` | Build Storybook for static hosting. |
+| `db:generate` | `prisma generate` | Regenerate the Prisma client. |
+| `db:push` | `prisma db push` | Push schema changes to the local DB. |
+| `db:migrate` | `prisma migrate dev` | Create and apply a migration. |
+| `db:seed` | `tsx prisma/seed.ts` | Seed the database with sample data. |
+| `db:reset` | `prisma migrate reset` | Reset the database and re-run migrations. |
+
+## Project Structure
+
+```text
+banking-company/
+├── .storybook/          # Storybook configuration
+├── prisma/
+│   ├── schema.prisma    # Prisma schema
+│   └── seed.ts          # Seed script
+├── public/              # Static assets
+├── src/
+│   ├── app/             # Next.js App Router pages and API routes
+│   ├── components/      # React components and stories
+│   ├── lib/             # Shared utilities (env, prisma singleton)
+│   └── stories/         # Storybook sample stories (auto-generated)
+├── .env.example         # Committed environment template
+├── .gitignore           # Git ignore rules
+└── README.md            # This file
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Deployment Notes for Netlify
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Connect the GitHub repository to a Netlify site.
+2. Set the build command to:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+   ```bash
+   npm run build
+   ```
 
-## Learn More
+3. Set the publish directory to:
 
-To learn more about Next.js, take a look at the following resources:
+   ```text
+   .next
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+4. Add the production `DATABASE_URL` environment variable in Netlify.
+5. On Netlify Functions, the Prisma client and SQLite paths are handled by the environment loader in `src/lib/env.ts`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Branch & Pull Request Workflow
 
-## Deploy on Vercel
+- All changes are developed on feature branches.
+- Branch naming convention: `<JIRA_KEY>-<PAGE>-<SECTION>-<SCOPE>`.
+- Open a pull request to `main` and request review before merging.
+- Never push directly to `main`.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## License
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT

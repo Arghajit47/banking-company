@@ -32,10 +32,31 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
 
 # vercel
 .vercel
 
+# netlify
+.netlify
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# prisma
+/prisma/dev.db
+/prisma/dev.db-journal
+/prisma/migrations/*/migration.sql
+
+# generated
+/src/generated/prisma
+
+# storybook
+storybook-static
+
+# agent/ide generated metadata
+.agents/
+.claude/
+.windsurf/
+skills-lock.json
