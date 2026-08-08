@@ -40,10 +40,11 @@ export default defineConfig({
         extends: true,
         test: {
           name: "unit",
+          environment: "happy-dom",
           include: [
             "src/__tests__/**/*.test.ts",
             "src/__tests__/**/*.test.tsx",
-            "src/components/**/__tests__/*.test.tsx",
+            "src/components/**/*.test.tsx",
             "src/app/**/__tests__/*.test.tsx",
             "src/app/**/route.test.ts",
           ],
