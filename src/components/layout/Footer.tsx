@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import LogoIcon from "@/components/LogoIcon";
 import { useFooterConfig, type FooterConfig } from "@/lib/footer";
 import { useMounted } from "@/lib/use-mounted";
 
@@ -18,37 +19,11 @@ const defaultConfig: FooterConfig = {
   },
   social: [
     { name: "facebook", url: "#" },
-    { name: "x", url: "#" },
+    { name: "twitter", url: "#" },
     { name: "linkedin", url: "#" },
   ],
   copyright: "YourBank All Rights Reserved",
 };
-
-function LogoIcon(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      width="40"
-      height="40"
-      viewBox="0 0 40 40"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      {...props}
-    >
-      <rect width="40" height="40" rx="8" fill="#CAFF33" />
-      <path
-        d="M20 8L32 20L20 32L8 20L20 8Z"
-        fill="#CAFF33"
-        stroke="#1E1E1E"
-        strokeWidth="2"
-      />
-      <path
-        d="M20 14L26 20L20 26L14 20L20 14Z"
-        fill="#1E1E1E"
-      />
-    </svg>
-  );
-}
-
 function MailIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" {...props}>
@@ -103,7 +78,7 @@ function FacebookIcon(props: React.SVGProps<SVGSVGElement>) {
 function TwitterIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" {...props}>
-      <path d="M18.24 2.25h3.31l-7.23 8.26L23.35 21.75h-6.42l-5.03-6.59-5.76 6.59H2.83l7.73-8.83L.67 2.25h6.58l4.55 6.02 5.44-6.02Zm-1.16 17.47h1.84L7.08 4.18H5.12l11.96 15.54Z" />
+      <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.84 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" />
     </svg>
   );
 }
@@ -149,7 +124,7 @@ export function Footer() {
       data-testid="footer"
       className="w-full bg-[#1A1A1A] font-[var(--font-lexend)]"
     >
-      <div className="mx-auto max-w-[1596px] px-4 py-[50px] md:px-6 xl:px-0">
+      <div className="mx-auto max-w-[1596px] px-4 py-[50px] md:px-6 xl:px-[162px]">
         {/* Top: logo + nav */}
         <div className="flex flex-col items-center gap-[50px]">
           <Link
@@ -157,7 +132,7 @@ export function Footer() {
             data-testid="footer-logo"
             className="flex items-center gap-[5.17px]"
           >
-            <LogoIcon className="h-10 w-10" />
+            <LogoIcon size={34} />
             <span className="text-xl font-medium tracking-tight text-white">
               YourBanK
             </span>
@@ -172,7 +147,7 @@ export function Footer() {
                 key={link.href + link.label}
                 href={link.href}
                 data-testid={`footer-nav-${link.label.toLowerCase()}`}
-                className="text-lg font-normal text-white transition-opacity hover:opacity-70"
+                className="text-lg font-normal text-[#E4E4E7] transition-opacity hover:opacity-70"
               >
                 <SkeletonText isLoading={showSkeleton} className="min-w-[60px]">
                   {link.label}
@@ -192,7 +167,7 @@ export function Footer() {
           <Link
             href={`mailto:${config.contact.email}`}
             data-testid="footer-email"
-            className="flex items-center gap-[18px] text-lg text-white transition-opacity hover:opacity-70"
+            className="flex items-center gap-[18px] text-lg text-[#E4E4E7] transition-opacity hover:opacity-70"
           >
             <MailIcon />
             <SkeletonText isLoading={showSkeleton} className="min-w-[180px]">
@@ -202,7 +177,7 @@ export function Footer() {
           <Link
             href={`tel:${config.contact.phone.replace(/\s/g, "")}`}
             data-testid="footer-phone"
-            className="flex items-center gap-[18px] text-lg text-white transition-opacity hover:opacity-70"
+            className="flex items-center gap-[18px] text-lg text-[#E4E4E7] transition-opacity hover:opacity-70"
           >
             <PhoneIcon />
             <SkeletonText isLoading={showSkeleton} className="min-w-[160px]">
@@ -211,7 +186,7 @@ export function Footer() {
           </Link>
           <span
             data-testid="footer-location"
-            className="flex items-center gap-[18px] text-lg text-white"
+            className="flex items-center gap-[18px] text-lg text-[#E4E4E7]"
           >
             <LocationIcon />
             <SkeletonText isLoading={showSkeleton} className="min-w-[180px]">
@@ -235,7 +210,7 @@ export function Footer() {
                   key={social.name}
                   href={social.url}
                   data-testid={`footer-social-${social.name}`}
-                  className="flex h-[52px] w-[52px] items-center justify-center rounded-full bg-[#CAFF33] text-[#1A1A1A] transition-opacity hover:opacity-80"
+                  className="flex h-[52px] w-[52px] items-center justify-center rounded-full bg-[#262626] text-[#CAFF33] transition-opacity hover:opacity-80"
                   aria-label={social.name}
                 >
                   <Icon className="h-6 w-6" />
@@ -246,7 +221,7 @@ export function Footer() {
 
           <p
             data-testid="footer-copyright"
-            className="text-center text-lg text-white"
+            className="text-center text-lg text-[#B3B3B3]"
           >
             <SkeletonText isLoading={showSkeleton} className="min-w-[220px]">
               {config.copyright}
@@ -255,7 +230,7 @@ export function Footer() {
 
           <div
             data-testid="footer-legal"
-            className="flex items-center gap-[10px] text-lg text-white"
+            className="flex items-center gap-[10px] text-lg text-[#E4E4E7]"
           >
             <Link
               href="/privacy-policy"

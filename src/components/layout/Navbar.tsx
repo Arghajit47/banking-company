@@ -3,6 +3,7 @@
 import { useState, useCallback, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import LogoIcon from "@/components/LogoIcon";
 import { useAuthStatus } from "@/lib/auth";
 
 const navLinks = [
@@ -11,32 +12,6 @@ const navLinks = [
   { label: "About", href: "/about" },
   { label: "Security", href: "/security" },
 ];
-
-function LogoIcon(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      width="40"
-      height="40"
-      viewBox="0 0 40 40"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden="true"
-      {...props}
-    >
-      <rect width="40" height="40" rx="8" fill="#CAFF33" />
-      <path
-        d="M20 8L32 20L20 32L8 20L20 8Z"
-        fill="#CAFF33"
-        stroke="#1E1E1E"
-        strokeWidth="2"
-      />
-      <path
-        d="M20 14L26 20L20 26L14 20L20 14Z"
-        fill="#1E1E1E"
-      />
-    </svg>
-  );
-}
 
 function MenuIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
@@ -105,7 +80,7 @@ function NavbarLink({
             ? "text-sm leading-[21px] desktop:text-lg"
             : "text-base leading-6"
         }
-        ${active ? "rounded-full bg-[#262626] px-6 py-3" : "px-2 py-1"}
+        ${active ? "rounded-[10px] bg-[#262626] px-6 py-3" : "px-2 py-1"}
       `}
       aria-current={active ? "page" : undefined}
     >
@@ -148,12 +123,12 @@ export function Navbar() {
         {/* Logo */}
         <Link
           href="/"
-          className="flex items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#CAFF33]"
           data-testid="navbar-logo"
+          className="flex items-center gap-[5.17px]"
           aria-label="YourBanK home"
         >
-          <LogoIcon className="h-8 w-8 desktop:h-9 desktop:w-9" />
-          <span className="text-lg font-medium text-white desktop:text-xl">
+          <LogoIcon size={34} />
+          <span className="text-xl font-medium tracking-tight text-white">
             YourBanK
           </span>
         </Link>
@@ -229,7 +204,7 @@ export function Navbar() {
           aria-controls="mobile-menu"
           data-testid="nav-mobile-toggle"
           onClick={toggleMenu}
-          className="inline-flex h-10 w-14 items-center justify-center rounded-lg text-white transition hover:text-[#CAFF33] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#CAFF33] md:hidden"
+          className="inline-flex h-10 w-14 items-center justify-center rounded-[100px] bg-[#CAFF33] text-[#1A1A1A] transition hover:brightness-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#CAFF33] md:hidden"
         >
           {menuOpen ? <CloseIcon /> : <MenuIcon />}
         </button>
