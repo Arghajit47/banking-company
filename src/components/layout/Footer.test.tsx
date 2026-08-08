@@ -20,7 +20,7 @@ const defaultConfig: FooterConfig = {
   },
   social: [
     { name: "facebook", url: "#" },
-    { name: "x", url: "#" },
+    { name: "twitter", url: "#" },
     { name: "linkedin", url: "#" },
   ],
   copyright: "YourBank All Rights Reserved",
@@ -89,7 +89,7 @@ describe("Footer", () => {
     render(<Footer />);
     expect(screen.getByTestId("footer-socials")).toBeInTheDocument();
     expect(screen.getByTestId("footer-social-facebook")).toHaveAttribute("href", "#");
-    expect(screen.getByTestId("footer-social-x")).toHaveAttribute("href", "#");
+    expect(screen.getByTestId("footer-social-twitter")).toHaveAttribute("href", "#");
     expect(screen.getByTestId("footer-social-linkedin")).toHaveAttribute("href", "#");
     expect(screen.getByTestId("footer-copyright")).toHaveTextContent("YourBank 2026 All Rights Reserved");
     expect(screen.getByTestId("footer-privacy")).toHaveTextContent("Privacy Policy");

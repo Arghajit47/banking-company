@@ -85,7 +85,7 @@ describe("Navbar (desktop)", () => {
 
     expect(homeLink).toBeTruthy();
     expect(homeLink?.getAttribute("aria-current")).toBe("page");
-    expect(homeLink?.className).toContain("rounded-full");
+    expect(homeLink?.className).toContain("rounded-[10px]");
     expect(homeLink?.className).toContain("bg-[#262626]");
   });
 });

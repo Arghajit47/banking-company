@@ -25,7 +25,7 @@ const footerConfig: FooterConfig = {
   },
   social: [
     { name: "facebook", url: "#" },
-    { name: "x", url: "#" },
+    { name: "twitter", url: "#" },
     { name: "linkedin", url: "#" },
   ],
   copyright: "YourBank All Rights Reserved",

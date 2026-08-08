@@ -16,6 +16,7 @@ describe("GET /api/config/footer", () => {
     });
     expect(body.social).toHaveLength(3);
     expect(body.social[0]).toEqual({ name: "facebook", url: "#" });
+    expect(body.social[1]).toEqual({ name: "twitter", url: "#" });
     expect(body.copyright).toBe("YourBank All Rights Reserved");
   });
 });

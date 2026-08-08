@@ -20,8 +20,8 @@ const lexend = Lexend({
 });
 
 export const metadata: Metadata = {
-  title: "Banking Company",
-  description: "A modern banking experience powered by Next.js",
+  title: "YourBank — Empowering Your Financial Journey",
+  description: "At YourBank, our mission is to provide comprehensive banking solutions that empower individuals and businesses to achieve their financial goals.",
 };
 
 export default function RootLayout({
