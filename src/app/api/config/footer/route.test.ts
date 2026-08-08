@@ -10,7 +10,7 @@ describe("GET /api/config/footer", () => {
     expect(body.navLinks).toHaveLength(4);
     expect(body.navLinks[0]).toEqual({ label: "Home", href: "/" });
     expect(body.contact).toEqual({
-      email: "hello@skillbirdge.com",
+      email: "hello@skillbridge.com",
       phone: "+91 91813 23 2309",
       location: "Somewhere in the World",
     });

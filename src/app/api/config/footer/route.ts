@@ -19,7 +19,7 @@ const footerConfig: FooterConfig = {
     { label: "Security", href: "/security" },
   ],
   contact: {
-    email: "hello@skillbirdge.com",
+    email: "hello@skillbridge.com",
     phone: "+91 91813 23 2309",
     location: "Somewhere in the World",
   },
