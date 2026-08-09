@@ -45,14 +45,9 @@ const ALL_FAQS: FAQ[] = [
 const INITIAL_VISIBLE_COUNT = 4;
 
 export function FAQSection() {
-  const [openId, setOpenId] = useState<number | null>(null);
   const [showAll, setShowAll] = useState(false);
 
   const visibleFaqs = showAll ? ALL_FAQS : ALL_FAQS.slice(0, INITIAL_VISIBLE_COUNT);
-
-  const handleToggle = (id: number) => {
-    setOpenId((prev) => (prev === id ? null : id));
-  };
 
   return (
     <section
@@ -86,51 +81,30 @@ export function FAQSection() {
         </div>
 
         {/* FAQ Grid — 2 columns on desktop, 1 on mobile */}
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6">
-          {visibleFaqs.map((faq) => (
-            <div
-              key={faq.id}
-              data-testid={`faq-item-${faq.id}`}
-              className="rounded-2xl border border-[#262626] bg-[#1A1A2E] p-6"
-            >
-              <button
-                type="button"
-                data-testid={`faq-toggle-${faq.id}`}
-                onClick={() => handleToggle(faq.id)}
-                aria-expanded={openId === faq.id}
-                className="flex w-full items-start justify-between gap-4 text-left focus:outline-none focus:ring-2 focus:ring-[#CAFF33] focus:ring-offset-2 focus:ring-offset-[#1A1A2E]"
+        <div className="relative">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6">
+            {visibleFaqs.map((faq) => (
+              <div
+                key={faq.id}
+                data-testid={`faq-item-${faq.id}`}
+                className="rounded-2xl border border-[#262626] bg-[#1E1E1E] p-6"
               >
-                <span
-                  data-testid="faq-question"
-                  className="text-base font-medium text-white"
-                >
+                <p data-testid="faq-question" className="text-base font-medium text-white">
                   {faq.question}
-                </span>
-                <Image
-                  src="/assets/icons/icon_expand_collapse.svg"
-                  alt=""
-                  width={22}
-                  height={22}
-                  aria-hidden="true"
-                  className={`mt-0.5 shrink-0 transition-transform duration-200 ${
-                    openId === faq.id ? "rotate-180" : ""
-                  }`}
-                />
-              </button>
-              <hr
-                data-testid="faq-separator"
-                className="my-4 border-[#999999]/30"
-              />
-              {openId === faq.id && (
-                <p
-                  data-testid="faq-answer"
-                  className="text-sm leading-relaxed text-[#999999]"
-                >
+                </p>
+                <hr data-testid="faq-separator" className="my-4 border-[#999999]/30" />
+                <p data-testid="faq-answer" className="text-sm leading-relaxed text-[#999999]">
                   {faq.answer}
                 </p>
-              )}
-            </div>
-          ))}
+              </div>
+            ))}
+          </div>
+          {!showAll && (
+            <div
+              data-testid="faq-fade-overlay"
+              className="pointer-events-none absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-[#1A1A1A] to-transparent"
+            />
+          )}
         </div>
 
         {/* Load All button */}
