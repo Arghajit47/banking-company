@@ -6,6 +6,8 @@ import {
   API_PATHS,
   authStatusSchema,
   AUTH_MOCK_USER,
+  CTA_ENDPOINTS,
+  CTA_SCHEMA_LABELS,
   CTA_TEXT,
   CTA_UI,
   ctaConfigSchema,
@@ -80,8 +82,8 @@ export class HomePage {
 
   async assertMobileAuthToggle(): Promise<void> {
     await this.initializationPage.goto(UI_ROUTES.HOME);
-    await this.initializationPage.page.setViewportSize({ width: 375, height: 667 });
-    await this.initializationPage.waitForSomeTime(300);
+    await this.initializationPage.page.setViewportSize(CTA_UI.MOBILE_VIEWPORT);
+    await this.initializationPage.waitForSomeTime(CTA_UI.MENU_ANIMATION_DELAY_MS);
     await this.initializationPage.expectVisible(HOMEPAGE_LOCATORS.mobileMenuButton);
     await this.initializationPage.clickOnElement(HOMEPAGE_LOCATORS.mobileMenuButton);
     await this.initializationPage.expectVisible(HOMEPAGE_LOCATORS.mobileMenu);
@@ -96,10 +98,10 @@ export class HomePage {
     // Fetch the real API response and validate schema so the integration test
     // checks actual backend data, not just static constants.
     const ctaResponse = (await this.apiHelper.getRequest(
-      `${API_PATHS.CTA_CONFIG}?page=${CTA_UI.DEFAULT_PAGE_PARAM}`
+      CTA_ENDPOINTS.HOME
     )) as CTAConfig;
     const validation = ctaConfigSchema.safeParse(ctaResponse);
-    this.apiHelper.assertSchemaValid(validation, "cta config schema");
+    this.apiHelper.assertSchemaValid(validation, CTA_SCHEMA_LABELS.CTA_CONFIG);
 
     // The real content excludes the SWR loading skeleton, which is aria-hidden.
     await this.initializationPage.expectTextContains(

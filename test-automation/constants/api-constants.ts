@@ -34,3 +34,7 @@ export interface CTAConfig {
 }
 
 export type CTAPage = "home" | "careers";
+
+export const CTA_ENDPOINTS = {
+  HOME: `${API_PATHS.CTA_CONFIG}?page=home`,
+};

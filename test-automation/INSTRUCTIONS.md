@@ -243,6 +243,8 @@ test.describe("Home Page Test Suite", () => {
 ### Rule 4: NO Hardcoded Text, Numbers, or Base URLs
 - ❌ **DON'T**: `await apiHelper.getRequest("https://real-estates-estatein.netlify.app/api/properties")` or `expect(text).toBe("Find Your Dream Property")`.
 - ✅ **DO**: Use `API_PATHS.PROPERTIES` and `PROPERTIES_TEXT.HEADING` from `@constants/index`.
+- ✅ **DO**: Store API endpoint query strings (e.g. `?page=home`) in a `*_ENDPOINTS` constant or derive them from `API_PATHS`.
+- ✅ **DO**: Store viewport dimensions, animation wait times, and schema validation labels in constants (e.g. `MOBILE_VIEWPORT`, `MENU_ANIMATION_DELAY_MS`, `SCHEMA_LABELS`).
 
 ### Rule 5: NO Raw Logic or Loops in Spec Files
 - ❌ **DON'T**: Write `for (const item of data) { ... }` or `if (condition) { ... }` inside a `test(...)` block in `specs/`.
