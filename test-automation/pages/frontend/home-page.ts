@@ -89,42 +89,37 @@ export class HomePage {
     await this.initializationPage.goto("/");
     await this.initializationPage.expectVisible(HOMEPAGE_LOCATORS.ctaSection);
 
-    // Wait for SWR to resolve: the skeleton heading has aria-hidden="true";
-    // the real <h2> does not. Wait until the skeleton is gone.
+    // CTASection renders a SWR loading skeleton with the same data-testid as
+    // the real content, so ctaHeading/ctaButton locators match both. The
+    // skeleton elements have aria-hidden="true"; the rendered elements do not.
+    // Define the non-hidden selector once and reuse it for every assertion so
+    // text, href, and visibility checks target the resolved content only.
     const page = this.initializationPage.page;
-    await page.waitForSelector(
-      `${HOMEPAGE_LOCATORS.ctaHeading}:not([aria-hidden="true"])`,
-      { timeout: 10000 }
-    );
+    const ctaHeadingReal = `${HOMEPAGE_LOCATORS.ctaHeading}:not([aria-hidden="true"])`;
+    const ctaButtonReal = `${HOMEPAGE_LOCATORS.ctaButton}:not([aria-hidden="true"])`;
+
+    await page.waitForSelector(ctaHeadingReal, { timeout: 10000 });
+    await page.waitForSelector(ctaButtonReal, { timeout: 10000 });
 
     await this.initializationPage.expectTextContains(
-      HOMEPAGE_LOCATORS.ctaHeading,
+      ctaHeadingReal,
       CTA_TEXT.HEADING_START
     );
     await this.initializationPage.expectTextContains(
-      HOMEPAGE_LOCATORS.ctaHeading,
+      ctaHeadingReal,
       CTA_TEXT.HEADING_ACCENT
     );
-
-    // Wait for the real button (not the skeleton placeholder)
-    await page.waitForSelector(
-      `${HOMEPAGE_LOCATORS.ctaButton}:not([aria-hidden="true"])`,
-      { timeout: 10000 }
-    );
-
     await this.initializationPage.expectTextContains(
-      HOMEPAGE_LOCATORS.ctaButton,
+      ctaButtonReal,
       CTA_TEXT.BUTTON_LABEL
     );
     await this.initializationPage.expectAttributeContains(
-      HOMEPAGE_LOCATORS.ctaButton,
+      ctaButtonReal,
       "href",
       "/",
       0
     );
-    await this.initializationPage.expectVisible(
-      page.locator(`${HOMEPAGE_LOCATORS.ctaButton}:not([aria-hidden="true"])`)
-    );
+    await this.initializationPage.expectVisible(page.locator(ctaButtonReal));
   }
 
   private async assertNoAuthConsoleErrors(): Promise<void> {
