@@ -23,11 +23,15 @@ test.describe("Home Page Navbar Auth Integration", () => {
 });
 
 test.describe("Home Page CTA Section", () => {
-  test("CTA section renders headline and button from API", async ({ homepage }) => {
+  test("CTA section renders with heading, body, and Open Account button", async ({ homepage }) => {
     await homepage.assertCtaSection();
   });
 
-  test("CTA button is visible and clickable on home page", async ({ homepage }) => {
+  test("CTA button is visible and clickable", async ({ homepage }) => {
     await homepage.assertCtaButtonClickable();
+  });
+
+  test("CTA section renders API-driven content", async ({ homepage }) => {
+    await homepage.assertCtaApiContent();
   });
 });

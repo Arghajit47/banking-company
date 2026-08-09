@@ -134,6 +134,24 @@ export class HomePage {
     await this.initializationPage.expectHaveURL(UI_ROUTES.HOME);
   }
 
+  async assertCtaApiContent(): Promise<void> {
+    await this.initializationPage.goto(UI_ROUTES.HOME);
+    await this.initializationPage.expectVisible(HOMEPAGE_LOCATORS.ctaSection);
+
+    // Fetch the real API response and validate schema so the integration test
+    // checks actual backend data, not just static constants.
+    const ctaResponse = (await this.apiHelper.getRequest(
+      CTA_ENDPOINTS.HOME
+    )) as CTAConfig;
+    const validation = ctaConfigSchema.safeParse(ctaResponse);
+    this.apiHelper.assertSchemaValid(validation, CTA_SCHEMA_LABELS.CTA_CONFIG);
+
+    await this.initializationPage.expectTextContains(
+      HOMEPAGE_LOCATORS.ctaBodyReal,
+      ctaResponse.body
+    );
+  }
+
   private async assertNoAuthConsoleErrors(): Promise<void> {
     await this.initializationPage.assertNoConsoleErrors(undefined, HOMEPAGE_LOCATORS.navbar);
   }
