@@ -17,4 +17,13 @@ export const HOMEPAGE_LOCATORS = {
   ctaHeadingReal: '[data-testid="cta-heading"]:not([aria-hidden="true"])',
   ctaBodyReal: '[data-testid="cta-body"]:not([aria-hidden="true"])',
   ctaButtonReal: '[data-testid="cta-button"]:not([aria-hidden="true"])',
+  // BC-13 — Testimonials Section
+  testimonialsSection: '[data-testid="testimonials-section"]',
+  testimonialsHeading: '[data-testid="testimonials-heading"]',
+  testimonialsSubheading: '[data-testid="testimonials-subheading"]',
+  testimonialsTabIndividuals: '[data-testid="testimonials-tab-individuals"]',
+  testimonialsTabBusinesses: '[data-testid="testimonials-tab-businesses"]',
+  testimonialsCard: '[data-testid^="testimonials-card-"]',
+  testimonialsPrev: '[data-testid="testimonials-prev"]',
+  testimonialsNext: '[data-testid="testimonials-next"]',
 } as const;

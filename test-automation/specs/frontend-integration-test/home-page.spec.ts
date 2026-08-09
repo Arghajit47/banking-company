@@ -35,3 +35,9 @@ test.describe("Home Page CTA Section", () => {
     await homepage.assertCtaApiContent();
   });
 });
+
+test.describe("Home Page Testimonials Section", () => {
+  test("testimonials section renders with heading, tabs, and cards", async ({ homepage }) => {
+    await homepage.assertTestimonialsSection();
+  });
+});
