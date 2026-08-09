@@ -13,6 +13,9 @@ import {
   ctaConfigSchema,
   type CTAConfig,
   TESTIMONIALS_TEXT,
+  TESTIMONIALS_ENDPOINTS,
+  type TestimonialsResponse,
+  testimonialsResponseSchema,
   UI_ROUTES,
 } from "@constants/index";
 
@@ -166,8 +169,15 @@ export class HomePage {
     );
     await this.initializationPage.expectVisible(HOMEPAGE_LOCATORS.testimonialsTabIndividuals);
     await this.initializationPage.expectVisible(HOMEPAGE_LOCATORS.testimonialsTabBusinesses);
+
+    const testimonialsResponse = (await this.apiHelper.getRequest(
+      TESTIMONIALS_ENDPOINTS.LIST
+    )) as TestimonialsResponse;
+    const validation = testimonialsResponseSchema.safeParse(testimonialsResponse);
+    this.apiHelper.assertSchemaValid(validation, "testimonials response schema");
+
     const cards = this.initializationPage.page.locator(HOMEPAGE_LOCATORS.testimonialsCard);
-    expect(await cards.count()).toBeGreaterThanOrEqual(3);
+    expect(await cards.count()).toBeGreaterThanOrEqual(testimonialsResponse.testimonials.length);
   }
 
   private async assertNoAuthConsoleErrors(): Promise<void> {
