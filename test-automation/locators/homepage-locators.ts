@@ -9,4 +9,8 @@ export const HOMEPAGE_LOCATORS = {
   mobileMenu: '[data-testid="mobile-menu"]',
   mobileLogin: '[data-testid="mobile-login"]',
   mobileSignUp: '[data-testid="mobile-sign-up"]',
+  ctaSection: '[data-testid="cta-section"]',
+  ctaHeading: '[data-testid="cta-heading"]',
+  ctaBody: '[data-testid="cta-body"]',
+  ctaButton: '[data-testid="cta-button"]',
 } as const;

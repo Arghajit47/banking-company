@@ -6,6 +6,7 @@ import {
   API_PATHS,
   authStatusSchema,
   AUTH_MOCK_USER,
+  CTA_TEXT,
 } from "@constants/index";
 
 export class HomePage {
@@ -82,6 +83,31 @@ export class HomePage {
     await this.initializationPage.expectVisible(HOMEPAGE_LOCATORS.mobileMenu);
     await this.initializationPage.expectVisible(HOMEPAGE_LOCATORS.mobileLogin);
     await this.initializationPage.expectVisible(HOMEPAGE_LOCATORS.mobileSignUp);
+  }
+
+  async assertCtaSection(): Promise<void> {
+    await this.initializationPage.goto("/");
+    await this.initializationPage.expectVisible(HOMEPAGE_LOCATORS.ctaSection);
+    await this.initializationPage.expectTextContains(
+      HOMEPAGE_LOCATORS.ctaHeading,
+      CTA_TEXT.HEADING_START
+    );
+    await this.initializationPage.expectTextContains(
+      HOMEPAGE_LOCATORS.ctaHeading,
+      CTA_TEXT.HEADING_ACCENT
+    );
+    await this.initializationPage.expectTextContains(
+      HOMEPAGE_LOCATORS.ctaButton,
+      CTA_TEXT.BUTTON_LABEL
+    );
+    const button = this.initializationPage.page.locator(HOMEPAGE_LOCATORS.ctaButton);
+    await this.initializationPage.expectAttributeContains(
+      HOMEPAGE_LOCATORS.ctaButton,
+      "href",
+      "/",
+      0
+    );
+    await this.initializationPage.expectVisible(button);
   }
 
   private async assertNoAuthConsoleErrors(): Promise<void> {
