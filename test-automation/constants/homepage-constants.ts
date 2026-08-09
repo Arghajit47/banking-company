@@ -1,7 +1,8 @@
-// BC-10 — CTA Section
+// BC-10 / BC-12 — CTA Section
 export const CTA_TEXT = {
   HEADING_START: "Start your financial journey with ",
   HEADING_ACCENT: "YourBank today!",
+  BODY: "At YourBank, our mission is to provide comprehensive banking solutions",
   BUTTON_LABEL: "Open Account",
 } as const;
 
