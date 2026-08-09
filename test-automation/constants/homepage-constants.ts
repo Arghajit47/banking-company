@@ -1,3 +1,10 @@
+// BC-10 — CTA Section
+export const CTA_TEXT = {
+  HEADING_START: "Start your financial journey with ",
+  HEADING_ACCENT: "YourBank today!",
+  BUTTON_LABEL: "Open Account",
+} as const;
+
 // BC-6 — Navbar auth integration constants
 export const NAVBAR_TEXT = {
   LOGIN: "Login",

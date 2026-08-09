@@ -21,3 +21,9 @@ test.describe("Home Page Navbar Auth Integration", () => {
     await footerPage.assertFooterRendersFromApi();
   });
 });
+
+test.describe("Home Page CTA Section", () => {
+  test("CTA section renders with heading, body, and Open Account button", async ({ homepage }) => {
+    await homepage.assertCtaSection();
+  });
+});
