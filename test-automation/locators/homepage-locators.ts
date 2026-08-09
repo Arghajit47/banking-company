@@ -13,4 +13,10 @@ export const HOMEPAGE_LOCATORS = {
   ctaHeading: '[data-testid="cta-heading"]',
   ctaBody: '[data-testid="cta-body"]',
   ctaButton: '[data-testid="cta-button"]',
+  // CTA Section also renders a SWR loading skeleton with the same data-testid
+  // as the real content. The skeleton is aria-hidden="true"; the resolved
+  // content is not. Use these selectors for assertions so we never read from
+  // the placeholder.
+  ctaHeadingReal: '[data-testid="cta-heading"]:not([aria-hidden="true"])',
+  ctaButtonReal: '[data-testid="cta-button"]:not([aria-hidden="true"])',
 } as const;

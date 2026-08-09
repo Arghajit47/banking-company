@@ -89,37 +89,40 @@ export class HomePage {
     await this.initializationPage.goto("/");
     await this.initializationPage.expectVisible(HOMEPAGE_LOCATORS.ctaSection);
 
-    // CTASection renders a SWR loading skeleton with the same data-testid as
-    // the real content, so ctaHeading/ctaButton locators match both. The
-    // skeleton elements have aria-hidden="true"; the rendered elements do not.
-    // Define the non-hidden selector once and reuse it for every assertion so
-    // text, href, and visibility checks target the resolved content only.
-    const page = this.initializationPage.page;
-    const ctaHeadingReal = `${HOMEPAGE_LOCATORS.ctaHeading}:not([aria-hidden="true"])`;
-    const ctaButtonReal = `${HOMEPAGE_LOCATORS.ctaButton}:not([aria-hidden="true"])`;
-
-    await page.waitForSelector(ctaHeadingReal, { timeout: 10000 });
-    await page.waitForSelector(ctaButtonReal, { timeout: 10000 });
+    // Wait for SWR to resolve: the skeleton shares data-testid with the real
+    // content; skeleton is aria-hidden="true", resolved content is not. The
+    // real-content selectors live in HOMEPAGE_LOCATORS (ctaHeadingReal /
+    // ctaButtonReal) and every assertion below targets those.
+    await this.initializationPage.page.waitForSelector(
+      HOMEPAGE_LOCATORS.ctaHeadingReal,
+      { timeout: 10000 }
+    );
+    await this.initializationPage.page.waitForSelector(
+      HOMEPAGE_LOCATORS.ctaButtonReal,
+      { timeout: 10000 }
+    );
 
     await this.initializationPage.expectTextContains(
-      ctaHeadingReal,
+      HOMEPAGE_LOCATORS.ctaHeadingReal,
       CTA_TEXT.HEADING_START
     );
     await this.initializationPage.expectTextContains(
-      ctaHeadingReal,
+      HOMEPAGE_LOCATORS.ctaHeadingReal,
       CTA_TEXT.HEADING_ACCENT
     );
     await this.initializationPage.expectTextContains(
-      ctaButtonReal,
+      HOMEPAGE_LOCATORS.ctaButtonReal,
       CTA_TEXT.BUTTON_LABEL
     );
     await this.initializationPage.expectAttributeContains(
-      ctaButtonReal,
+      HOMEPAGE_LOCATORS.ctaButtonReal,
       "href",
       "/",
       0
     );
-    await this.initializationPage.expectVisible(page.locator(ctaButtonReal));
+    await this.initializationPage.expectVisible(
+      this.initializationPage.page.locator(HOMEPAGE_LOCATORS.ctaButtonReal)
+    );
   }
 
   private async assertNoAuthConsoleErrors(): Promise<void> {
