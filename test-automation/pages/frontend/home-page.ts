@@ -110,6 +110,21 @@ export class HomePage {
     await this.initializationPage.expectVisible(button);
   }
 
+  async assertCtaButtonClickable(): Promise<void> {
+    await this.initializationPage.goto("/");
+    await this.initializationPage.expectVisible(HOMEPAGE_LOCATORS.ctaSection);
+    await this.initializationPage.expectEnable(HOMEPAGE_LOCATORS.ctaButton);
+  }
+
+  async assertCtaApiContent(): Promise<void> {
+    await this.initializationPage.goto("/");
+    await this.initializationPage.expectVisible(HOMEPAGE_LOCATORS.ctaSection);
+    await this.initializationPage.expectTextContains(
+      HOMEPAGE_LOCATORS.ctaBody,
+      CTA_TEXT.BODY
+    );
+  }
+
   private async assertNoAuthConsoleErrors(): Promise<void> {
     await this.initializationPage.assertNoConsoleErrors(undefined, HOMEPAGE_LOCATORS.navbar);
   }

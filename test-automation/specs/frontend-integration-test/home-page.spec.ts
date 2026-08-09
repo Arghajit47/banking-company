@@ -26,4 +26,12 @@ test.describe("Home Page CTA Section", () => {
   test("CTA section renders with heading, body, and Open Account button", async ({ homepage }) => {
     await homepage.assertCtaSection();
   });
+
+  test("CTA button is visible and clickable", async ({ homepage }) => {
+    await homepage.assertCtaButtonClickable();
+  });
+
+  test("CTA section renders API-driven content", async ({ homepage }) => {
+    await homepage.assertCtaApiContent();
+  });
 });
