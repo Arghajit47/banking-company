@@ -1,5 +1,6 @@
 import { Navbar } from "@/components/layout/Navbar";
 import { CTASection } from "@/components/sections/CTASection";
+import { FAQSection } from "@/components/sections/FAQSection";
 import { TestimonialsSection } from "@/components/sections/TestimonialsSection";
 
 export default function Home() {
@@ -21,6 +22,7 @@ export default function Home() {
         </div>
       </main>
       <TestimonialsSection />
+      <FAQSection />
       <CTASection />
     </div>
   );
