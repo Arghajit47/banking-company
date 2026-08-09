@@ -1,4 +1,4 @@
-import { type Page } from "@playwright/test";
+import { expect, type Page } from "@playwright/test";
 import InitializationPage from "@base/ui-base";
 import { ApiHelper } from "@base/api-base";
 import { HOMEPAGE_LOCATORS } from "@locators/homepage-locators";
@@ -12,6 +12,7 @@ import {
   CTA_UI,
   ctaConfigSchema,
   type CTAConfig,
+  TESTIMONIALS_TEXT,
   UI_ROUTES,
 } from "@constants/index";
 
@@ -150,6 +151,23 @@ export class HomePage {
       HOMEPAGE_LOCATORS.ctaBodyReal,
       ctaResponse.body
     );
+  }
+
+  async assertTestimonialsSection(): Promise<void> {
+    await this.initializationPage.goto(UI_ROUTES.HOME);
+    await this.initializationPage.expectVisible(HOMEPAGE_LOCATORS.testimonialsSection);
+    await this.initializationPage.expectTextContains(
+      HOMEPAGE_LOCATORS.testimonialsHeading,
+      TESTIMONIALS_TEXT.HEADING
+    );
+    await this.initializationPage.expectTextContains(
+      HOMEPAGE_LOCATORS.testimonialsSubheading,
+      TESTIMONIALS_TEXT.SUBHEADING_START
+    );
+    await this.initializationPage.expectVisible(HOMEPAGE_LOCATORS.testimonialsTabIndividuals);
+    await this.initializationPage.expectVisible(HOMEPAGE_LOCATORS.testimonialsTabBusinesses);
+    const cards = this.initializationPage.page.locator(HOMEPAGE_LOCATORS.testimonialsCard);
+    expect(await cards.count()).toBeGreaterThanOrEqual(3);
   }
 
   private async assertNoAuthConsoleErrors(): Promise<void> {

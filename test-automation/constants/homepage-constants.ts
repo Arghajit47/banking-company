@@ -28,3 +28,11 @@ export const AUTH_MOCK_USER = {
   name: "Jane Doe",
   avatarUrl: null,
 } as const;
+
+// BC-13 — Testimonials Section
+export const TESTIMONIALS_TEXT = {
+  HEADING: "Testimonials",
+  SUBHEADING_START: "Discover how YourBank",
+  TAB_INDIVIDUALS: "For Individuals",
+  TAB_BUSINESSES: "For Businesses",
+} as const;
