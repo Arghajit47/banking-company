@@ -89,19 +89,11 @@ export class HomePage {
     await this.initializationPage.goto("/");
     await this.initializationPage.expectVisible(HOMEPAGE_LOCATORS.ctaSection);
 
-    // Wait for SWR to resolve: the skeleton shares data-testid with the real
-    // content; skeleton is aria-hidden="true", resolved content is not. The
-    // real-content selectors live in HOMEPAGE_LOCATORS (ctaHeadingReal /
-    // ctaButtonReal) and every assertion below targets those.
-    await this.initializationPage.page.waitForSelector(
-      HOMEPAGE_LOCATORS.ctaHeadingReal,
-      { timeout: 10000 }
-    );
-    await this.initializationPage.page.waitForSelector(
-      HOMEPAGE_LOCATORS.ctaButtonReal,
-      { timeout: 10000 }
-    );
-
+    // CTASection renders a SWR loading skeleton with the same data-testid as
+    // the real content. The skeleton is aria-hidden="true"; the resolved
+    // content is not. The real-content selectors (ctaHeadingReal /
+    // ctaButtonReal) exclude the skeleton, so every assertion below auto-waits
+    // for the resolved element via Playwright's locator retry behavior.
     await this.initializationPage.expectTextContains(
       HOMEPAGE_LOCATORS.ctaHeadingReal,
       CTA_TEXT.HEADING_START
