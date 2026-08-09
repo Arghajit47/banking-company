@@ -34,20 +34,21 @@ describe("FAQSection", () => {
     expect(items).toHaveLength(4);
   });
 
-  it("toggles accordion open on click", () => {
+  it("all 4 initial items show answers immediately", () => {
     render(<FAQSection />);
-    const toggle = screen.getByTestId("faq-toggle-1");
-    fireEvent.click(toggle);
-    expect(screen.getByTestId("faq-answer")).toBeInTheDocument();
+    const answers = screen.getAllByTestId("faq-answer");
+    expect(answers).toHaveLength(4);
   });
 
-  it("closes accordion on second click", () => {
+  it("faq-fade-overlay is present when not all shown", () => {
     render(<FAQSection />);
-    const toggle = screen.getByTestId("faq-toggle-1");
-    fireEvent.click(toggle);
-    expect(screen.getByTestId("faq-answer")).toBeInTheDocument();
-    fireEvent.click(toggle);
-    expect(screen.queryByTestId("faq-answer")).not.toBeInTheDocument();
+    expect(screen.getByTestId("faq-fade-overlay")).toBeInTheDocument();
+  });
+
+  it("faq-fade-overlay is absent after Load All click", () => {
+    render(<FAQSection />);
+    fireEvent.click(screen.getByTestId("faq-load-all"));
+    expect(screen.queryByTestId("faq-fade-overlay")).not.toBeInTheDocument();
   });
 
   it("Load All FAQ button is visible", () => {
@@ -60,12 +61,5 @@ describe("FAQSection", () => {
     fireEvent.click(screen.getByTestId("faq-load-all"));
     const items = screen.getAllByTestId(/^faq-item-/);
     expect(items.length).toBeGreaterThan(4);
-  });
-
-  it("expand/collapse icon is rendered", () => {
-    render(<FAQSection />);
-    // Chevron icons are rendered (at least the Load All button has one)
-    const images = document.querySelectorAll('img[src="/assets/icons/icon_expand_collapse.svg"]');
-    expect(images.length).toBeGreaterThan(0);
   });
 });
