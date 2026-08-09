@@ -13,4 +13,8 @@ export const HOMEPAGE_LOCATORS = {
   ctaHeading: '[data-testid="cta-heading"]',
   ctaBody: '[data-testid="cta-body"]',
   ctaButton: '[data-testid="cta-button"]',
+  // Real content excludes the SWR loading skeleton, which is aria-hidden.
+  ctaHeadingReal: '[data-testid="cta-heading"]:not([aria-hidden="true"])',
+  ctaBodyReal: '[data-testid="cta-body"]:not([aria-hidden="true"])',
+  ctaButtonReal: '[data-testid="cta-button"]:not([aria-hidden="true"])',
 } as const;

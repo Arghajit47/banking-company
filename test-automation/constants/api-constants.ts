@@ -2,6 +2,7 @@ import { z } from "zod";
 
 export const API_PATHS = {
   AUTH_STATUS: "/api/auth/status",
+  CTA_CONFIG: "/api/config/cta",
 } as const;
 
 export const authStatusSchema = z.object({
@@ -12,6 +13,12 @@ export const authStatusSchema = z.object({
   }).nullable(),
 });
 
+export const ctaConfigSchema = z.object({
+  headline: z.string().min(1),
+  body: z.string().min(1),
+  buttonLabel: z.string().min(1),
+});
+
 export interface AuthStatus {
   isLoggedIn: boolean;
   user: {
@@ -19,3 +26,15 @@ export interface AuthStatus {
     avatarUrl: string | null;
   } | null;
 }
+
+export interface CTAConfig {
+  headline: string;
+  body: string;
+  buttonLabel: string;
+}
+
+export type CTAPage = "home" | "careers";
+
+export const CTA_ENDPOINTS = {
+  HOME: `${API_PATHS.CTA_CONFIG}?page=home`,
+};

@@ -6,7 +6,13 @@ import {
   API_PATHS,
   authStatusSchema,
   AUTH_MOCK_USER,
+  CTA_ENDPOINTS,
+  CTA_SCHEMA_LABELS,
   CTA_TEXT,
+  CTA_UI,
+  ctaConfigSchema,
+  type CTAConfig,
+  UI_ROUTES,
 } from "@constants/index";
 
 export class HomePage {
@@ -19,13 +25,13 @@ export class HomePage {
   }
 
   async assertPageComponents(): Promise<void> {
-    await this.initializationPage.goto("/");
+    await this.initializationPage.goto(UI_ROUTES.HOME);
     await this.initializationPage.expectVisible(HOMEPAGE_LOCATORS.navbar);
     await this.initializationPage.expectVisible(HOMEPAGE_LOCATORS.navbarLogo);
   }
 
   async assertNavbarAuthStatusFromApi(): Promise<void> {
-    await this.initializationPage.goto("/");
+    await this.initializationPage.goto(UI_ROUTES.HOME);
     const authResponse = await this.initializationPage.captureResponseWhenPageLoad(
       Promise.resolve(),
       { url: API_PATHS.AUTH_STATUS, method: "GET", status: 200 }
@@ -48,7 +54,7 @@ export class HomePage {
   }
 
   async assertLoggedOutNavbar(): Promise<void> {
-    await this.initializationPage.goto("/");
+    await this.initializationPage.goto(UI_ROUTES.HOME);
     await this.initializationPage.expectVisible(HOMEPAGE_LOCATORS.navLogin);
     await this.initializationPage.expectVisible(HOMEPAGE_LOCATORS.navSignUp);
     await this.initializationPage.expectNotPresent(HOMEPAGE_LOCATORS.navUser);
@@ -57,7 +63,7 @@ export class HomePage {
   }
 
   async assertLoggedInNavbar(): Promise<void> {
-    await this.initializationPage.goto("/");
+    await this.initializationPage.goto(UI_ROUTES.HOME);
     await this.initializationPage.mockJsonResponse(API_PATHS.AUTH_STATUS, {
       isLoggedIn: true,
       user: AUTH_MOCK_USER,
@@ -75,9 +81,9 @@ export class HomePage {
   }
 
   async assertMobileAuthToggle(): Promise<void> {
-    await this.initializationPage.goto("/");
-    await this.initializationPage.page.setViewportSize({ width: 375, height: 667 });
-    await this.initializationPage.waitForSomeTime(300);
+    await this.initializationPage.goto(UI_ROUTES.HOME);
+    await this.initializationPage.page.setViewportSize(CTA_UI.MOBILE_VIEWPORT);
+    await this.initializationPage.waitForSomeTime(CTA_UI.MENU_ANIMATION_DELAY_MS);
     await this.initializationPage.expectVisible(HOMEPAGE_LOCATORS.mobileMenuButton);
     await this.initializationPage.clickOnElement(HOMEPAGE_LOCATORS.mobileMenuButton);
     await this.initializationPage.expectVisible(HOMEPAGE_LOCATORS.mobileMenu);
@@ -86,42 +92,63 @@ export class HomePage {
   }
 
   async assertCtaSection(): Promise<void> {
-    await this.initializationPage.goto("/");
+    await this.initializationPage.goto(UI_ROUTES.HOME);
     await this.initializationPage.expectVisible(HOMEPAGE_LOCATORS.ctaSection);
+
+    // Fetch the real API response and validate schema so the integration test
+    // checks actual backend data, not just static constants.
+    const ctaResponse = (await this.apiHelper.getRequest(
+      CTA_ENDPOINTS.HOME
+    )) as CTAConfig;
+    const validation = ctaConfigSchema.safeParse(ctaResponse);
+    this.apiHelper.assertSchemaValid(validation, CTA_SCHEMA_LABELS.CTA_CONFIG);
+
+    // The real content excludes the SWR loading skeleton, which is aria-hidden.
     await this.initializationPage.expectTextContains(
-      HOMEPAGE_LOCATORS.ctaHeading,
+      HOMEPAGE_LOCATORS.ctaHeadingReal,
       CTA_TEXT.HEADING_START
     );
     await this.initializationPage.expectTextContains(
-      HOMEPAGE_LOCATORS.ctaHeading,
-      CTA_TEXT.HEADING_ACCENT
+      HOMEPAGE_LOCATORS.ctaHeadingReal,
+      ctaResponse.headline
     );
     await this.initializationPage.expectTextContains(
-      HOMEPAGE_LOCATORS.ctaButton,
-      CTA_TEXT.BUTTON_LABEL
+      HOMEPAGE_LOCATORS.ctaButtonReal,
+      ctaResponse.buttonLabel
     );
-    const button = this.initializationPage.page.locator(HOMEPAGE_LOCATORS.ctaButton);
     await this.initializationPage.expectAttributeContains(
-      HOMEPAGE_LOCATORS.ctaButton,
+      HOMEPAGE_LOCATORS.ctaButtonReal,
       "href",
-      "/",
+      CTA_UI.HOME_PATH,
       0
     );
-    await this.initializationPage.expectVisible(button);
+    await this.initializationPage.expectVisible(
+      this.initializationPage.page.locator(HOMEPAGE_LOCATORS.ctaButtonReal)
+    );
   }
 
   async assertCtaButtonClickable(): Promise<void> {
-    await this.initializationPage.goto("/");
-    await this.initializationPage.expectVisible(HOMEPAGE_LOCATORS.ctaSection);
-    await this.initializationPage.expectEnable(HOMEPAGE_LOCATORS.ctaButton);
+    await this.initializationPage.goto(UI_ROUTES.HOME);
+    await this.initializationPage.expectVisible(HOMEPAGE_LOCATORS.ctaButtonReal);
+    await this.initializationPage.clickOnElement(HOMEPAGE_LOCATORS.ctaButtonReal);
+    await this.initializationPage.expectHaveURL(UI_ROUTES.HOME);
   }
 
   async assertCtaApiContent(): Promise<void> {
-    await this.initializationPage.goto("/");
+    await this.initializationPage.goto(UI_ROUTES.HOME);
     await this.initializationPage.expectVisible(HOMEPAGE_LOCATORS.ctaSection);
+
+    // Fetch the real API response and validate schema so the integration test
+    // checks actual backend data, not just static constants.
+    const ctaResponse = (await this.apiHelper.getRequest(
+      CTA_ENDPOINTS.HOME
+    )) as CTAConfig;
+    const validation = ctaConfigSchema.safeParse(ctaResponse);
+    this.apiHelper.assertSchemaValid(validation, CTA_SCHEMA_LABELS.CTA_CONFIG);
+
     await this.initializationPage.expectTextContains(
-      HOMEPAGE_LOCATORS.ctaBody,
-      CTA_TEXT.BODY
+      HOMEPAGE_LOCATORS.ctaBodyReal,
+      ctaResponse.body
     );
   }
 

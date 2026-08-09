@@ -6,6 +6,17 @@ export const CTA_TEXT = {
   BUTTON_LABEL: "Open Account",
 } as const;
 
+export const CTA_UI = {
+  HOME_PATH: "/",
+  DEFAULT_PAGE_PARAM: "home",
+  MOBILE_VIEWPORT: { width: 375, height: 667 },
+  MENU_ANIMATION_DELAY_MS: 300,
+} as const;
+
+export const CTA_SCHEMA_LABELS = {
+  CTA_CONFIG: "cta config schema",
+} as const;
+
 // BC-6 — Navbar auth integration constants
 export const NAVBAR_TEXT = {
   LOGIN: "Login",
