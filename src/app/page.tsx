@@ -1,4 +1,5 @@
 import { Navbar } from "@/components/layout/Navbar";
+import { CTASection } from "@/components/sections/CTASection";
 
 export default function Home() {
   return (
@@ -18,6 +19,7 @@ export default function Home() {
           </p>
         </div>
       </main>
+      <CTASection />
     </div>
   );
 }
