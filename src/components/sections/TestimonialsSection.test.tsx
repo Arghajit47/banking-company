@@ -1,5 +1,5 @@
 import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
-import { render, screen, cleanup } from "@testing-library/react";
+import { render, screen, fireEvent, cleanup } from "@testing-library/react";
 import * as matchers from "@testing-library/jest-dom/matchers";
 import { TestimonialsSection } from "./TestimonialsSection";
 
@@ -9,11 +9,19 @@ afterEach(() => {
   cleanup();
 });
 
-const mockData = {
+const mockIndividualsData = {
   testimonials: [
     { id: 1, name: "Sara T", role: "Individual Customer", quote: "YourBank has been my trusted financial partner for years. Their personalized service and innovative digital banking solutions have made managing my finances a breeze.", avatarUrl: null },
-    { id: 2, name: "John D", role: "Business Owner", quote: "I recently started my own business, and YourBank has been instrumental in helping me set up my business accounts and secure the financing I needed. Their expert guidance and tailored solutions have been invaluable.", avatarUrl: null },
-    { id: 3, name: "Emily G", role: "Individual Customer", quote: "I love the convenience of YourBank banking app. It allows me to stay on top of my finances and make transactions on the go. The app is user-friendly and secure, giving me peace of mind.", avatarUrl: null },
+    { id: 2, name: "Emily G", role: "Individual Customer", quote: "I love the convenience of YourBank banking app. It allows me to stay on top of my finances and make transactions on the go. The app is user-friendly and secure, giving me peace of mind.", avatarUrl: null },
+    { id: 3, name: "Michael B", role: "Individual Customer", quote: "Switching to YourBank was the best financial decision I ever made. Their zero-fee accounts and competitive interest rates have helped me save more and grow my personal wealth steadily.", avatarUrl: null },
+  ],
+};
+
+const mockBusinessesData = {
+  testimonials: [
+    { id: 4, name: "John D", role: "Business Owner", quote: "I recently started my own business, and YourBank has been instrumental in helping me set up my business accounts and secure the financing I needed. Their expert guidance and tailored solutions have been invaluable.", avatarUrl: null },
+    { id: 5, name: "Alex P", role: "Business Director", quote: "YourBank's business banking suite is exactly what our growing company needed. From multi-user account access to seamless payroll integration, every feature is designed with businesses like ours in mind.", avatarUrl: null },
+    { id: 6, name: "Rachel M", role: "Business Manager", quote: "The dedicated relationship manager at YourBank truly understands our industry. They helped us restructure our credit lines and unlock better cash flow management — our business has never been more financially healthy.", avatarUrl: null },
   ],
 };
 
@@ -25,7 +33,7 @@ import { useMounted } from "@/lib/use-mounted";
 
 beforeEach(() => {
   vi.mocked(useMounted).mockReturnValue(true);
-  vi.mocked(useSWR).mockReturnValue({ data: mockData, isLoading: false, error: undefined } as ReturnType<typeof useSWR>);
+  vi.mocked(useSWR).mockReturnValue({ data: mockIndividualsData, isLoading: false, error: undefined } as ReturnType<typeof useSWR>);
 });
 
 describe("TestimonialsSection", () => {
@@ -50,29 +58,29 @@ describe("TestimonialsSection", () => {
     expect(cards.length).toBeGreaterThanOrEqual(3);
   });
 
-  it("displays Sara T", () => {
+  it("displays Sara T in individuals tab", () => {
     render(<TestimonialsSection />);
     expect(screen.getByText("Sara T")).toBeInTheDocument();
   });
 
-  it("displays John D", () => {
-    render(<TestimonialsSection />);
-    expect(screen.getByText("John D")).toBeInTheDocument();
-  });
-
-  it("displays Emily G", () => {
+  it("displays Emily G in individuals tab", () => {
     render(<TestimonialsSection />);
     expect(screen.getByText("Emily G")).toBeInTheDocument();
   });
 
-  it("shows For Individuals tab", () => {
+  it("shows For Individuals tab button", () => {
     render(<TestimonialsSection />);
     expect(screen.getByTestId("testimonials-tab-individuals")).toBeInTheDocument();
   });
 
-  it("shows For Businesses tab", () => {
+  it("shows For Businesses tab button", () => {
     render(<TestimonialsSection />);
     expect(screen.getByTestId("testimonials-tab-businesses")).toBeInTheDocument();
+  });
+
+  it("renders tabs inside a container with data-testid testimonials-tabs", () => {
+    render(<TestimonialsSection />);
+    expect(screen.getByTestId("testimonials-tabs")).toBeInTheDocument();
   });
 
   it("shows skeleton when loading", () => {
@@ -80,5 +88,29 @@ describe("TestimonialsSection", () => {
     vi.mocked(useMounted).mockReturnValue(true);
     render(<TestimonialsSection />);
     expect(screen.getByTestId("testimonials-section")).toHaveAttribute("aria-busy", "true");
+  });
+
+  it("switching to businesses tab updates SWR call key", () => {
+    render(<TestimonialsSection />);
+    const bizTab = screen.getByTestId("testimonials-tab-businesses");
+    fireEvent.click(bizTab);
+    // After tab switch, useSWR is called with businesses tab key
+    const calls = vi.mocked(useSWR).mock.calls;
+    const lastCall = calls[calls.length - 1];
+    expect(lastCall[0]).toContain("businesses");
+  });
+
+  it("outer cards have opacity-40 class", () => {
+    render(<TestimonialsSection />);
+    const card0 = screen.getByTestId("testimonials-card-0");
+    const card2 = screen.getByTestId("testimonials-card-2");
+    expect(card0.className).toContain("opacity-40");
+    expect(card2.className).toContain("opacity-40");
+  });
+
+  it("center card does not have opacity-40 class", () => {
+    render(<TestimonialsSection />);
+    const card1 = screen.getByTestId("testimonials-card-1");
+    expect(card1.className).not.toContain("opacity-40");
   });
 });

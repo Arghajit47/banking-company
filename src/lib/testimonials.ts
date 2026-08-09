@@ -22,8 +22,8 @@ const fetcher = async (url: string): Promise<TestimonialsResponse> => {
   return response.json();
 };
 
-export function useTestimonials() {
-  return useSWR<TestimonialsResponse>("/api/testimonials", fetcher, {
+export function useTestimonials(tab: "individuals" | "businesses" = "individuals") {
+  return useSWR<TestimonialsResponse>(`/api/testimonials?tab=${tab}`, fetcher, {
     revalidateOnFocus: false,
   });
 }

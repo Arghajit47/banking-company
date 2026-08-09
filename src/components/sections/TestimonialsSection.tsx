@@ -9,7 +9,7 @@ import { useMounted } from "@/lib/use-mounted";
 
 type TabKey = "individuals" | "businesses";
 
-const FALLBACK_TESTIMONIALS: Testimonial[] = [
+const FALLBACK_INDIVIDUALS: Testimonial[] = [
   {
     id: 1,
     name: "Sara T",
@@ -20,6 +20,25 @@ const FALLBACK_TESTIMONIALS: Testimonial[] = [
   },
   {
     id: 2,
+    name: "Emily G",
+    role: "Individual Customer",
+    quote:
+      "I love the convenience of YourBank banking app. It allows me to stay on top of my finances and make transactions on the go. The app is user-friendly and secure, giving me peace of mind.",
+    avatarUrl: null,
+  },
+  {
+    id: 3,
+    name: "Michael B",
+    role: "Individual Customer",
+    quote:
+      "Switching to YourBank was the best financial decision I ever made. Their zero-fee accounts and competitive interest rates have helped me save more and grow my personal wealth steadily.",
+    avatarUrl: null,
+  },
+];
+
+const FALLBACK_BUSINESSES: Testimonial[] = [
+  {
+    id: 4,
     name: "John D",
     role: "Business Owner",
     quote:
@@ -27,11 +46,19 @@ const FALLBACK_TESTIMONIALS: Testimonial[] = [
     avatarUrl: null,
   },
   {
-    id: 3,
-    name: "Emily G",
-    role: "Individual Customer",
+    id: 5,
+    name: "Alex P",
+    role: "Business Director",
     quote:
-      "I love the convenience of YourBank banking app. It allows me to stay on top of my finances and make transactions on the go. The app is user-friendly and secure, giving me peace of mind.",
+      "YourBank's business banking suite is exactly what our growing company needed. From multi-user account access to seamless payroll integration, every feature is designed with businesses like ours in mind.",
+    avatarUrl: null,
+  },
+  {
+    id: 6,
+    name: "Rachel M",
+    role: "Business Manager",
+    quote:
+      "The dedicated relationship manager at YourBank truly understands our industry. They helped us restructure our credit lines and unlock better cash flow management — our business has never been more financially healthy.",
     avatarUrl: null,
   },
 ];
@@ -41,8 +68,8 @@ export function TestimonialsSection() {
   const [activeIndex, setActiveIndex] = useState(0);
 
   const mounted = useMounted();
-  const { data, isLoading } = useTestimonials();
-  const testimonials = data?.testimonials ?? FALLBACK_TESTIMONIALS;
+  const { data, isLoading } = useTestimonials(activeTab);
+  const testimonials = data?.testimonials ?? (activeTab === "businesses" ? FALLBACK_BUSINESSES : FALLBACK_INDIVIDUALS);
 
   const handlePrev = () => {
     setActiveIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
@@ -83,15 +110,18 @@ export function TestimonialsSection() {
             </div>
 
             {/* Tab pills */}
-            <div className="flex shrink-0 items-center gap-3">
+            <div
+              data-testid="testimonials-tabs"
+              className="flex shrink-0 items-center rounded-[82px] border border-[#262626] bg-[#1C1C1C] p-[14px]"
+            >
               <button
                 data-testid="testimonials-tab-individuals"
                 type="button"
-                onClick={() => setActiveTab("individuals")}
-                className={`rounded-[82px] px-5 py-2 text-sm font-medium transition-all focus:outline-none focus:ring-2 focus:ring-[#CAFF33] focus:ring-offset-2 focus:ring-offset-[#1A1A1A] ${
+                onClick={() => { setActiveTab("individuals"); setActiveIndex(0); }}
+                className={`rounded-[140px] px-6 py-[14px] text-[18px] font-normal transition-all focus:outline-none focus:ring-2 focus:ring-[#CAFF33] focus:ring-offset-2 focus:ring-offset-[#1C1C1C] ${
                   activeTab === "individuals"
-                    ? "bg-[#CAFF33] text-[#1A1A1A]"
-                    : "border border-[#CAFF33] bg-transparent text-white"
+                    ? "bg-[#CAFF33] text-[#1C1C1C]"
+                    : "bg-transparent text-white"
                 }`}
               >
                 For Individuals
@@ -99,11 +129,11 @@ export function TestimonialsSection() {
               <button
                 data-testid="testimonials-tab-businesses"
                 type="button"
-                onClick={() => setActiveTab("businesses")}
-                className={`rounded-[82px] px-5 py-2 text-sm font-medium transition-all focus:outline-none focus:ring-2 focus:ring-[#CAFF33] focus:ring-offset-2 focus:ring-offset-[#1A1A1A] ${
+                onClick={() => { setActiveTab("businesses"); setActiveIndex(0); }}
+                className={`rounded-[140px] px-6 py-[14px] text-[18px] font-normal transition-all focus:outline-none focus:ring-2 focus:ring-[#CAFF33] focus:ring-offset-2 focus:ring-offset-[#1C1C1C] ${
                   activeTab === "businesses"
-                    ? "bg-[#CAFF33] text-[#1A1A1A]"
-                    : "border border-[#CAFF33] bg-transparent text-white"
+                    ? "bg-[#CAFF33] text-[#1C1C1C]"
+                    : "bg-transparent text-white"
                 }`}
               >
                 For Businesses
@@ -161,15 +191,18 @@ export function TestimonialsSection() {
           </div>
 
           {/* Tab pills */}
-          <div className="flex shrink-0 items-center gap-3">
+          <div
+            data-testid="testimonials-tabs"
+            className="flex shrink-0 items-center rounded-[82px] border border-[#262626] bg-[#1C1C1C] p-[14px]"
+          >
             <button
               data-testid="testimonials-tab-individuals"
               type="button"
-              onClick={() => setActiveTab("individuals")}
-              className={`rounded-[82px] px-5 py-2 text-sm font-medium transition-all focus:outline-none focus:ring-2 focus:ring-[#CAFF33] focus:ring-offset-2 focus:ring-offset-[#1A1A1A] ${
+              onClick={() => { setActiveTab("individuals"); setActiveIndex(0); }}
+              className={`rounded-[140px] px-6 py-[14px] text-[18px] font-normal transition-all focus:outline-none focus:ring-2 focus:ring-[#CAFF33] focus:ring-offset-2 focus:ring-offset-[#1C1C1C] ${
                 activeTab === "individuals"
-                  ? "bg-[#CAFF33] text-[#1A1A1A]"
-                  : "border border-[#CAFF33] bg-transparent text-white"
+                  ? "bg-[#CAFF33] text-[#1C1C1C]"
+                  : "bg-transparent text-white"
               }`}
             >
               For Individuals
@@ -177,11 +210,11 @@ export function TestimonialsSection() {
             <button
               data-testid="testimonials-tab-businesses"
               type="button"
-              onClick={() => setActiveTab("businesses")}
-              className={`rounded-[82px] px-5 py-2 text-sm font-medium transition-all focus:outline-none focus:ring-2 focus:ring-[#CAFF33] focus:ring-offset-2 focus:ring-offset-[#1A1A1A] ${
+              onClick={() => { setActiveTab("businesses"); setActiveIndex(0); }}
+              className={`rounded-[140px] px-6 py-[14px] text-[18px] font-normal transition-all focus:outline-none focus:ring-2 focus:ring-[#CAFF33] focus:ring-offset-2 focus:ring-offset-[#1C1C1C] ${
                 activeTab === "businesses"
-                  ? "bg-[#CAFF33] text-[#1A1A1A]"
-                  : "border border-[#CAFF33] bg-transparent text-white"
+                  ? "bg-[#CAFF33] text-[#1C1C1C]"
+                  : "bg-transparent text-white"
               }`}
             >
               For Businesses
@@ -210,8 +243,8 @@ export function TestimonialsSection() {
                 <div
                   key={testimonial.id}
                   data-testid={`testimonials-card-${index}`}
-                  className={`flex min-w-[260px] flex-1 flex-col rounded-2xl bg-[#262626] p-6 md:min-w-0 ${
-                    isCenter ? "ring-1 ring-[#CAFF33]/20" : ""
+                  className={`flex min-w-[260px] flex-1 flex-col rounded-2xl bg-[#262626] p-6 md:min-w-0 transition-opacity ${
+                    isCenter ? "ring-1 ring-[#CAFF33]/20" : "opacity-40"
                   }`}
                 >
                   <div className="mb-4">
