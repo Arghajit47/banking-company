@@ -7,6 +7,10 @@ import {
   authStatusSchema,
   AUTH_MOCK_USER,
   CTA_TEXT,
+  CTA_UI,
+  ctaConfigSchema,
+  type CTAConfig,
+  UI_ROUTES,
 } from "@constants/index";
 
 export class HomePage {
@@ -19,13 +23,13 @@ export class HomePage {
   }
 
   async assertPageComponents(): Promise<void> {
-    await this.initializationPage.goto("/");
+    await this.initializationPage.goto(UI_ROUTES.HOME);
     await this.initializationPage.expectVisible(HOMEPAGE_LOCATORS.navbar);
     await this.initializationPage.expectVisible(HOMEPAGE_LOCATORS.navbarLogo);
   }
 
   async assertNavbarAuthStatusFromApi(): Promise<void> {
-    await this.initializationPage.goto("/");
+    await this.initializationPage.goto(UI_ROUTES.HOME);
     const authResponse = await this.initializationPage.captureResponseWhenPageLoad(
       Promise.resolve(),
       { url: API_PATHS.AUTH_STATUS, method: "GET", status: 200 }
@@ -48,7 +52,7 @@ export class HomePage {
   }
 
   async assertLoggedOutNavbar(): Promise<void> {
-    await this.initializationPage.goto("/");
+    await this.initializationPage.goto(UI_ROUTES.HOME);
     await this.initializationPage.expectVisible(HOMEPAGE_LOCATORS.navLogin);
     await this.initializationPage.expectVisible(HOMEPAGE_LOCATORS.navSignUp);
     await this.initializationPage.expectNotPresent(HOMEPAGE_LOCATORS.navUser);
@@ -57,7 +61,7 @@ export class HomePage {
   }
 
   async assertLoggedInNavbar(): Promise<void> {
-    await this.initializationPage.goto("/");
+    await this.initializationPage.goto(UI_ROUTES.HOME);
     await this.initializationPage.mockJsonResponse(API_PATHS.AUTH_STATUS, {
       isLoggedIn: true,
       user: AUTH_MOCK_USER,
@@ -75,7 +79,7 @@ export class HomePage {
   }
 
   async assertMobileAuthToggle(): Promise<void> {
-    await this.initializationPage.goto("/");
+    await this.initializationPage.goto(UI_ROUTES.HOME);
     await this.initializationPage.page.setViewportSize({ width: 375, height: 667 });
     await this.initializationPage.waitForSomeTime(300);
     await this.initializationPage.expectVisible(HOMEPAGE_LOCATORS.mobileMenuButton);
@@ -86,35 +90,46 @@ export class HomePage {
   }
 
   async assertCtaSection(): Promise<void> {
-    await this.initializationPage.goto("/");
+    await this.initializationPage.goto(UI_ROUTES.HOME);
     await this.initializationPage.expectVisible(HOMEPAGE_LOCATORS.ctaSection);
 
-    // CTASection renders a SWR loading skeleton with the same data-testid as
-    // the real content. The skeleton is aria-hidden="true"; the resolved
-    // content is not. The real-content selectors (ctaHeadingReal /
-    // ctaButtonReal) exclude the skeleton, so every assertion below auto-waits
-    // for the resolved element via Playwright's locator retry behavior.
+    // Fetch the real API response and validate schema so the integration test
+    // checks actual backend data, not just static constants.
+    const ctaResponse = (await this.apiHelper.getRequest(
+      `${API_PATHS.CTA_CONFIG}?page=${CTA_UI.DEFAULT_PAGE_PARAM}`
+    )) as CTAConfig;
+    const validation = ctaConfigSchema.safeParse(ctaResponse);
+    this.apiHelper.assertSchemaValid(validation, "cta config schema");
+
+    // The real content excludes the SWR loading skeleton, which is aria-hidden.
     await this.initializationPage.expectTextContains(
       HOMEPAGE_LOCATORS.ctaHeadingReal,
       CTA_TEXT.HEADING_START
     );
     await this.initializationPage.expectTextContains(
       HOMEPAGE_LOCATORS.ctaHeadingReal,
-      CTA_TEXT.HEADING_ACCENT
+      ctaResponse.headline
     );
     await this.initializationPage.expectTextContains(
       HOMEPAGE_LOCATORS.ctaButtonReal,
-      CTA_TEXT.BUTTON_LABEL
+      ctaResponse.buttonLabel
     );
     await this.initializationPage.expectAttributeContains(
       HOMEPAGE_LOCATORS.ctaButtonReal,
       "href",
-      "/",
+      CTA_UI.HOME_PATH,
       0
     );
     await this.initializationPage.expectVisible(
       this.initializationPage.page.locator(HOMEPAGE_LOCATORS.ctaButtonReal)
     );
+  }
+
+  async assertCtaButtonClickable(): Promise<void> {
+    await this.initializationPage.goto(UI_ROUTES.HOME);
+    await this.initializationPage.expectVisible(HOMEPAGE_LOCATORS.ctaButtonReal);
+    await this.initializationPage.clickOnElement(HOMEPAGE_LOCATORS.ctaButtonReal);
+    await this.initializationPage.expectHaveURL(UI_ROUTES.HOME);
   }
 
   private async assertNoAuthConsoleErrors(): Promise<void> {
