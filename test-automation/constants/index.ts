@@ -2,6 +2,7 @@
 export * from "./homepage-constants";
 export * from "./api-constants";
 export * from "./footer-constants";
+export * from "./faq-constants";
 export * from "./routes";
 
 // Banking Company Netlify deploy target
