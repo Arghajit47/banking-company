@@ -12,6 +12,11 @@ import {
   CTA_UI,
   ctaConfigSchema,
   type CTAConfig,
+  HERO_ENDPOINTS,
+  HERO_SCHEMA_LABELS,
+  HERO_TEXT,
+  heroResponseSchema,
+  type HeroResponse,
   TESTIMONIALS_TEXT,
   TESTIMONIALS_ENDPOINTS,
   type TestimonialsResponse,
@@ -182,5 +187,53 @@ export class HomePage {
 
   private async assertNoAuthConsoleErrors(): Promise<void> {
     await this.initializationPage.assertNoConsoleErrors(undefined, HOMEPAGE_LOCATORS.navbar);
+  }
+
+  async assertHeroSectionFromApi(): Promise<void> {
+    await this.initializationPage.goto(UI_ROUTES.HOME);
+    await this.initializationPage.expectVisible(HOMEPAGE_LOCATORS.heroSection);
+
+    const heroResponse = (await this.apiHelper.getRequest(
+      HERO_ENDPOINTS.HOME
+    )) as HeroResponse;
+    const validation = heroResponseSchema.safeParse(heroResponse);
+    this.apiHelper.assertSchemaValid(validation, HERO_SCHEMA_LABELS.HERO_RESPONSE);
+
+    await this.initializationPage.expectTextContains(
+      HOMEPAGE_LOCATORS.heroBadge,
+      HERO_TEXT.BADGE
+    );
+    await this.initializationPage.expectTextContains(
+      HOMEPAGE_LOCATORS.heroHeadingReal,
+      heroResponse.headline
+    );
+    await this.initializationPage.expectTextContains(
+      HOMEPAGE_LOCATORS.heroParagraphReal,
+      heroResponse.subtext
+    );
+    await this.initializationPage.expectTextContains(
+      HOMEPAGE_LOCATORS.heroOpenAccountReal,
+      heroResponse.ctaLabel
+    );
+
+    await this.initializationPage.expectVisible(HOMEPAGE_LOCATORS.heroMockup);
+    await this.initializationPage.expectVisible(HOMEPAGE_LOCATORS.heroMonthlyIncomeReal);
+    await this.initializationPage.expectVisible(HOMEPAGE_LOCATORS.heroTransactionsCardReal);
+    await this.initializationPage.expectTextContains(
+      HOMEPAGE_LOCATORS.heroTransactionsHeading,
+      HERO_TEXT.TRANSACTIONS_HEADING
+    );
+    await this.initializationPage.expectVisible(HOMEPAGE_LOCATORS.heroExchangeCard);
+    await this.initializationPage.expectTextContains(
+      HOMEPAGE_LOCATORS.heroExchangeHeading,
+      HERO_TEXT.EXCHANGE_HEADING
+    );
+    await this.initializationPage.expectVisible(HOMEPAGE_LOCATORS.heroSupportedCurrencyReal);
+  }
+
+  async assertHeroCtaClickable(): Promise<void> {
+    await this.initializationPage.goto(UI_ROUTES.HOME);
+    await this.initializationPage.expectVisible(HOMEPAGE_LOCATORS.heroOpenAccountReal);
+    await this.initializationPage.clickOnElement(HOMEPAGE_LOCATORS.heroOpenAccountReal);
   }
 }

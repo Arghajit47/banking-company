@@ -41,3 +41,13 @@ test.describe("Home Page Testimonials Section", () => {
     await homepage.assertTestimonialsSection();
   });
 });
+
+test.describe("Home Page Hero Section", () => {
+  test("hero section renders with API-driven headline, subtext, and CTA", async ({ homepage }) => {
+    await homepage.assertHeroSectionFromApi();
+  });
+
+  test("hero CTA button is visible and clickable", async ({ homepage }) => {
+    await homepage.assertHeroCtaClickable();
+  });
+});

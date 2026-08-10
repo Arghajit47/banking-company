@@ -36,3 +36,23 @@ export const TESTIMONIALS_TEXT = {
   TAB_INDIVIDUALS: "For Individuals",
   TAB_BUSINESSES: "For Businesses",
 } as const;
+
+// BC-21 — Hero Section
+export const HERO_TEXT = {
+  HEADLINE_START: "Welcome to ",
+  HEADLINE_ACCENT: "YourBank",
+  SUBHEADING_START: "At YourBank, our mission is to provide comprehensive banking solutions",
+  CTA_LABEL: "Open Account",
+  BADGE: "No LLC Required, No Credit Check.",
+  MONTHLY_INCOME_LABEL: "Monthly Income",
+  TRANSACTIONS_HEADING: "Your Transactions",
+  EXCHANGE_HEADING: "Money Exchange",
+  EXCHANGE_BUTTON: "Exchange",
+  SUPPORTED_CURRENCY: "Supported Currency",
+} as const;
+
+export const HERO_UI = {
+  DESKTOP_VIEWPORT: { width: 1920, height: 1080 },
+  MOBILE_VIEWPORT: { width: 375, height: 667 },
+  ANIMATION_DELAY_MS: 300,
+} as const;
