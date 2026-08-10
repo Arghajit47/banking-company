@@ -23,6 +23,11 @@ export default defineConfig({
       testMatch: /.*\.spec\.ts$/,
     },
     {
+      name: 'api-test',
+      testDir: "./specs/api-test",
+      testMatch: /.*\.spec\.ts$/,
+    },
+    {
       name: 'lighthouse-test',
       testDir: "./specs/lighthouse-test",
       testMatch: /.*\.spec\.ts$/,
