@@ -13,8 +13,8 @@ export default function Home() {
         <HeroSection />
         <ProductsSection />
       </main>
-      <TestimonialsSection />
       <FAQSection />
+      <TestimonialsSection />
       <CTASection />
     </div>
   );

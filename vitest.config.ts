@@ -46,6 +46,7 @@ export default defineConfig({
             "src/__tests__/**/*.test.tsx",
             "src/components/**/*.test.tsx",
             "src/app/**/__tests__/*.test.tsx",
+            "src/app/**/*.test.tsx",
             "src/app/**/route.test.ts",
           ],
         },
