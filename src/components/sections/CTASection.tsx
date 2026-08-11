@@ -68,8 +68,8 @@ export function CTASection({
       aria-labelledby="cta-heading"
       className="w-full bg-[#1A1A1A]"
     >
-      <div className="mx-auto max-w-[1920px] px-4 py-12 md:px-6 md:py-16 lg:px-8 lg:py-20 xl:px-12">
-        <div className="relative flex flex-col items-center gap-8 overflow-hidden rounded-2xl bg-[#262626] px-5 py-10 md:flex-row md:items-center md:justify-between md:px-12 md:py-16 lg:px-16">
+      <div className="mx-auto max-w-[1920px] px-4 md:px-6 lg:px-8 xl:px-12">
+        <div className="relative flex min-h-[288px] flex-col items-center gap-8 overflow-hidden rounded-2xl bg-[#262626] px-5 py-10 md:flex-row md:items-center md:justify-between md:px-12 md:py-0 lg:px-16">
           {/*
             TODO: Replace this CSS placeholder with the exported Figma SVG once the
             Local AI Bridge plugin is synced to the correct page.
@@ -87,7 +87,7 @@ export function CTASection({
             }}
           />
 
-          <div className="relative z-10 w-full max-w-3xl text-center md:text-left">
+          <div className="relative z-10 w-full text-center md:text-left">
             {showSkeleton ? (
               <>
                 <div

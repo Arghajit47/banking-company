@@ -151,4 +151,18 @@ describe("CTASection", () => {
       "Start your financial journey with YourBank today!",
     );
   });
+
+  it("card has min-h-[288px] to match Figma compact height", () => {
+    render(<CTASection />);
+    const section = screen.getByTestId("cta-section");
+    const card = section.querySelector(".rounded-2xl");
+    expect(card?.className).toContain("min-h-[288px]");
+  });
+
+  it("text container has no max-w-3xl constraint", () => {
+    render(<CTASection />);
+    const heading = screen.getByTestId("cta-heading");
+    const textContainer = heading.closest("[class*='w-full']");
+    expect(textContainer?.className).not.toContain("max-w-3xl");
+  });
 });
