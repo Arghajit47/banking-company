@@ -79,4 +79,10 @@ describe("ProductsSection", () => {
     const heading = screen.getByTestId("products-heading");
     expect(heading.className).toContain("text-[#CAFF33]");
   });
+
+  it("tab container has correct padding class", () => {
+    render(<ProductsSection />);
+    const tabs = screen.getByTestId("products-tabs");
+    expect(tabs.className).toContain("p-[14px]");
+  });
 });
