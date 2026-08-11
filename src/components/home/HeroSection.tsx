@@ -251,22 +251,22 @@ export function HeroSection() {
               </button>
             </div>
 
+            {/* Lime arrows illustration — far-right of hero, placed before mockup so mockup (z-10) paints on top */}
+            <Image
+              src="/assets/illustrations/abstract_design_hero_illustration.svg"
+              alt=""
+              width={418}
+              height={383}
+              aria-hidden="true"
+              data-testid="hero-abstract-illustration"
+              className="pointer-events-none absolute right-0 top-16 hidden w-[280px] [mix-blend-mode:screen] md:block lg:w-[340px] xl:w-[418px]"
+            />
+
             {/* Right mockup column */}
             <div
               data-testid="hero-mockup"
               className="relative z-10 mt-12 w-full max-w-[700px] md:mt-0 lg:max-w-[780px]"
             >
-              {/* Decorative abstract illustration behind cards */}
-              <Image
-                src="/assets/illustrations/abstract_design_hero_illustration.svg"
-                alt=""
-                width={418}
-                height={383}
-                aria-hidden="true"
-                data-testid="hero-abstract-illustration"
-                className="pointer-events-none absolute -left-8 top-16 w-64 opacity-60 [mix-blend-mode:screen] sm:w-80 md:w-96"
-              />
-
               <div className="relative flex flex-col gap-4">
                 {/* Monthly Income floating badge */}
                 <div
