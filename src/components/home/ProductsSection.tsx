@@ -58,7 +58,7 @@ export function ProductsSection() {
           {/* Tabs */}
           <div
             data-testid="products-tabs"
-            className="inline-flex rounded-full border border-[#262626] bg-[#1A1A1A] p-1"
+            className="inline-flex rounded-full border border-[#262626] bg-[#1A1A1A] p-[14px]"
           >
             <button
               type="button"
