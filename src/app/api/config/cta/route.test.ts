@@ -11,7 +11,7 @@ function buildRequest(page?: string): NextRequest {
 
 const homeConfig = {
   headline: "Start your financial journey with YourBank today!",
-  body: "At YourBank, our mission is to provide comprehensive banking solutions that empower individuals and businesses to achieve their financial goals. We are committed to delivering personalized and innovative services that prioritize our customers' needs.",
+  body: "Ready to take control of your finances? Join YourBank now, and let us help you achieve your financial goals with our tailored solutions and exceptional customer service",
   buttonLabel: "Open Account",
 };
 
