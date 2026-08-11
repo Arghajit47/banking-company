@@ -4,16 +4,7 @@ import Image from "next/image";
 import { useHeroData, type HeroResponse, type HeroStats } from "@/lib/hero";
 import { useMounted } from "@/lib/use-mounted";
 
-function AvatarPlaceholder({ initials }: { initials: string }) {
-  return (
-    <div
-      data-testid="transaction-avatar"
-      className="flex h-10 w-10 items-center justify-center rounded-full bg-[#CAFF33] text-xs font-semibold text-[#1E1E1E]"
-    >
-      {initials}
-    </div>
-  );
-}
+const ROW_OPACITY = ["", "opacity-60", "opacity-30"] as const;
 
 function HeroSkeleton() {
   return (
@@ -273,12 +264,12 @@ export function HeroSection() {
                   data-testid="hero-monthly-income"
                   className="absolute -top-6 left-4 z-20 flex items-center gap-3 rounded-xl bg-[#1E1E1E] px-4 py-3 shadow-lg md:left-0"
                 >
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#CAFF33]">
+                  <div className="flex h-[38px] w-[38px] items-center justify-center rounded-full bg-[#CAFF33]">
                     <Image
                       src={stats?.monthlyIncome.icon ?? "/assets/icons/icon_stat_1.svg"}
                       alt=""
-                      width={20}
-                      height={20}
+                      width={21}
+                      height={21}
                       aria-hidden="true"
                       data-testid="hero-monthly-income-icon"
                     />
@@ -305,18 +296,20 @@ export function HeroSection() {
                     Your Transactions
                   </h3>
                   <div className="flex flex-col gap-3">
-                    {stats?.transactions.map((tx) => (
+                    {stats?.transactions.map((tx, idx) => (
                       <div
                         key={tx.id}
                         data-testid={`hero-transaction-${tx.id}`}
-                        className="flex items-center justify-between rounded-xl bg-[#262626]/50 px-3 py-2.5 sm:px-4 sm:py-3"
+                        className={`flex items-center justify-between rounded-xl bg-[#262626]/50 px-3 py-2.5 sm:px-4 sm:py-3 ${ROW_OPACITY[idx] ?? ""}`}
                       >
                         <div className="flex items-center gap-3">
-                          <AvatarPlaceholder
-                            initials={tx.name
-                              .split(" ")
-                              .map((n) => n[0])
-                              .join("")}
+                          <Image
+                            src="/assets/icons/icon_transaction.svg"
+                            alt=""
+                            width={38}
+                            height={38}
+                            aria-hidden="true"
+                            data-testid={`hero-transaction-icon-${tx.id}`}
                           />
                           <div className="text-left">
                             <p
