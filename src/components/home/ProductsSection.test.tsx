@@ -73,4 +73,10 @@ describe("ProductsSection", () => {
       ).toBeInTheDocument();
     });
   });
+
+  it("heading has lime green color class", () => {
+    render(<ProductsSection />);
+    const heading = screen.getByTestId("products-heading");
+    expect(heading.className).toContain("text-[#CAFF33]");
+  });
 });
