@@ -32,20 +32,20 @@ describe("GET /api/testimonials", () => {
     expect(Array.isArray(body.testimonials)).toBe(true);
   });
 
-  it("individuals tab returns 3 items including Sara T and Emily G", async () => {
+  it("individuals tab returns 6 items including Sara T and Emily G", async () => {
     const response = await GET(createRequest("individuals"));
     const body = await response.json();
-    expect(body.testimonials.length).toBe(3);
+    expect(body.testimonials.length).toBe(6);
     const names = body.testimonials.map((t: { name: string }) => t.name);
     expect(names).toContain("Sara T");
     expect(names).toContain("Emily G");
     expect(names).toContain("Michael B");
   });
 
-  it("businesses tab returns 3 items including John D", async () => {
+  it("businesses tab returns 6 items including John D", async () => {
     const response = await GET(createRequest("businesses"));
     const body = await response.json();
-    expect(body.testimonials.length).toBe(3);
+    expect(body.testimonials.length).toBe(6);
     const names = body.testimonials.map((t: { name: string }) => t.name);
     expect(names).toContain("John D");
     expect(names).toContain("Alex P");
