@@ -264,7 +264,7 @@ export function HeroSection() {
                 height={383}
                 aria-hidden="true"
                 data-testid="hero-abstract-illustration"
-                className="pointer-events-none absolute -left-8 top-16 w-64 opacity-60 sm:w-80 md:w-96"
+                className="pointer-events-none absolute -left-8 top-16 w-64 opacity-60 [mix-blend-mode:screen] sm:w-80 md:w-96"
               />
 
               <div className="relative flex flex-col gap-4">
@@ -438,7 +438,7 @@ export function HeroSection() {
               height={499}
               aria-hidden="true"
               data-testid="hero-background-arrows"
-              className="pointer-events-none absolute -right-24 bottom-0 hidden w-[420px] opacity-80 md:block lg:w-[540px] desktop:w-[660px]"
+              className="pointer-events-none absolute -right-24 bottom-0 hidden w-[420px] opacity-80 [mix-blend-mode:color-dodge] md:block lg:w-[540px] desktop:w-[660px]"
             />
           </>
         )}

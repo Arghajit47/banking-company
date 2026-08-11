@@ -9,7 +9,6 @@ const products = [
     description:
       "Enjoy easy and convenient access to your funds with our range of checking account options. Benefit from features such as online and mobile banking, debit cards, and free ATM access.",
     icon: "/assets/icons/icon_product_1.svg",
-    badge: "/assets/icons/icon_product_badge_1.svg",
   },
   {
     id: 2,
@@ -17,7 +16,6 @@ const products = [
     description:
       "Build your savings with our competitive interest rates and flexible savings account options. Whether you're saving for a specific goal or want to grow your wealth over time, we have the right account for you.",
     icon: "/assets/icons/icon_product_2.svg",
-    badge: "/assets/icons/icon_product_badge_2.svg",
   },
   {
     id: 3,
@@ -25,7 +23,6 @@ const products = [
     description:
       "Realize your dreams with our flexible loan and mortgage options. From personal loans to home mortgages, our experienced loan officers are here to guide you through the application process and help you secure the funds you need.",
     icon: "/assets/icons/icon_product_3.svg",
-    badge: "/assets/icons/icon_product_badge_3.svg",
   },
 ];
 
@@ -86,30 +83,24 @@ export function ProductsSection() {
             <article
               key={product.id}
               data-testid={`product-card-${product.id}`}
-              className="flex flex-col rounded-2xl border border-[#262626] bg-[#1A1A2E] p-6 transition hover:border-[#333333] sm:p-8"
+              className="flex flex-col rounded-2xl border border-[#262626] bg-[#1E1E1E] p-6 transition hover:border-[#333333] sm:p-8"
             >
               <div className="mb-6 flex items-center gap-4">
+                {/* Icon wrapper: double-ring structure matching Figma node 11:86875 */}
                 <div
                   data-testid={`product-icon-wrapper-${product.id}`}
-                  className="relative flex h-14 w-14 flex-shrink-0 items-center justify-center"
+                  className="flex h-[98px] w-[98px] shrink-0 items-center justify-center rounded-[70px] bg-gradient-to-b from-[rgba(202,255,51,0.05)] to-transparent p-3"
                 >
-                  <Image
-                    src={product.icon}
-                    alt=""
-                    width={56}
-                    height={56}
-                    aria-hidden="true"
-                    data-testid={`product-icon-${product.id}`}
-                  />
-                  <Image
-                    src={product.badge}
-                    alt=""
-                    width={20}
-                    height={20}
-                    aria-hidden="true"
-                    data-testid={`product-badge-${product.id}`}
-                    className="absolute -right-1 -top-1"
-                  />
+                  <div className="flex h-full w-full items-center justify-center rounded-[50px] border border-[#CAFF33]/20 bg-gradient-to-b from-[rgba(202,255,51,0.1)] to-transparent">
+                    <Image
+                      src={product.icon}
+                      alt=""
+                      width={34}
+                      height={34}
+                      aria-hidden="true"
+                      data-testid={`product-icon-${product.id}`}
+                    />
+                  </div>
                 </div>
                 <h3
                   data-testid={`product-title-${product.id}`}

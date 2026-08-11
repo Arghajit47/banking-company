@@ -68,10 +68,30 @@ describe("ProductsSection", () => {
       expect(
         screen.getByTestId(`product-icon-${product.id}`),
       ).toBeInTheDocument();
-      expect(
-        screen.getByTestId(`product-badge-${product.id}`),
-      ).toBeInTheDocument();
     });
+  });
+
+  it("product cards have no duplicate badge icon", () => {
+    render(<ProductsSection />);
+    products.forEach((product) => {
+      expect(
+        screen.queryByTestId(`product-badge-${product.id}`),
+      ).not.toBeInTheDocument();
+    });
+  });
+
+  it("product icon wrapper has Figma double-ring gradient structure", () => {
+    render(<ProductsSection />);
+    const wrapper = screen.getByTestId("product-icon-wrapper-1");
+    expect(wrapper.className).toContain("rounded-[70px]");
+    expect(wrapper.className).toContain("from-[rgba(202,255,51,0.05)]");
+  });
+
+  it("product cards have correct dark background color", () => {
+    render(<ProductsSection />);
+    const card = screen.getByTestId("product-card-1");
+    expect(card.className).toContain("bg-[#1E1E1E]");
+    expect(card.className).not.toContain("bg-[#1A1A2E]");
   });
 
   it("heading has lime green color class", () => {

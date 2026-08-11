@@ -235,9 +235,13 @@ export function TestimonialsSection() {
             <ChevronLeftIcon size={34} />
           </button>
 
-          {/* Cards — horizontally scrollable on mobile */}
+          {/* Cards — visible window of 3: prev, active, next */}
           <div className="flex flex-1 gap-4 overflow-x-auto pb-2 md:gap-6 md:overflow-x-visible md:pb-0">
-            {testimonials.map((testimonial, index) => {
+            {[
+              testimonials[(activeIndex - 1 + testimonials.length) % testimonials.length],
+              testimonials[activeIndex],
+              testimonials[(activeIndex + 1) % testimonials.length],
+            ].map((testimonial, index) => {
               const isCenter = index === 1;
               return (
                 <div
