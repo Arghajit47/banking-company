@@ -13,8 +13,16 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-lexend: var(--font-lexend);
-  --breakpoint-laptop: 1440px;
-  --breakpoint-desktop: 1920px;
+  /* Breakpoints defined in ascending order so CSS cascade is correct —
+     Tailwind v4 generates media queries in definition order; custom breakpoints
+     must appear after the standard ones to override them at wider viewports. */
+  --breakpoint-sm: 40rem;
+  --breakpoint-md: 48rem;
+  --breakpoint-lg: 64rem;
+  --breakpoint-xl: 80rem;
+  --breakpoint-laptop: 90rem;
+  --breakpoint-2xl: 96rem;
+  --breakpoint-desktop: 120rem;
 }
 
 @media (prefers-color-scheme: dark) {
