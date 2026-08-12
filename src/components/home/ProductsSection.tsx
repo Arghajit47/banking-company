@@ -1,32 +1,59 @@
 "use client";
 
 import Image from "next/image";
+import { useProductsData, getProductIconPath } from "@/lib/products";
+import { useMounted } from "@/lib/use-mounted";
 
-const products = [
-  {
-    id: 1,
-    title: "Checking Accounts",
-    description:
-      "Enjoy easy and convenient access to your funds with our range of checking account options. Benefit from features such as online and mobile banking, debit cards, and free ATM access.",
-    icon: "/assets/icons/icon_product_1.svg",
-  },
-  {
-    id: 2,
-    title: "Savings Accounts",
-    description:
-      "Build your savings with our competitive interest rates and flexible savings account options. Whether you're saving for a specific goal or want to grow your wealth over time, we have the right account for you.",
-    icon: "/assets/icons/icon_product_2.svg",
-  },
-  {
-    id: 3,
-    title: "Loans and Mortgages",
-    description:
-      "Realize your dreams with our flexible loan and mortgage options. From personal loans to home mortgages, our experienced loan officers are here to guide you through the application process and help you secure the funds you need.",
-    icon: "/assets/icons/icon_product_3.svg",
-  },
-];
+const SKELETON_COUNT = 6;
+
+function ProductsSkeleton() {
+  return (
+    <div
+      data-testid="products-grid"
+      className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
+    >
+      {Array.from({ length: SKELETON_COUNT }).map((_, idx) => (
+        <div
+          key={idx}
+          data-testid={`product-card-skeleton-${idx + 1}`}
+          className="flex flex-col rounded-2xl border border-[#262626] bg-[#1E1E1E] p-6 sm:p-8"
+          aria-hidden="true"
+        >
+          <div className="mb-6 flex items-center gap-4">
+            <div className="h-[98px] w-[98px] shrink-0 animate-pulse rounded-[70px] bg-[#262626]" />
+            <div className="h-6 w-36 animate-pulse rounded bg-[#262626]" />
+          </div>
+          <div className="space-y-2">
+            <div className="h-3 w-full animate-pulse rounded bg-[#262626]" />
+            <div className="h-3 w-5/6 animate-pulse rounded bg-[#262626]" />
+            <div className="h-3 w-4/6 animate-pulse rounded bg-[#262626]" />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function ProductsErrorFallback() {
+  return (
+    <div
+      data-testid="products-error-state"
+      className="flex h-64 w-full items-center justify-center"
+    >
+      <p className="text-[#999999]">
+        Unable to load products. Please try again later.
+      </p>
+    </div>
+  );
+}
 
 export function ProductsSection() {
+  const mounted = useMounted();
+  const { data, error, isLoading } = useProductsData();
+
+  const showSkeleton = !mounted || isLoading;
+  const hasError = !showSkeleton && (error || !data);
+
   return (
     <section
       data-testid="products-section"
@@ -75,49 +102,54 @@ export function ProductsSection() {
         </div>
 
         {/* Product cards */}
-        <div
-          data-testid="products-grid"
-          className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
-        >
-          {products.map((product) => (
-            <article
-              key={product.id}
-              data-testid={`product-card-${product.id}`}
-              className="flex flex-col rounded-2xl border border-[#262626] bg-[#1E1E1E] p-6 transition hover:border-[#333333] sm:p-8"
-            >
-              <div className="mb-6 flex items-center gap-4">
-                {/* Icon wrapper: double-ring structure matching Figma node 11:86875 */}
-                <div
-                  data-testid={`product-icon-wrapper-${product.id}`}
-                  className="flex h-[98px] w-[98px] shrink-0 items-center justify-center rounded-[70px] bg-gradient-to-b from-[rgba(202,255,51,0.05)] to-transparent p-3"
-                >
-                  <div className="flex h-full w-full items-center justify-center rounded-[50px] border border-[#CAFF33]/20 bg-gradient-to-b from-[rgba(202,255,51,0.1)] to-transparent">
-                    <Image
-                      src={product.icon}
-                      alt=""
-                      width={34}
-                      height={34}
-                      aria-hidden="true"
-                      data-testid={`product-icon-${product.id}`}
-                    />
-                  </div>
-                </div>
-                <h3
-                  data-testid={`product-title-${product.id}`}
-                  className="text-lg font-medium text-white sm:text-xl"
-                >
-                  {product.title}
-                </h3>
-              </div>
-              <p
-                data-testid={`product-description-${product.id}`}
-                className="text-sm leading-relaxed text-[#999999]"
+        {showSkeleton ? (
+          <ProductsSkeleton />
+        ) : hasError ? (
+          <ProductsErrorFallback />
+        ) : (
+          <div
+            data-testid="products-grid"
+            className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
+          >
+            {data!.products.map((product) => (
+              <article
+                key={product.id}
+                data-testid={`product-card-${product.id}`}
+                className="flex flex-col rounded-2xl border border-[#262626] bg-[#1E1E1E] p-6 transition hover:border-[#333333] sm:p-8"
               >
-                {product.description}
-              </p>
-            </article>
-          ))}
-        </div>
+                <div className="mb-6 flex items-center gap-4">
+                  <div
+                    data-testid={`product-icon-wrapper-${product.id}`}
+                    className="flex h-[98px] w-[98px] shrink-0 items-center justify-center rounded-[70px] bg-gradient-to-b from-[rgba(202,255,51,0.05)] to-transparent p-3"
+                  >
+                    <div className="flex h-full w-full items-center justify-center rounded-[50px] border border-[#CAFF33]/20 bg-gradient-to-b from-[rgba(202,255,51,0.1)] to-transparent">
+                      <Image
+                        src={getProductIconPath(product.icon)}
+                        alt=""
+                        width={34}
+                        height={34}
+                        aria-hidden="true"
+                        data-testid={`product-icon-${product.id}`}
+                      />
+                    </div>
+                  </div>
+                  <h3
+                    data-testid={`product-title-${product.id}`}
+                    className="text-lg font-medium text-white sm:text-xl"
+                  >
+                    {product.title}
+                  </h3>
+                </div>
+                <p
+                  data-testid={`product-description-${product.id}`}
+                  className="text-sm leading-relaxed text-[#999999]"
+                >
+                  {product.description}
+                </p>
+              </article>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
