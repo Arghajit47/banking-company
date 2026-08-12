@@ -56,3 +56,16 @@ export const HERO_UI = {
   MOBILE_VIEWPORT: { width: 375, height: 667 },
   ANIMATION_DELAY_MS: 300,
 } as const;
+
+// BC-24 — Products Section
+export const PRODUCTS_TEXT = {
+  HEADING: "Our Products",
+  SUBHEADING_START: "Discover a range of comprehensive",
+  TAB_INDIVIDUALS: "For Individuals",
+  TAB_BUSINESSES: "For Businesses",
+} as const;
+
+export const PRODUCTS_COUNTS = {
+  EXPECTED_CARDS: 6,
+  SWR_LOAD_TIMEOUT_MS: 15000,
+} as const;

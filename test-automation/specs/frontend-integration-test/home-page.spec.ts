@@ -51,3 +51,9 @@ test.describe("Home Page Hero Section", () => {
     await homepage.assertHeroCtaClickable();
   });
 });
+
+test.describe("Home Page Products Section", () => {
+  test("products section renders all 6 cards from /api/products with Zod-validated schema", async ({ homepage }) => {
+    await homepage.assertProductsSectionFromApi();
+  });
+});
