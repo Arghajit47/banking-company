@@ -1,10 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import { useProductsData, getProductIconPath } from "@/lib/products";
 import { useMounted } from "@/lib/use-mounted";
 
-const SKELETON_COUNT = 6;
+const SKELETON_COUNT = 3;
 
 function ProductsSkeleton() {
   return (
@@ -50,9 +51,14 @@ function ProductsErrorFallback() {
 export function ProductsSection() {
   const mounted = useMounted();
   const { data, error, isLoading } = useProductsData();
+  const [activeTab, setActiveTab] = useState<"individuals" | "businesses">(
+    "individuals"
+  );
 
   const showSkeleton = !mounted || isLoading;
   const hasError = !showSkeleton && (error || !data);
+
+  const visibleProducts = data?.products.filter((p) => p.tab === activeTab) ?? [];
 
   return (
     <section
@@ -87,14 +93,24 @@ export function ProductsSection() {
             <button
               type="button"
               data-testid="products-tab-individuals"
-              className="rounded-full bg-[#CAFF33] px-5 py-2 text-sm font-medium text-[#1E1E1E] transition hover:brightness-110"
+              onClick={() => setActiveTab("individuals")}
+              className={
+                activeTab === "individuals"
+                  ? "rounded-full bg-[#CAFF33] px-5 py-2 text-sm font-medium text-[#1E1E1E] transition hover:brightness-110"
+                  : "rounded-full px-5 py-2 text-sm font-medium text-[#999999] transition hover:text-white"
+              }
             >
               For Individuals
             </button>
             <button
               type="button"
               data-testid="products-tab-businesses"
-              className="rounded-full px-5 py-2 text-sm font-medium text-[#999999] transition hover:text-white"
+              onClick={() => setActiveTab("businesses")}
+              className={
+                activeTab === "businesses"
+                  ? "rounded-full bg-[#CAFF33] px-5 py-2 text-sm font-medium text-[#1E1E1E] transition hover:brightness-110"
+                  : "rounded-full px-5 py-2 text-sm font-medium text-[#999999] transition hover:text-white"
+              }
             >
               For Businesses
             </button>
@@ -111,7 +127,7 @@ export function ProductsSection() {
             data-testid="products-grid"
             className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
           >
-            {data!.products.map((product) => (
+            {visibleProducts.map((product) => (
               <article
                 key={product.id}
                 data-testid={`product-card-${product.id}`}

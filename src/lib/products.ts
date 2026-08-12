@@ -7,6 +7,7 @@ export interface Product {
   icon: string;
   title: string;
   description: string;
+  tab: "individuals" | "businesses";
 }
 
 export interface ProductsResponse {
