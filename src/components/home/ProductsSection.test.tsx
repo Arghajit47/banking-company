@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { render, screen, cleanup } from "@testing-library/react";
+import { render, screen, cleanup, fireEvent } from "@testing-library/react";
 import * as matchers from "@testing-library/jest-dom/matchers";
 import { ProductsSection } from "./ProductsSection";
 import type { ProductsResponse } from "@/lib/products";
@@ -12,43 +12,49 @@ const apiProductsData: ProductsResponse = {
       id: 1,
       icon: "checking",
       title: "Checking Accounts",
+      tab: "individuals",
       description:
-        "Enjoy easy and convenient banking with our range of checking account options.",
+        "Enjoy easy and convenient access to your funds with our range of checking account options. Benefit from features such as online and mobile banking, debit cards, and free ATM access.",
     },
     {
       id: 2,
       icon: "savings",
       title: "Savings Accounts",
+      tab: "individuals",
       description:
-        "Build your savings with competitive interest rates and flexible account options.",
+        "Build your savings with our competitive interest rates and flexible savings account options. Whether you're saving for a specific goal or want to grow your wealth over time, we have the right account for you.",
     },
     {
       id: 3,
       icon: "loans",
-      title: "Home Loans",
+      title: "Loans and Mortgages",
+      tab: "individuals",
       description:
-        "Realize your dream of homeownership with our flexible mortgage solutions.",
+        "Realize your dreams with our flexible loan and mortgage options. From personal loans to home mortgages, our experienced loan officers are here to guide you through the application process and help you secure the funds you need.",
     },
     {
       id: 4,
       icon: "insurance",
-      title: "Insurance",
+      title: "Business Accounts",
+      tab: "businesses",
       description:
-        "Protect what matters most with our comprehensive insurance products.",
+        "Efficiently manage your business finances with our tailored business account options, designed to help your business grow and succeed with seamless banking solutions.",
     },
     {
       id: 5,
       icon: "investing",
-      title: "Investments",
+      title: "Business Loans",
+      tab: "businesses",
       description:
-        "Grow your wealth with our tailored investment plans and expert guidance.",
+        "Power your business ambitions with our flexible business loan solutions. Whether you need working capital or funds for expansion, our dedicated team is ready to support your growth.",
     },
     {
       id: 6,
       icon: "credit",
-      title: "Credit Cards",
+      title: "Cash Management",
+      tab: "businesses",
       description:
-        "Earn rewards and enjoy financial flexibility with our range of credit card options.",
+        "Optimize your business cash flow with our comprehensive cash management services, giving you greater control and visibility over your business finances.",
     },
   ],
 };
@@ -109,7 +115,7 @@ describe("ProductsSection", () => {
     );
   });
 
-  it("renders at least 2 product cards with titles from API", () => {
+  it("renders 3 individuals cards by default with Figma-correct titles", () => {
     render(<ProductsSection />);
     expect(screen.getByTestId("products-grid")).toBeInTheDocument();
     expect(screen.getByTestId("product-card-1")).toBeInTheDocument();
@@ -120,11 +126,20 @@ describe("ProductsSection", () => {
     expect(screen.getByTestId("product-title-2")).toHaveTextContent(
       "Savings Accounts",
     );
+    expect(screen.getByTestId("product-card-3")).toBeInTheDocument();
+    expect(screen.getByTestId("product-title-3")).toHaveTextContent(
+      "Loans and Mortgages",
+    );
+    // businesses cards not rendered by default
+    expect(screen.queryByTestId("product-card-4")).not.toBeInTheDocument();
   });
 
-  it("renders all 6 product cards from API", () => {
+  it("renders all 3 individuals product cards with correct Figma descriptions", () => {
     render(<ProductsSection />);
-    apiProductsData.products.forEach((product) => {
+    const individuals = apiProductsData.products.filter(
+      (p) => p.tab === "individuals",
+    );
+    individuals.forEach((product) => {
       expect(
         screen.getByTestId(`product-card-${product.id}`),
       ).toBeInTheDocument();
@@ -138,6 +153,35 @@ describe("ProductsSection", () => {
         screen.getByTestId(`product-icon-${product.id}`),
       ).toBeInTheDocument();
     });
+  });
+
+  it("switches to businesses cards when For Businesses tab is clicked", () => {
+    render(<ProductsSection />);
+    const businessesTab = screen.getByTestId("products-tab-businesses");
+    fireEvent.click(businessesTab);
+
+    expect(screen.getByTestId("product-card-4")).toBeInTheDocument();
+    expect(screen.getByTestId("product-title-4")).toHaveTextContent(
+      "Business Accounts",
+    );
+    expect(screen.getByTestId("product-card-5")).toBeInTheDocument();
+    expect(screen.getByTestId("product-title-5")).toHaveTextContent(
+      "Business Loans",
+    );
+    expect(screen.getByTestId("product-card-6")).toBeInTheDocument();
+    expect(screen.getByTestId("product-title-6")).toHaveTextContent(
+      "Cash Management",
+    );
+    // individuals cards not visible after switching
+    expect(screen.queryByTestId("product-card-1")).not.toBeInTheDocument();
+  });
+
+  it("switches back to individuals when For Individuals tab is clicked", () => {
+    render(<ProductsSection />);
+    fireEvent.click(screen.getByTestId("products-tab-businesses"));
+    fireEvent.click(screen.getByTestId("products-tab-individuals"));
+    expect(screen.getByTestId("product-card-1")).toBeInTheDocument();
+    expect(screen.queryByTestId("product-card-4")).not.toBeInTheDocument();
   });
 
   it("renders loading skeleton when isLoading is true", () => {
@@ -184,5 +228,14 @@ describe("ProductsSection", () => {
     render(<ProductsSection />);
     const tabs = screen.getByTestId("products-tabs");
     expect(tabs.className).toContain("p-[14px]");
+  });
+
+  it("active tab has lime green background, inactive tab has muted text", () => {
+    render(<ProductsSection />);
+    const individualsTab = screen.getByTestId("products-tab-individuals");
+    const businessesTab = screen.getByTestId("products-tab-businesses");
+    expect(individualsTab.className).toContain("bg-[#CAFF33]");
+    expect(businessesTab.className).not.toContain("bg-[#CAFF33]");
+    expect(businessesTab.className).toContain("text-[#999999]");
   });
 });
