@@ -16,7 +16,7 @@ function HeroSkeleton() {
       <div className="z-10 flex w-full max-w-[826px] flex-col items-center text-center md:items-start md:text-left">
         <div
           data-testid="hero-badge"
-          className="mb-6 inline-flex h-11 items-center gap-1.5 rounded-full bg-[#262626] pl-3 pr-5 py-2.5"
+          className="mb-6 inline-flex h-11 items-center gap-1.5 rounded-[61px] bg-[#262626] pl-3 pr-5 py-2.5"
         >
           <div
             data-testid="hero-badge-icon"
@@ -48,7 +48,7 @@ function HeroSkeleton() {
       {/* Right mockup column skeleton */}
       <div
         data-testid="hero-mockup"
-        className="relative z-10 mt-12 w-full max-w-[700px] md:mt-0 lg:max-w-[780px]"
+        className="relative z-10 mt-12 w-full max-w-[700px] md:mt-0 lg:max-w-[780px] desktop:max-w-[515px]"
       >
         <div className="relative flex flex-col gap-4">
           <div
@@ -196,7 +196,7 @@ export function HeroSection() {
               {/* Trust badge */}
               <div
                 data-testid="hero-badge"
-                className="mb-6 inline-flex h-11 items-center gap-1.5 rounded-full bg-[#262626] pl-3 pr-5 py-2.5"
+                className="mb-6 inline-flex h-11 items-center gap-1.5 rounded-[61px] bg-[#262626] pl-3 pr-5 py-2.5"
               >
                 <Image
                   src="/assets/icons/icon_hero_badge.svg"
@@ -214,7 +214,7 @@ export function HeroSection() {
               {/* Heading */}
               <h1
                 data-testid="hero-heading"
-                className="mb-6 text-[28px] font-medium leading-[42px] text-white sm:text-[34px] sm:leading-[51px] md:text-[40px] md:leading-[60px] lg:text-[44px] lg:leading-[66px] desktop:text-[48px] desktop:leading-[72px]"
+                className="mb-6 w-full text-[28px] font-medium leading-[42px] text-white sm:text-[34px] sm:leading-[51px] md:text-[40px] md:leading-[60px] lg:text-[44px] lg:leading-[66px] desktop:text-[48px] desktop:leading-[72px]"
               >
                 <span className="block" data-testid="hero-line-welcome">
                   {hero.headline}
@@ -263,7 +263,7 @@ export function HeroSection() {
             {/* Right mockup column */}
             <div
               data-testid="hero-mockup"
-              className="relative z-10 mt-12 w-full max-w-[700px] md:mt-0 lg:max-w-[780px]"
+              className="relative z-10 mt-12 w-full max-w-[700px] md:mt-0 lg:max-w-[780px] desktop:max-w-[515px]"
             >
               <div className="relative flex flex-col gap-4">
                 {/* Monthly Income floating badge */}
