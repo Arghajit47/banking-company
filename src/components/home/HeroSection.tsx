@@ -171,7 +171,7 @@ export function HeroSection() {
         data-testid="hero-section"
         className="relative w-full overflow-hidden bg-[#1A1A1A] font-[var(--font-lexend)]"
       >
-        <div className="relative mx-auto flex min-h-[824px] max-w-[1920px] flex-col items-center justify-center px-4 py-16 md:flex-row md:items-center md:justify-between md:px-8 lg:px-12 laptop:px-20 desktop:px-[162px]">
+        <div className="relative mx-auto flex min-h-[824px] max-w-[1920px] flex-col items-center justify-center px-4 py-16 md:flex-row md:items-center md:justify-start md:px-8 lg:px-12 laptop:px-20 desktop:px-[162px]">
           <HeroErrorFallback />
         </div>
       </section>
@@ -186,7 +186,7 @@ export function HeroSection() {
       data-testid="hero-section"
       className="relative w-full overflow-hidden bg-[#1A1A1A] font-[var(--font-lexend)]"
     >
-      <div className="relative mx-auto flex min-h-[824px] max-w-[1920px] flex-col items-center justify-center px-4 py-16 md:flex-row md:items-center md:justify-between md:px-8 lg:px-12 laptop:px-20 desktop:px-[162px]">
+      <div className="relative mx-auto flex min-h-[824px] max-w-[1920px] flex-col items-center justify-center px-4 py-16 md:flex-row md:items-center md:justify-start md:px-8 lg:px-12 laptop:px-20 desktop:px-[162px]">
         {showSkeleton ? (
           <HeroSkeleton />
         ) : (
