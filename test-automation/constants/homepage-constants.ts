@@ -66,6 +66,7 @@ export const PRODUCTS_TEXT = {
 } as const;
 
 export const PRODUCTS_COUNTS = {
-  EXPECTED_CARDS: 6,
+  EXPECTED_API_TOTAL: 6,
+  EXPECTED_VISIBLE_CARDS: 3,
   SWR_LOAD_TIMEOUT_MS: 15000,
 } as const;

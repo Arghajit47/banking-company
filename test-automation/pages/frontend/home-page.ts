@@ -253,7 +253,7 @@ export class HomePage {
     const validation = productsResponseSchema.safeParse(productsResponse);
     this.apiHelper.assertSchemaValid(validation, PRODUCTS_SCHEMA_LABELS.PRODUCTS_RESPONSE);
 
-    expect(productsResponse.products).toHaveLength(PRODUCTS_COUNTS.EXPECTED_CARDS);
+    expect(productsResponse.products).toHaveLength(PRODUCTS_COUNTS.EXPECTED_API_TOTAL);
 
     await this.initializationPage.expectTextContains(
       HOMEPAGE_LOCATORS.productsHeading,
@@ -277,7 +277,7 @@ export class HomePage {
     await this.initializationPage.expectVisible(HOMEPAGE_LOCATORS.productsGrid);
 
     const cards = this.initializationPage.page.locator(HOMEPAGE_LOCATORS.productsCard);
-    expect(await cards.count()).toBe(PRODUCTS_COUNTS.EXPECTED_CARDS);
+    expect(await cards.count()).toBe(PRODUCTS_COUNTS.EXPECTED_VISIBLE_CARDS);
 
     await this.initializationPage.expectTextContains(
       HOMEPAGE_LOCATORS.productsTitleFirst,
