@@ -49,4 +49,15 @@ export const HOMEPAGE_LOCATORS = {
   heroSupportedCurrencyReal: '[data-testid="hero-supported-currency"]:not([aria-hidden="true"])',
   heroBackgroundArrows: '[data-testid="hero-background-arrows"]',
   heroAbstractIllustration: '[data-testid="hero-abstract-illustration"]',
+  // BC-24 — Products Section
+  productsSection: '[data-testid="products-section"]',
+  productsHeading: '[data-testid="products-heading"]',
+  productsSubheading: '[data-testid="products-subheading"]',
+  productsTabs: '[data-testid="products-tabs"]',
+  productsTabIndividuals: '[data-testid="products-tab-individuals"]',
+  productsTabBusinesses: '[data-testid="products-tab-businesses"]',
+  productsGrid: '[data-testid="products-grid"]',
+  productsCard: 'article[data-testid^="product-card-"]',
+  productsCardFirst: '[data-testid="product-card-1"]',
+  productsTitleFirst: '[data-testid="product-title-1"]',
 } as const;

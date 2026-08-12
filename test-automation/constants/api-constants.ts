@@ -153,3 +153,34 @@ export const HERO_ENDPOINTS = {
 export const HERO_SCHEMA_LABELS = {
   HERO_RESPONSE: "hero response schema",
 } as const;
+
+// BC-24 — Products Section
+export const productSchema = z.object({
+  id: z.number().int(),
+  icon: z.string().min(1),
+  title: z.string().min(1),
+  description: z.string().min(1),
+});
+
+export const productsResponseSchema = z.object({
+  products: z.array(productSchema),
+});
+
+export interface Product {
+  id: number;
+  icon: string;
+  title: string;
+  description: string;
+}
+
+export interface ProductsResponse {
+  products: Product[];
+}
+
+export const PRODUCTS_ENDPOINTS = {
+  LIST: "/api/products",
+} as const;
+
+export const PRODUCTS_SCHEMA_LABELS = {
+  PRODUCTS_RESPONSE: "products response schema",
+} as const;

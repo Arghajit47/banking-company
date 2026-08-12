@@ -17,6 +17,12 @@ import {
   HERO_TEXT,
   heroResponseSchema,
   type HeroResponse,
+  PRODUCTS_COUNTS,
+  PRODUCTS_ENDPOINTS,
+  PRODUCTS_SCHEMA_LABELS,
+  PRODUCTS_TEXT,
+  productsResponseSchema,
+  type ProductsResponse,
   TESTIMONIALS_TEXT,
   TESTIMONIALS_ENDPOINTS,
   type TestimonialsResponse,
@@ -235,5 +241,47 @@ export class HomePage {
     await this.initializationPage.goto(UI_ROUTES.HOME);
     await this.initializationPage.expectVisible(HOMEPAGE_LOCATORS.heroOpenAccountReal);
     await this.initializationPage.clickOnElement(HOMEPAGE_LOCATORS.heroOpenAccountReal);
+  }
+
+  async assertProductsSectionFromApi(): Promise<void> {
+    await this.initializationPage.goto(UI_ROUTES.HOME);
+    await this.initializationPage.expectVisible(HOMEPAGE_LOCATORS.productsSection);
+
+    const productsResponse = (await this.apiHelper.getRequest(
+      PRODUCTS_ENDPOINTS.LIST
+    )) as ProductsResponse;
+    const validation = productsResponseSchema.safeParse(productsResponse);
+    this.apiHelper.assertSchemaValid(validation, PRODUCTS_SCHEMA_LABELS.PRODUCTS_RESPONSE);
+
+    expect(productsResponse.products).toHaveLength(PRODUCTS_COUNTS.EXPECTED_API_TOTAL);
+
+    await this.initializationPage.expectTextContains(
+      HOMEPAGE_LOCATORS.productsHeading,
+      PRODUCTS_TEXT.HEADING
+    );
+    await this.initializationPage.expectTextContains(
+      HOMEPAGE_LOCATORS.productsSubheading,
+      PRODUCTS_TEXT.SUBHEADING_START
+    );
+    await this.initializationPage.expectVisible(HOMEPAGE_LOCATORS.productsTabIndividuals);
+    await this.initializationPage.expectVisible(HOMEPAGE_LOCATORS.productsTabBusinesses);
+
+    // SWR fetches after React hydration; wait for the first real card to appear
+    // before asserting the count (skeleton cards are aria-hidden and won't match).
+    await this.initializationPage.expectVisibleWithTimeout(
+      HOMEPAGE_LOCATORS.productsCardFirst,
+      0,
+      PRODUCTS_COUNTS.SWR_LOAD_TIMEOUT_MS
+    );
+
+    await this.initializationPage.expectVisible(HOMEPAGE_LOCATORS.productsGrid);
+
+    const cards = this.initializationPage.page.locator(HOMEPAGE_LOCATORS.productsCard);
+    expect(await cards.count()).toBe(PRODUCTS_COUNTS.EXPECTED_VISIBLE_CARDS);
+
+    await this.initializationPage.expectTextContains(
+      HOMEPAGE_LOCATORS.productsTitleFirst,
+      productsResponse.products[0].title
+    );
   }
 }
