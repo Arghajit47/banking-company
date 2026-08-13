@@ -1,11 +1,104 @@
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { render, screen, cleanup } from "@testing-library/react";
 import * as matchers from "@testing-library/jest-dom/matchers";
 import { UseCasesSection } from "./UseCasesSection";
+import type { UseCasesResponse } from "@/lib/use-cases";
 
 expect.extend(matchers);
 
+const apiUseCasesData: UseCasesResponse = {
+  useCases: [
+    {
+      id: 1,
+      icon: "/assets/icons/icon_use_case_1.svg",
+      title: "Managing Personal Finances",
+      description: "Take control of your finances with our intuitive budgeting and expense tracking tools.",
+      audience: "individual",
+    },
+    {
+      id: 2,
+      icon: "/assets/icons/icon_use_case_2.svg",
+      title: "Saving for the Future",
+      description: "Start building your nest egg with our high-yield savings accounts and investment options.",
+      audience: "individual",
+    },
+    {
+      id: 3,
+      icon: "/assets/icons/icon_use_case_3.svg",
+      title: "Homeownership",
+      description: "Realize your dream of homeownership with our competitive mortgage rates.",
+      audience: "individual",
+    },
+    {
+      id: 4,
+      icon: "/assets/icons/icon_use_case_4.svg",
+      title: "Education Funding",
+      description: "Invest in the future with our education savings accounts and student loan solutions.",
+      audience: "individual",
+    },
+    {
+      id: 5,
+      icon: "/assets/icons/icon_use_case_5.svg",
+      title: "Startups and Entrepreneurs",
+      description: "Launch and scale your business with our startup-friendly banking solutions.",
+      audience: "business",
+    },
+    {
+      id: 6,
+      icon: "/assets/icons/icon_use_case_6.svg",
+      title: "Cash Flow Management",
+      description: "Keep your business running smoothly with our working capital solutions.",
+      audience: "business",
+    },
+    {
+      id: 7,
+      icon: "/assets/icons/icon_use_case_7.svg",
+      title: "Business Expansion",
+      description: "Fuel your growth ambitions with tailored financing options.",
+      audience: "business",
+    },
+    {
+      id: 8,
+      icon: "/assets/icons/icon_use_case_8.svg",
+      title: "Payment Solutions",
+      description: "Streamline your payment processing with our comprehensive business payment solutions.",
+      audience: "business",
+    },
+  ],
+};
+
+type UseCasesHookState = {
+  data: UseCasesResponse | undefined;
+  error: Error | undefined;
+  isLoading: boolean;
+  isValidating: boolean;
+  mutate: ReturnType<typeof vi.fn>;
+};
+
+const baseMock: UseCasesHookState = {
+  data: apiUseCasesData,
+  error: undefined,
+  isLoading: false,
+  isValidating: false,
+  mutate: vi.fn(),
+};
+
+let mockState: UseCasesHookState = { ...baseMock };
+
+vi.mock("@/lib/use-cases", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@/lib/use-cases")>();
+  return {
+    ...actual,
+    useUseCasesData: () => mockState,
+  };
+});
+
+vi.mock("@/lib/use-mounted", () => ({
+  useMounted: () => true,
+}));
+
 afterEach(() => {
+  mockState = { ...baseMock };
   cleanup();
 });
 
@@ -27,9 +120,7 @@ describe("UseCasesSection", () => {
   it("renders 4 individuals cards with correct titles", () => {
     render(<UseCasesSection />);
     expect(screen.getByTestId("use-case-card-1")).toBeInTheDocument();
-    expect(screen.getByTestId("use-case-title-1")).toHaveTextContent(
-      "Managing Personal Finances",
-    );
+    expect(screen.getByTestId("use-case-title-1")).toHaveTextContent("Managing Personal Finances");
     expect(screen.getByTestId("use-case-title-2")).toHaveTextContent("Saving for the Future");
     expect(screen.getByTestId("use-case-title-3")).toHaveTextContent("Homeownership");
     expect(screen.getByTestId("use-case-title-4")).toHaveTextContent("Education Funding");
@@ -38,9 +129,7 @@ describe("UseCasesSection", () => {
   it("renders 4 businesses cards with correct titles", () => {
     render(<UseCasesSection />);
     expect(screen.getByTestId("use-case-card-5")).toBeInTheDocument();
-    expect(screen.getByTestId("use-case-title-5")).toHaveTextContent(
-      "Startups and Entrepreneurs",
-    );
+    expect(screen.getByTestId("use-case-title-5")).toHaveTextContent("Startups and Entrepreneurs");
     expect(screen.getByTestId("use-case-title-6")).toHaveTextContent("Cash Flow Management");
     expect(screen.getByTestId("use-case-title-7")).toHaveTextContent("Business Expansion");
     expect(screen.getByTestId("use-case-title-8")).toHaveTextContent("Payment Solutions");
@@ -101,6 +190,27 @@ describe("UseCasesSection", () => {
     render(<UseCasesSection />);
     expect(screen.getByTestId("use-cases-cards-panel-individuals")).toBeInTheDocument();
     expect(screen.getByTestId("use-cases-cards-panel-businesses")).toBeInTheDocument();
+  });
+
+  it("renders loading skeletons when isLoading is true", () => {
+    mockState = { ...baseMock, data: undefined, isLoading: true };
+    render(<UseCasesSection />);
+    expect(screen.queryByTestId("use-case-card-1")).not.toBeInTheDocument();
+    const panels = screen.getAllByRole("article", { hidden: true });
+    expect(panels.length).toBeGreaterThanOrEqual(4);
+  });
+
+  it("renders error state when API fails", () => {
+    mockState = {
+      ...baseMock,
+      data: undefined,
+      isLoading: false,
+      error: new Error("Failed to fetch"),
+    };
+    render(<UseCasesSection />);
+    expect(screen.getByTestId("use-cases-cards-error-individuals")).toBeInTheDocument();
+    expect(screen.getByTestId("use-cases-cards-error-businesses")).toBeInTheDocument();
+    expect(screen.queryByTestId("use-case-card-1")).not.toBeInTheDocument();
   });
 
   it("heading has lime green color class", () => {
