@@ -60,4 +60,13 @@ export const HOMEPAGE_LOCATORS = {
   productsCard: 'article[data-testid^="product-card-"]',
   productsCardFirst: '[data-testid="product-card-1"]',
   productsTitleFirst: '[data-testid="product-title-1"]',
+  // BC-27 — Use Cases Section
+  useCasesSection: '[data-testid="use-cases-section"]',
+  useCasesHeading: '[data-testid="use-cases-heading"]',
+  useCasesSubheading: '[data-testid="use-cases-subheading"]',
+  useCasesRowIndividuals: '[data-testid="use-cases-row-individuals"]',
+  useCasesRowBusinesses: '[data-testid="use-cases-row-businesses"]',
+  useCaseCard: 'article[data-testid^="use-case-card-"]',
+  useCaseCardFirst: '[data-testid="use-case-card-1"]',
+  useCaseTitleFirst: '[data-testid="use-case-title-1"]',
 } as const;
