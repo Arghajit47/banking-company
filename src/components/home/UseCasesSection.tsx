@@ -2,20 +2,9 @@
 
 import React from "react";
 import Image from "next/image";
-
-const INDIVIDUALS_CARDS = [
-  { id: 1, icon: "/assets/icons/icon_use_case_1.svg", title: "Managing Personal Finances" },
-  { id: 2, icon: "/assets/icons/icon_use_case_2.svg", title: "Saving for the Future" },
-  { id: 3, icon: "/assets/icons/icon_use_case_3.svg", title: "Homeownership" },
-  { id: 4, icon: "/assets/icons/icon_use_case_4.svg", title: "Education Funding" },
-] as const;
-
-const BUSINESSES_CARDS = [
-  { id: 5, icon: "/assets/icons/icon_use_case_5.svg", title: "Startups and Entrepreneurs" },
-  { id: 6, icon: "/assets/icons/icon_use_case_6.svg", title: "Cash Flow Management" },
-  { id: 7, icon: "/assets/icons/icon_use_case_7.svg", title: "Business Expansion" },
-  { id: 8, icon: "/assets/icons/icon_use_case_8.svg", title: "Payment Solutions" },
-] as const;
+import { useUseCasesData } from "@/lib/use-cases";
+import { useMounted } from "@/lib/use-mounted";
+import type { UseCase } from "@/lib/use-cases";
 
 const INDIVIDUALS_STATS = [
   { value: "78%", label: "Secure Retirement Planning" },
@@ -30,36 +19,10 @@ const BUSINESSES_STATS = [
 ] as const;
 
 type Stat = { value: string; label: string };
-type Card = { id: number; icon: string; title: string };
-
-function UseCaseCard({ card }: { card: Card }) {
-  return (
-    <article
-      data-testid={`use-case-card-${card.id}`}
-      className="flex flex-col gap-6 rounded-2xl border border-[#262626] bg-[#1A1A1A] p-[30px]"
-    >
-      <Image
-        src={card.icon}
-        alt=""
-        width={78}
-        height={78}
-        aria-hidden="true"
-        data-testid={`use-case-icon-${card.id}`}
-        unoptimized
-      />
-      <p
-        data-testid={`use-case-title-${card.id}`}
-        className="text-xl font-normal text-white"
-      >
-        {card.title}
-      </p>
-    </article>
-  );
-}
 
 function StatsRow({ stats }: { stats: readonly Stat[] }) {
   return (
-    <div className="flex items-stretch gap-[50px]">
+    <div className="flex flex-wrap items-stretch gap-[20px] md:gap-[50px]">
       {stats.map((stat, i) => (
         <React.Fragment key={stat.value}>
           <div className="flex flex-col gap-[5px]">
@@ -69,7 +32,7 @@ function StatsRow({ stats }: { stats: readonly Stat[] }) {
             <span className="text-lg font-light text-[#B3B3B3]">{stat.label}</span>
           </div>
           {i < stats.length - 1 && (
-            <div className="w-px self-stretch bg-[#262626]" />
+            <div className="hidden w-px self-stretch bg-[#262626] md:block" />
           )}
         </React.Fragment>
       ))}
@@ -111,16 +74,57 @@ function TextPanel({
   );
 }
 
+function UseCaseCardSkeleton() {
+  return (
+    <article
+      className="flex flex-col gap-6 rounded-2xl border border-[#262626] bg-[#1A1A1A] p-[30px]"
+      aria-hidden="true"
+    >
+      <div className="h-[78px] w-[78px] animate-pulse rounded-full bg-[#262626]" />
+      <div className="h-5 w-3/4 animate-pulse rounded bg-[#262626]" />
+    </article>
+  );
+}
+
+function UseCaseCard({ card }: { card: UseCase }) {
+  return (
+    <article
+      data-testid={`use-case-card-${card.id}`}
+      className="flex flex-col gap-6 rounded-2xl border border-[#262626] bg-[#1A1A1A] p-[30px]"
+    >
+      <Image
+        src={card.icon}
+        alt=""
+        width={78}
+        height={78}
+        aria-hidden="true"
+        data-testid={`use-case-icon-${card.id}`}
+        unoptimized
+      />
+      <p
+        data-testid={`use-case-title-${card.id}`}
+        className="text-xl font-normal text-white"
+      >
+        {card.title}
+      </p>
+    </article>
+  );
+}
+
 function CardsPanel({
   audience,
   cards,
   abstractSrc,
   abstractPosition,
+  isLoading,
+  hasError,
 }: {
   audience: "individuals" | "businesses";
-  cards: readonly Card[];
+  cards: UseCase[];
   abstractSrc: string;
   abstractPosition: "top-left" | "bottom-right";
+  isLoading: boolean;
+  hasError: boolean;
 }) {
   return (
     <div
@@ -137,15 +141,35 @@ function CardsPanel({
         className={`pointer-events-none absolute z-0 ${abstractPosition === "top-left" ? "left-0 top-0" : "bottom-0 right-0"}`}
       />
       <div className="relative z-10 grid grid-cols-2 gap-5">
-        {cards.map((card) => (
-          <UseCaseCard key={card.id} card={card} />
-        ))}
+        {isLoading ? (
+          Array.from({ length: 4 }).map((_, i) => (
+            <UseCaseCardSkeleton key={i} />
+          ))
+        ) : hasError ? (
+          <div
+            data-testid={`use-cases-cards-error-${audience}`}
+            className="col-span-2 flex h-40 items-center justify-center"
+          >
+            <p className="text-[#999999]">Unable to load use cases. Please try again later.</p>
+          </div>
+        ) : (
+          cards.map((card) => <UseCaseCard key={card.id} card={card} />)
+        )}
       </div>
     </div>
   );
 }
 
 export function UseCasesSection() {
+  const mounted = useMounted();
+  const { data, error, isLoading } = useUseCasesData();
+
+  const showSkeleton = !mounted || isLoading;
+  const hasError = !showSkeleton && (!!error || !data);
+
+  const individualCards = data?.useCases.filter((u) => u.audience === "individual") ?? [];
+  const businessCards = data?.useCases.filter((u) => u.audience === "business") ?? [];
+
   return (
     <section
       data-testid="use-cases-section"
@@ -175,9 +199,11 @@ export function UseCasesSection() {
           >
             <CardsPanel
               audience="individuals"
-              cards={INDIVIDUALS_CARDS}
+              cards={individualCards}
               abstractSrc="/assets/illustrations/abstract_design_left.svg"
               abstractPosition="top-left"
+              isLoading={showSkeleton}
+              hasError={hasError}
             />
             <TextPanel
               audience="individuals"
@@ -202,9 +228,11 @@ export function UseCasesSection() {
             />
             <CardsPanel
               audience="businesses"
-              cards={BUSINESSES_CARDS}
+              cards={businessCards}
               abstractSrc="/assets/illustrations/abstract_design_right.svg"
               abstractPosition="bottom-right"
+              isLoading={showSkeleton}
+              hasError={hasError}
             />
           </div>
         </div>
