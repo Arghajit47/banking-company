@@ -12,6 +12,12 @@ import {
   CTA_UI,
   ctaConfigSchema,
   type CTAConfig,
+  FEATURES_API_PATH,
+  FEATURES_COUNTS,
+  FEATURES_SCHEMA_LABELS,
+  FEATURES_TEXT,
+  featuresResponseSchema,
+  type FeaturesResponse,
   HERO_ENDPOINTS,
   HERO_SCHEMA_LABELS,
   HERO_TEXT,
@@ -283,5 +289,42 @@ export class HomePage {
       HOMEPAGE_LOCATORS.productsTitleFirst,
       productsResponse.products[0].title
     );
+  }
+
+  async assertFeaturesSectionFromApi(): Promise<void> {
+    await this.initializationPage.goto(UI_ROUTES.HOME);
+    await this.initializationPage.expectVisible(HOMEPAGE_LOCATORS.featuresSection);
+
+    const featuresResponse = (await this.apiHelper.getRequest(
+      FEATURES_API_PATH
+    )) as FeaturesResponse;
+    const validation = featuresResponseSchema.safeParse(featuresResponse);
+    this.apiHelper.assertSchemaValid(validation, FEATURES_SCHEMA_LABELS.FEATURES_RESPONSE);
+
+    expect(featuresResponse.features).toHaveLength(FEATURES_COUNTS.EXPECTED_TOTAL);
+
+    await this.initializationPage.expectTextContains(
+      HOMEPAGE_LOCATORS.featuresHeading,
+      FEATURES_TEXT.HEADING
+    );
+
+    // Wait for first feature card to be visible (SWR / hydration)
+    await this.initializationPage.expectVisibleWithTimeout(
+      HOMEPAGE_LOCATORS.featureCard,
+      0,
+      FEATURES_COUNTS.SWR_LOAD_TIMEOUT_MS
+    );
+
+    const featureCards = this.initializationPage.page.locator(HOMEPAGE_LOCATORS.featureCard);
+    expect(await featureCards.count()).toBe(FEATURES_COUNTS.EXPECTED_TOTAL);
+
+    // AC-3: at least 2 feature cards must be visible on the home page
+    const visibleCount = await featureCards.evaluateAll((els) =>
+      els.filter((el) => (el as HTMLElement).offsetParent !== null).length
+    );
+    expect(
+      visibleCount,
+      `at least ${FEATURES_COUNTS.MIN_VISIBLE} feature cards must be visible`
+    ).toBeGreaterThanOrEqual(FEATURES_COUNTS.MIN_VISIBLE);
   }
 }
