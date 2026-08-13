@@ -2,50 +2,118 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { useFeaturesData } from "@/lib/features";
+import { useMounted } from "@/lib/use-mounted";
+import type { Feature } from "@/lib/features";
 
 const TABS = ["Online Banking", "Financial Tools", "Customer Support"] as const;
 type Tab = (typeof TABS)[number];
 
-interface Feature {
-  id: number;
-  title: string;
-  icon: string;
-  description: string;
+function FeatureCardSkeleton() {
+  return (
+    <article
+      aria-hidden="true"
+      className="flex flex-1 animate-pulse flex-col gap-[30px] rounded-[20px] bg-[#1C1C1C] p-[50px]"
+    >
+      <div className="flex items-start gap-[10px]">
+        <div className="h-6 flex-1 rounded bg-[#262626]" />
+        <div className="h-[34px] w-[34px] rounded bg-[#262626]" />
+      </div>
+      <div className="space-y-2">
+        <div className="h-4 rounded bg-[#262626]" />
+        <div className="h-4 w-3/4 rounded bg-[#262626]" />
+      </div>
+    </article>
+  );
 }
 
-const FEATURES: Feature[] = [
-  {
-    id: 1,
-    title: "24/7 Account Access",
-    icon: "/assets/icons/icon_feature_1.svg",
-    description:
-      "Enjoy the convenience of accessing your accounts anytime, anywhere through our secure online banking platform. Check balances, transfer funds, and pay bills with ease.",
-  },
-  {
-    id: 2,
-    title: "Mobile Banking App",
-    icon: "/assets/icons/icon_feature_2.svg",
-    description:
-      "Stay connected to your finances on the go with our user-friendly mobile banking app. Easily manage your accounts, deposit checks, and make payments from your smartphone or tablet.",
-  },
-  {
-    id: 3,
-    title: "Secure Transactions",
-    icon: "/assets/icons/icon_feature_3.svg",
-    description:
-      "Rest assured knowing that your transactions are protected by industry-leading security measures. We employ encryption and multi-factor authentication to safeguard your financial information.",
-  },
-  {
-    id: 4,
-    title: "Bill Pay and Transfers",
-    icon: "/assets/icons/icon_feature_4.svg",
-    description:
-      "Save time and avoid late fees with our convenient bill pay service. Set up recurring payments or make one-time transfers between your accounts with just a few clicks.",
-  },
-];
+function FeatureCard({ feature }: { feature: Feature }) {
+  return (
+    <article
+      data-testid={`feature-card-${feature.id}`}
+      className="flex flex-1 flex-col gap-[30px] rounded-[20px] bg-[#1C1C1C] p-[50px]"
+    >
+      <div className="flex items-start gap-[10px]">
+        <h3
+          data-testid={`feature-card-title-${feature.id}`}
+          className="flex-1 text-[22px] font-medium leading-[150%] text-white"
+        >
+          {feature.title}
+        </h3>
+        <Image
+          src={feature.icon}
+          alt=""
+          width={34}
+          height={34}
+          aria-hidden="true"
+          data-testid={`feature-card-icon-${feature.id}`}
+        />
+      </div>
+      <p
+        data-testid={`feature-card-description-${feature.id}`}
+        className="text-lg font-light text-[#B3B3B3]"
+      >
+        {feature.description}
+      </p>
+    </article>
+  );
+}
+
+function CardsGrid({
+  features,
+  showSkeleton,
+  hasError,
+}: {
+  features: Feature[];
+  showSkeleton: boolean;
+  hasError: boolean;
+}) {
+  const rows = showSkeleton
+    ? [
+        [null, null],
+        [null, null],
+      ]
+    : [features.slice(0, 2), features.slice(2, 4)];
+
+  if (hasError) {
+    return (
+      <div
+        data-testid="features-cards-error"
+        className="flex flex-1 items-center justify-center rounded-[20px] bg-[#1C1C1C] p-[50px] text-[#B3B3B3]"
+      >
+        <p>Failed to load features. Please try again later.</p>
+      </div>
+    );
+  }
+
+  return (
+    <div
+      data-testid="features-cards-grid"
+      className="flex flex-1 flex-col gap-[30px]"
+    >
+      {rows.map((row, rowIdx) => (
+        <div key={rowIdx} className="flex flex-col gap-[30px] sm:flex-row">
+          {row.map((feature, colIdx) =>
+            showSkeleton || !feature ? (
+              <FeatureCardSkeleton key={colIdx} />
+            ) : (
+              <FeatureCard key={feature.id} feature={feature} />
+            )
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
 
 export function FeaturesSection() {
   const [activeTab, setActiveTab] = useState<Tab>("Online Banking");
+  const { data, error, isLoading } = useFeaturesData();
+  const mounted = useMounted();
+
+  const showSkeleton = !mounted || isLoading;
+  const hasError = !showSkeleton && (!!error || !data);
+  const features = data?.features ?? [];
 
   return (
     <section
@@ -95,52 +163,12 @@ export function FeaturesSection() {
           })}
         </nav>
 
-        <div
-          data-testid="features-cards-grid"
-          className="flex flex-1 flex-col gap-[30px]"
-        >
-          <div className="flex flex-col gap-[30px] sm:flex-row">
-            <FeatureCard feature={FEATURES[0]} />
-            <FeatureCard feature={FEATURES[1]} />
-          </div>
-          <div className="flex flex-col gap-[30px] sm:flex-row">
-            <FeatureCard feature={FEATURES[2]} />
-            <FeatureCard feature={FEATURES[3]} />
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function FeatureCard({ feature }: { feature: Feature }) {
-  return (
-    <article
-      data-testid={`feature-card-${feature.id}`}
-      className="flex flex-1 flex-col gap-[30px] rounded-[20px] bg-[#1C1C1C] p-[50px]"
-    >
-      <div className="flex items-start gap-[10px]">
-        <h3
-          data-testid={`feature-card-title-${feature.id}`}
-          className="flex-1 text-[22px] font-medium leading-[150%] text-white"
-        >
-          {feature.title}
-        </h3>
-        <Image
-          src={feature.icon}
-          alt=""
-          width={34}
-          height={34}
-          aria-hidden="true"
-          data-testid={`feature-card-icon-${feature.id}`}
+        <CardsGrid
+          features={features}
+          showSkeleton={showSkeleton}
+          hasError={hasError}
         />
       </div>
-      <p
-        data-testid={`feature-card-description-${feature.id}`}
-        className="text-lg font-light text-[#B3B3B3]"
-      >
-        {feature.description}
-      </p>
-    </article>
+    </section>
   );
 }
