@@ -4,6 +4,7 @@ import { FAQPage } from "@pages/frontend/faq-page";
 import { FooterPage } from "@pages/frontend/footer-page";
 import { CareersPage } from "@pages/frontend/careers-page";
 import { AboutPage } from "@pages/frontend/about-page";
+import { SecurityPage } from "@pages/frontend/security-page";
 
 type UiFixtures = {
   homepage: HomePage;
@@ -11,6 +12,7 @@ type UiFixtures = {
   footerPage: FooterPage;
   careersPage: CareersPage;
   aboutPage: AboutPage;
+  securityPage: SecurityPage;
 };
 
 export const test = base.extend<UiFixtures>({
@@ -33,6 +35,10 @@ export const test = base.extend<UiFixtures>({
   aboutPage: async ({ page }, fixtureUse) => {
     const ap = new AboutPage(page);
     await fixtureUse(ap);
+  },
+  securityPage: async ({ page }, fixtureUse) => {
+    const sp = new SecurityPage(page);
+    await fixtureUse(sp);
   },
 });
 
