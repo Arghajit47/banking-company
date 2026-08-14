@@ -511,3 +511,33 @@ export const SECURITY_PROTECTIONS_ENDPOINTS = {
 export const SECURITY_PROTECTIONS_SCHEMA_LABELS = {
   PROTECTIONS_RESPONSE: "security protections response schema",
 } as const;
+
+// BC-59/BC-60 — Login Form API
+export const loginResponseSchema = z.object({
+  success: z.boolean(),
+  token: z.string().optional(),
+  error: z.string().optional(),
+});
+
+export interface LoginResponseType {
+  success: boolean;
+  token?: string;
+  error?: string;
+}
+
+export const LOGIN_ENDPOINTS = {
+  LOGIN: "/api/auth/login",
+} as const;
+
+export const LOGIN_SCHEMA_LABELS = {
+  LOGIN_RESPONSE: "login response schema",
+} as const;
+
+export const LOGIN_TEXT = {
+  HEADING: "Login",
+  SUBTEXT: "Welcome back!",
+  FORGOT_PASSWORD: "Forgot Password?",
+  LOGIN_BUTTON: "Login",
+  SIGNUP_BUTTON: "Sign Up",
+  OR_DIVIDER: "Or",
+} as const;
