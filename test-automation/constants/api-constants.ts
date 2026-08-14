@@ -455,3 +455,26 @@ export const ABOUT_PRESS_RELEASES_ENDPOINTS = {
 export const ABOUT_PRESS_RELEASES_SCHEMA_LABELS = {
   PRESS_RELEASES_RESPONSE: "about press releases response schema",
 } as const;
+
+// BC-53/BC-54 — Security Page Hero Section
+export const securityHeroSchema = z.object({
+  headline: z.string().min(1),
+  headlineAccent: z.string().min(1),
+  body: z.string().min(1),
+  imageUrl: z.string().min(1),
+});
+
+export interface SecurityHeroDataType {
+  headline: string;
+  headlineAccent: string;
+  body: string;
+  imageUrl: string;
+}
+
+export const SECURITY_HERO_ENDPOINTS = {
+  HERO: "/api/security/hero",
+} as const;
+
+export const SECURITY_HERO_SCHEMA_LABELS = {
+  SECURITY_HERO_RESPONSE: "security hero response schema",
+} as const;
