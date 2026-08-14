@@ -420,3 +420,38 @@ export const ABOUT_MISSION_VISION_ENDPOINTS = {
 export const ABOUT_MISSION_VISION_SCHEMA_LABELS = {
   MISSION_VISION_RESPONSE: "about mission vision response schema",
 } as const;
+
+// BC-50/BC-51 — About Press Releases Section
+export const pressReleaseItemSchema = z.object({
+  id: z.number().int(),
+  date: z.string().min(1),
+  headline: z.string().min(1),
+  excerpt: z.string().min(1),
+  imageUrl: z.string().min(1),
+  url: z.string(),
+});
+
+export const pressReleasesResponseSchema = z.object({
+  pressReleases: z.array(pressReleaseItemSchema),
+});
+
+export interface PressReleaseItemType {
+  id: number;
+  date: string;
+  headline: string;
+  excerpt: string;
+  imageUrl: string;
+  url: string;
+}
+
+export interface PressReleasesDataType {
+  pressReleases: PressReleaseItemType[];
+}
+
+export const ABOUT_PRESS_RELEASES_ENDPOINTS = {
+  LIST: "/api/about/press-releases",
+} as const;
+
+export const ABOUT_PRESS_RELEASES_SCHEMA_LABELS = {
+  PRESS_RELEASES_RESPONSE: "about press releases response schema",
+} as const;

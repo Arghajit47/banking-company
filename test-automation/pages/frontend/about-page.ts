@@ -13,6 +13,11 @@ import {
   ABOUT_MISSION_VISION_TEXT,
   missionVisionResponseSchema,
   type MissionVisionData,
+  ABOUT_PRESS_RELEASES_ENDPOINTS,
+  ABOUT_PRESS_RELEASES_SCHEMA_LABELS,
+  ABOUT_PRESS_RELEASES_TEXT,
+  pressReleasesResponseSchema,
+  type PressReleasesDataType,
   UI_ROUTES,
 } from "@constants/index";
 
@@ -110,5 +115,36 @@ export class AboutPage {
       ABOUT_MISSION_VISION_TEXT.VISION_BODY_STARTS_WITH
     );
     await this.initializationPage.expectVisible(ABOUT_LOCATORS.visionCardImage);
+  }
+
+  async assertPressReleasesFromApi(): Promise<void> {
+    const body = (await this.apiHelper.getRequest(
+      ABOUT_PRESS_RELEASES_ENDPOINTS.LIST
+    )) as PressReleasesDataType;
+
+    const parsed = pressReleasesResponseSchema.safeParse(body);
+    this.apiHelper.assertSchemaValid(
+      parsed,
+      ABOUT_PRESS_RELEASES_SCHEMA_LABELS.PRESS_RELEASES_RESPONSE
+    );
+
+    await this.initializationPage.goto(UI_ROUTES.ABOUT);
+    await this.initializationPage.expectVisible(ABOUT_LOCATORS.pressReleasesSection);
+
+    await this.initializationPage.expectTextContains(
+      ABOUT_LOCATORS.pressReleasesSectionHeading,
+      ABOUT_PRESS_RELEASES_TEXT.SECTION_HEADING
+    );
+    await this.initializationPage.expectTextContains(
+      ABOUT_LOCATORS.pressReleasesSectionParagraph,
+      ABOUT_PRESS_RELEASES_TEXT.SECTION_BODY_STARTS_WITH
+    );
+
+    await this.initializationPage.expectVisible(ABOUT_LOCATORS.pressReleasesGrid);
+    await this.initializationPage.expectVisible(ABOUT_LOCATORS.pressReleaseCard1);
+    await this.initializationPage.expectTextContains(
+      ABOUT_LOCATORS.pressReleaseCardTitle1,
+      ABOUT_PRESS_RELEASES_TEXT.FIRST_CARD_TITLE_CONTAINS
+    );
   }
 }
