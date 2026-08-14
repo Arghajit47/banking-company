@@ -5,6 +5,7 @@ export * from "./footer-constants";
 export * from "./faq-constants";
 export * from "./routes";
 export * from "./careers-constants";
+export * from "./about-constants";
 
 // Banking Company Netlify deploy target
 export const BASE_URL = "https://banking-company-440.netlify.app";
