@@ -37,6 +37,11 @@ export const TESTIMONIALS_TEXT = {
   TAB_BUSINESSES: "For Businesses",
 } as const;
 
+export const TESTIMONIALS_COUNTS = {
+  MIN_VISIBLE: 2,
+  SWR_LOAD_TIMEOUT_MS: 15000,
+} as const;
+
 // BC-21 — Hero Section
 export const HERO_TEXT = {
   HEADLINE_START: "Welcome to ",
