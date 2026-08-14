@@ -13,7 +13,7 @@ function CareersHeroSkeleton() {
       <div className="flex flex-col items-start md:flex-row">
         <div
           data-testid="careers-hero-text-container"
-          className="relative z-10 flex shrink-0 flex-col gap-[23px] rounded-[20px_0_80px_20px] bg-[#1A1A1A] p-8 md:p-[80px] md:w-[791px]"
+          className="relative z-20 flex shrink-0 flex-col gap-[23px] rounded-[20px_0_80px_20px] bg-[#1A1A1A] p-8 md:p-[80px] md:w-[791px]"
         >
           <div
             data-testid="careers-hero-heading"
@@ -66,10 +66,10 @@ export function CareersHeroSection() {
 
       {/* Horizontal flex container */}
       <div className="flex flex-col items-start md:flex-row">
-        {/* Text card */}
+        {/* Text card — z-20 keeps it above the hero image in the overlap zone */}
         <div
           data-testid="careers-hero-text-container"
-          className="relative z-10 flex shrink-0 flex-col gap-[23px] rounded-[20px_0_80px_20px] bg-[#1A1A1A] p-8 md:p-[80px] md:w-[791px]"
+          className="relative z-20 flex shrink-0 flex-col gap-[23px] rounded-[20px_0_80px_20px] bg-[#1A1A1A] p-8 md:p-[80px] md:w-[791px]"
         >
           {error && (
             <p className="text-sm text-red-400">
@@ -97,7 +97,7 @@ export function CareersHeroSection() {
           </p>
         </div>
 
-        {/* Hero image — relative z-10 keeps it above the abstract design */}
+        {/* Hero image — z-10 keeps it above the abstract design (z-0) */}
         <div
           data-testid="careers-hero-image-wrapper"
           className="relative z-10 mt-6 flex-1 md:mt-0 md:-ml-[260px]"
