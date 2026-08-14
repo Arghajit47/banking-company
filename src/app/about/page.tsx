@@ -1,4 +1,5 @@
 import { AboutHeroSection } from "@/components/about/AboutHeroSection";
+import { MissionVisionSection } from "@/components/about/MissionVisionSection";
 import { Navbar } from "@/components/layout/Navbar";
 
 export default function AboutPage() {
@@ -7,6 +8,7 @@ export default function AboutPage() {
       <Navbar />
       <main className="px-4 py-8 md:px-8 md:py-12 lg:px-[162px] lg:py-[80px]">
         <AboutHeroSection />
+        <MissionVisionSection />
       </main>
     </div>
   );
