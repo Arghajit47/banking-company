@@ -21,3 +21,9 @@ test.describe("Careers Page Benefits Section", () => {
     await careersPage.assertBenefitsFromApi();
   });
 });
+
+test.describe("Careers Page Job Openings Section", () => {
+  test("job openings section renders ≥2 cards with titles and Apply buttons validated against API response", async ({ careersPage }) => {
+    await careersPage.assertJobsFromApi();
+  });
+});
