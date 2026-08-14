@@ -70,3 +70,14 @@ export const PRODUCTS_COUNTS = {
   EXPECTED_VISIBLE_CARDS: 3,
   SWR_LOAD_TIMEOUT_MS: 15000,
 } as const;
+
+// BC-30 — Features Section
+export const FEATURES_TEXT = {
+  HEADING: "Our Features",
+} as const;
+
+export const FEATURES_COUNTS = {
+  EXPECTED_TOTAL: 4,
+  MIN_VISIBLE: 2,
+  SWR_LOAD_TIMEOUT_MS: 15000,
+} as const;

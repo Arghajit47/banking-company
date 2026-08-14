@@ -60,4 +60,10 @@ export const HOMEPAGE_LOCATORS = {
   productsCard: 'article[data-testid^="product-card-"]',
   productsCardFirst: '[data-testid="product-card-1"]',
   productsTitleFirst: '[data-testid="product-title-1"]',
+  // BC-30 — Features Section
+  featuresSection: '[data-testid="features-section"]',
+  featuresHeading: '[data-testid="features-heading"]',
+  featuresCardsGrid: '[data-testid="features-cards-grid"]',
+  featureCard: 'article[data-testid^="feature-card-"]',
+  featureCardTitle: '[data-testid^="feature-card-title-"]',
 } as const;

@@ -184,3 +184,32 @@ export const PRODUCTS_ENDPOINTS = {
 export const PRODUCTS_SCHEMA_LABELS = {
   PRODUCTS_RESPONSE: "products response schema",
 } as const;
+
+// BC-30 — Features Section
+export const FEATURES_API_PATH = "/api/features" as const;
+
+export const featureSchema = z.object({
+  id: z.number().int(),
+  icon: z.string().min(1),
+  title: z.string().min(1),
+  description: z.string().min(1),
+});
+
+export const featuresResponseSchema = z.object({
+  features: z.array(featureSchema),
+});
+
+export interface Feature {
+  id: number;
+  icon: string;
+  title: string;
+  description: string;
+}
+
+export interface FeaturesResponse {
+  features: Feature[];
+}
+
+export const FEATURES_SCHEMA_LABELS = {
+  FEATURES_RESPONSE: "features response schema",
+} as const;

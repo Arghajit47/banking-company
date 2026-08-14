@@ -67,3 +67,13 @@ test.describe("Home Page Products Section", () => {
     await homepage.assertProductsSectionFromApi();
   });
 });
+
+test.describe("Home Page Features Section", () => {
+  test("features section fetches /api/features and renders 4 cards", async ({ homepage }) => {
+    await homepage.assertFeaturesSectionFromApi();
+  });
+
+  test("at least 2 feature cards are visible on the home page", async ({ homepage }) => {
+    await homepage.assertFeaturesSectionFromApi();
+  });
+});
