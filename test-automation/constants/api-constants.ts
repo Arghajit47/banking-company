@@ -302,3 +302,34 @@ export const CAREERS_VALUES_ENDPOINTS = {
 export const CAREERS_VALUES_SCHEMA_LABELS = {
   CAREERS_VALUES_RESPONSE: "careers values response schema",
 } as const;
+
+// BC-38/BC-39 — Careers Benefits Section
+export const careersBenefitItemSchema = z.object({
+  id: z.number().int(),
+  icon: z.string(),
+  title: z.string().min(1),
+  description: z.string().min(1),
+});
+
+export const careersBenefitsResponseSchema = z.object({
+  benefits: z.array(careersBenefitItemSchema),
+});
+
+export interface CareersBenefitItem {
+  id: number;
+  icon: string;
+  title: string;
+  description: string;
+}
+
+export interface CareersBenefitsData {
+  benefits: CareersBenefitItem[];
+}
+
+export const CAREERS_BENEFITS_ENDPOINTS = {
+  BENEFITS: "/api/careers/benefits",
+} as const;
+
+export const CAREERS_BENEFITS_SCHEMA_LABELS = {
+  CAREERS_BENEFITS_RESPONSE: "careers benefits response schema",
+} as const;

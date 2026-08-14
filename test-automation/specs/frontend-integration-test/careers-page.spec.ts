@@ -15,3 +15,9 @@ test.describe("Careers Page Values Section", () => {
     await careersPage.assertValuesFromApi();
   });
 });
+
+test.describe("Careers Page Benefits Section", () => {
+  test("benefits section renders ≥4 cards validated against API response", async ({ careersPage }) => {
+    await careersPage.assertBenefitsFromApi();
+  });
+});
