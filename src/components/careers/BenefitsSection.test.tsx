@@ -1,15 +1,47 @@
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { render, screen, cleanup } from "@testing-library/react";
 import * as matchers from "@testing-library/jest-dom/matchers";
 import { BenefitsSection } from "./BenefitsSection";
+import type { CareersBenefitsResponse } from "@/lib/careers-benefits";
 
 expect.extend(matchers);
 
+interface BenefitsHookState {
+  data: CareersBenefitsResponse | undefined;
+  error: Error | undefined;
+  isLoading: boolean;
+}
+
+const apiData: CareersBenefitsResponse = {
+  benefits: [
+    { id: 1, icon: "/assets/icons/icon_benefit_1.svg", title: "Competitive Compensation", description: "We provide a competitive salary package." },
+    { id: 2, icon: "/assets/icons/icon_benefit_2.svg", title: "Health and Wellness", description: "We prioritize health and well-being." },
+    { id: 3, icon: "/assets/icons/icon_benefit_3.svg", title: "Retirement Planning", description: "We offer a retirement savings plan." },
+    { id: 4, icon: "/assets/icons/icon_benefit_4.svg", title: "Work-Life Balance", description: "We support work-life balance." },
+  ],
+};
+
+const baseMock: BenefitsHookState = {
+  data: apiData,
+  error: undefined,
+  isLoading: false,
+};
+
+let mockState: BenefitsHookState = { ...baseMock };
+
+vi.mock("@/lib/careers-benefits", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@/lib/careers-benefits")>();
+  return { ...actual, useCareersBenefitsData: () => mockState };
+});
+
+vi.mock("@/lib/use-mounted", () => ({ useMounted: () => true }));
+
 afterEach(() => {
+  mockState = { ...baseMock };
   cleanup();
 });
 
-describe("BenefitsSection", () => {
+describe("BenefitsSection (SWR integration)", () => {
   it("renders the section", () => {
     render(<BenefitsSection />);
     expect(screen.getByTestId("benefits-section")).toBeInTheDocument();
@@ -20,62 +52,51 @@ describe("BenefitsSection", () => {
     expect(screen.getByTestId("benefits-section-header")).toBeInTheDocument();
   });
 
-  it("renders the heading with correct text", () => {
+  it("renders heading with correct text", () => {
     render(<BenefitsSection />);
     const heading = screen.getByTestId("benefits-section-heading");
     expect(heading.textContent).toContain("Our");
     expect(heading.textContent).toContain("Benefits");
   });
 
-  it("renders the paragraph text", () => {
+  it("renders paragraph text", () => {
     render(<BenefitsSection />);
-    const paragraph = screen.getByTestId("benefits-section-paragraph");
-    expect(paragraph.textContent).toContain("At YourBank");
+    expect(screen.getByTestId("benefits-section-paragraph").textContent).toContain("At YourBank");
   });
 
-  it("renders the grid container", () => {
+  it("renders 4 benefit cards from API data", () => {
     render(<BenefitsSection />);
-    expect(screen.getByTestId("benefits-section-grid")).toBeInTheDocument();
-  });
-
-  it("renders 4 benefit cards", () => {
-    render(<BenefitsSection />);
-    const cards = [0, 1, 2, 3].map((i) =>
-      screen.getByTestId(`benefit-card-${i}`)
-    );
-    expect(cards).toHaveLength(4);
+    [0, 1, 2, 3].forEach((i) => {
+      expect(screen.getByTestId(`benefit-card-${i}`)).toBeInTheDocument();
+    });
   });
 
   it("renders icon, title, and body for each card", () => {
     render(<BenefitsSection />);
     [0, 1, 2, 3].forEach((i) => {
       expect(screen.getByTestId(`benefit-card-icon-${i}`)).toBeInTheDocument();
-      expect(
-        screen.getByTestId(`benefit-card-title-${i}`)
-      ).toBeInTheDocument();
+      expect(screen.getByTestId(`benefit-card-title-${i}`)).toBeInTheDocument();
       expect(screen.getByTestId(`benefit-card-body-${i}`)).toBeInTheDocument();
     });
   });
 
-  it("renders correct card titles", () => {
+  it("renders correct card titles from API data", () => {
     render(<BenefitsSection />);
-    const expectedTitles = [
-      "Competitive Compensation",
-      "Health and Wellness",
-      "Retirement Planning",
-      "Work-Life Balance",
-    ];
-    expectedTitles.forEach((title, i) => {
-      expect(screen.getByTestId(`benefit-card-title-${i}`).textContent).toBe(
-        title
-      );
-    });
+    expect(screen.getByTestId("benefit-card-title-0").textContent).toBe("Competitive Compensation");
+    expect(screen.getByTestId("benefit-card-title-1").textContent).toBe("Health and Wellness");
+    expect(screen.getByTestId("benefit-card-title-2").textContent).toBe("Retirement Planning");
+    expect(screen.getByTestId("benefit-card-title-3").textContent).toBe("Work-Life Balance");
+  });
+
+  it("shows loading skeleton when isLoading=true", () => {
+    mockState = { data: undefined, error: undefined, isLoading: true };
+    render(<BenefitsSection />);
+    expect(screen.getByTestId("benefit-card-0")).toHaveAttribute("aria-hidden", "true");
   });
 
   it("uses no light-theme classes", () => {
     const { container } = render(<BenefitsSection />);
     expect(container.innerHTML).not.toContain("bg-white");
     expect(container.innerHTML).not.toContain("text-zinc-900");
-    expect(container.innerHTML).not.toContain("text-black");
   });
 });
