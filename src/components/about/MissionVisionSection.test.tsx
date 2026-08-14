@@ -1,12 +1,40 @@
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen, cleanup } from "@testing-library/react";
 import * as matchers from "@testing-library/jest-dom/matchers";
 import { MissionVisionSection } from "./MissionVisionSection";
 
 expect.extend(matchers);
 
+const MOCK_DATA = {
+  mission: {
+    title: "Mission",
+    description:
+      "At YourBank, our mission is to empower our customers to achieve financial success.",
+  },
+  vision: {
+    title: "Vision",
+    description:
+      "Our vision at YourBank is to redefine banking by creating a seamless and personalized experience.",
+  },
+};
+
+let mockState = { data: MOCK_DATA, error: undefined, isLoading: false };
+
+vi.mock("@/lib/about-mission-vision", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@/lib/about-mission-vision")>();
+  return {
+    ...actual,
+    useAboutMissionVisionData: () => mockState,
+  };
+});
+
+vi.mock("@/lib/use-mounted", () => ({
+  useMounted: () => true,
+}));
+
 afterEach(() => {
   cleanup();
+  mockState = { data: MOCK_DATA, error: undefined, isLoading: false };
 });
 
 describe("MissionVisionSection", () => {
@@ -35,12 +63,12 @@ describe("MissionVisionSection", () => {
     expect(screen.getByTestId("mission-card")).toBeInTheDocument();
   });
 
-  it("renders mission card heading", () => {
+  it("renders mission card heading from API", () => {
     render(<MissionVisionSection />);
     expect(screen.getByTestId("mission-card-heading").textContent).toBe("Mission");
   });
 
-  it("renders mission card body", () => {
+  it("renders mission card body from API", () => {
     render(<MissionVisionSection />);
     expect(screen.getByTestId("mission-card-body").textContent).toContain("At YourBank");
   });
@@ -55,12 +83,12 @@ describe("MissionVisionSection", () => {
     expect(screen.getByTestId("vision-card")).toBeInTheDocument();
   });
 
-  it("renders vision card heading", () => {
+  it("renders vision card heading from API", () => {
     render(<MissionVisionSection />);
     expect(screen.getByTestId("vision-card-heading").textContent).toBe("Vision");
   });
 
-  it("renders vision card body", () => {
+  it("renders vision card body from API", () => {
     render(<MissionVisionSection />);
     expect(screen.getByTestId("vision-card-body").textContent).toContain("Our vision at YourBank");
   });
@@ -74,5 +102,11 @@ describe("MissionVisionSection", () => {
     const { container } = render(<MissionVisionSection />);
     expect(container.innerHTML).not.toContain("bg-white");
     expect(container.innerHTML).not.toContain("text-zinc-900");
+  });
+
+  it("shows skeleton when not mounted", () => {
+    mockState = { data: undefined as never, error: undefined, isLoading: true };
+    render(<MissionVisionSection />);
+    expect(screen.getByTestId("mission-vision-section")).toBeInTheDocument();
   });
 });

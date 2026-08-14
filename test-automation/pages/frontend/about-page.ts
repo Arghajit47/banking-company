@@ -8,6 +8,11 @@ import {
   ABOUT_HERO_TEXT,
   aboutHeroSchema,
   type AboutHeroData,
+  ABOUT_MISSION_VISION_ENDPOINTS,
+  ABOUT_MISSION_VISION_SCHEMA_LABELS,
+  ABOUT_MISSION_VISION_TEXT,
+  missionVisionResponseSchema,
+  type MissionVisionData,
   UI_ROUTES,
 } from "@constants/index";
 
@@ -59,5 +64,51 @@ export class AboutPage {
 
     await this.initializationPage.expectVisible(ABOUT_LOCATORS.heroImageWrapper);
     await this.initializationPage.expectVisible(ABOUT_LOCATORS.heroImage);
+  }
+
+  async assertMissionVisionFromApi(): Promise<void> {
+    const body = (await this.apiHelper.getRequest(
+      ABOUT_MISSION_VISION_ENDPOINTS.MISSION_VISION
+    )) as MissionVisionData;
+
+    const parsed = missionVisionResponseSchema.safeParse(body);
+    this.apiHelper.assertSchemaValid(
+      parsed,
+      ABOUT_MISSION_VISION_SCHEMA_LABELS.MISSION_VISION_RESPONSE
+    );
+
+    await this.initializationPage.goto(UI_ROUTES.ABOUT);
+    await this.initializationPage.expectVisible(ABOUT_LOCATORS.missionVisionSection);
+
+    await this.initializationPage.expectTextContains(
+      ABOUT_LOCATORS.missionVisionSectionHeading,
+      ABOUT_MISSION_VISION_TEXT.SECTION_HEADING
+    );
+    await this.initializationPage.expectTextContains(
+      ABOUT_LOCATORS.missionVisionSectionParagraph,
+      ABOUT_MISSION_VISION_TEXT.SECTION_BODY_STARTS_WITH
+    );
+
+    await this.initializationPage.expectVisible(ABOUT_LOCATORS.missionCard);
+    await this.initializationPage.expectTextContains(
+      ABOUT_LOCATORS.missionCardHeading,
+      ABOUT_MISSION_VISION_TEXT.MISSION_HEADING
+    );
+    await this.initializationPage.expectTextContains(
+      ABOUT_LOCATORS.missionCardBody,
+      ABOUT_MISSION_VISION_TEXT.MISSION_BODY_STARTS_WITH
+    );
+    await this.initializationPage.expectVisible(ABOUT_LOCATORS.missionCardImage);
+
+    await this.initializationPage.expectVisible(ABOUT_LOCATORS.visionCard);
+    await this.initializationPage.expectTextContains(
+      ABOUT_LOCATORS.visionCardHeading,
+      ABOUT_MISSION_VISION_TEXT.VISION_HEADING
+    );
+    await this.initializationPage.expectTextContains(
+      ABOUT_LOCATORS.visionCardBody,
+      ABOUT_MISSION_VISION_TEXT.VISION_BODY_STARTS_WITH
+    );
+    await this.initializationPage.expectVisible(ABOUT_LOCATORS.visionCardImage);
   }
 }

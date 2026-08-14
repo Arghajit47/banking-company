@@ -391,3 +391,32 @@ export const CAREERS_BENEFITS_ENDPOINTS = {
 export const CAREERS_BENEFITS_SCHEMA_LABELS = {
   CAREERS_BENEFITS_RESPONSE: "careers benefits response schema",
 } as const;
+
+// BC-47/BC-48 — About Mission & Vision Section
+export const missionVisionItemSchema = z.object({
+  title: z.string().min(1),
+  description: z.string().min(1),
+});
+
+export const missionVisionResponseSchema = z.object({
+  mission: missionVisionItemSchema,
+  vision: missionVisionItemSchema,
+});
+
+export interface MissionVisionItem {
+  title: string;
+  description: string;
+}
+
+export interface MissionVisionData {
+  mission: MissionVisionItem;
+  vision: MissionVisionItem;
+}
+
+export const ABOUT_MISSION_VISION_ENDPOINTS = {
+  MISSION_VISION: "/api/about/mission-vision",
+} as const;
+
+export const ABOUT_MISSION_VISION_SCHEMA_LABELS = {
+  MISSION_VISION_RESPONSE: "about mission vision response schema",
+} as const;
