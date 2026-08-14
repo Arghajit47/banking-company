@@ -1,5 +1,15 @@
 import { test } from "@fixtures/ui-fixtures";
 
+test.describe("Home Page FAQ Section", () => {
+  test("FAQ section renders and validates against API response", async ({ faqPage }) => {
+    await faqPage.assertFAQSectionFromApi();
+  });
+
+  test("FAQ section produces no console errors", async ({ faqPage }) => {
+    await faqPage.assertNoFAQConsoleErrors();
+  });
+});
+
 test.describe("Home Page Navbar Auth Integration", () => {
   test("loads home page and navbar", async ({ homepage }) => {
     await homepage.assertPageComponents();
@@ -61,5 +71,15 @@ test.describe("Home Page Products Section", () => {
 test.describe("Home Page Use Cases Section", () => {
   test("use cases section renders all 8 cards from /api/use-cases with Zod-validated schema", async ({ homepage }) => {
     await homepage.assertUseCasesSectionFromApi();
+  });
+});
+
+test.describe("Home Page Features Section", () => {
+  test("features section fetches /api/features and renders 4 cards", async ({ homepage }) => {
+    await homepage.assertFeaturesSectionFromApi();
+  });
+
+  test("at least 2 feature cards are visible on the home page", async ({ homepage }) => {
+    await homepage.assertFeaturesSectionFromApi();
   });
 });

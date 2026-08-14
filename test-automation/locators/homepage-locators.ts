@@ -69,4 +69,10 @@ export const HOMEPAGE_LOCATORS = {
   useCaseCard: 'article[data-testid^="use-case-card-"]',
   useCaseCardFirst: '[data-testid="use-case-card-1"]',
   useCaseTitleFirst: '[data-testid="use-case-title-1"]',
+  // BC-30 — Features Section
+  featuresSection: '[data-testid="features-section"]',
+  featuresHeading: '[data-testid="features-heading"]',
+  featuresCardsGrid: '[data-testid="features-cards-grid"]',
+  featureCard: 'article[data-testid^="feature-card-"]',
+  featureCardTitle: '[data-testid^="feature-card-title-"]',
 } as const;
