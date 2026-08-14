@@ -80,7 +80,14 @@ export function CareersHeroSection() {
             data-testid="careers-hero-heading"
             className="font-[var(--font-lexend)] text-[32px] font-medium leading-[130%] text-white md:text-[48px] lg:text-[58px]"
           >
-            {data.headline}
+            {data.headline.split("YourBank").map((part, i, arr) => (
+              <span key={i}>
+                {part}
+                {i < arr.length - 1 && (
+                  <span className="text-[#CAFF33]">YourBank</span>
+                )}
+              </span>
+            ))}
           </h1>
           <p
             data-testid="careers-hero-paragraph"
