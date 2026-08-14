@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const HEADING = "Login";
 const SUBTEXT = "Welcome back!";
@@ -11,12 +12,18 @@ const FORGOT_PASSWORD_LABEL = "Forgot Password?";
 const LOGIN_BUTTON_LABEL = "Login";
 const REGISTER_BUTTON_LABEL = "Sign Up";
 const OR_DIVIDER_LABEL = "Or";
+const LOGIN_API_ENDPOINT = "/api/auth/login";
+const ERROR_INVALID_CREDENTIALS = "Invalid credentials. Please check your email and password.";
+const ERROR_NETWORK = "Something went wrong. Please try again.";
 
 export function LoginForm() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
+  const [apiError, setApiError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   function validate(): boolean {
     const next: { email?: string; password?: string } = {};
@@ -32,9 +39,31 @@ export function LoginForm() {
     return Object.keys(next).length === 0;
   }
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    validate();
+    setApiError(null);
+    if (!validate()) return;
+
+    setIsSubmitting(true);
+    try {
+      const res = await fetch(LOGIN_API_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+      const data = (await res.json()) as { success: boolean; token?: string; error?: string };
+      if (data.success) {
+        setEmail("");
+        setPassword("");
+        router.push("/");
+      } else {
+        setApiError(ERROR_INVALID_CREDENTIALS);
+      }
+    } catch {
+      setApiError(ERROR_NETWORK);
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -80,6 +109,17 @@ export function LoginForm() {
             {SUBTEXT}
           </p>
         </div>
+
+        {/* API error banner */}
+        {apiError && (
+          <div
+            data-testid="login-api-error"
+            role="alert"
+            className="rounded-[12px] border border-red-500/30 bg-red-500/10 px-[24px] py-[16px] text-sm text-red-400"
+          >
+            {apiError}
+          </div>
+        )}
 
         {/* Form */}
         <form
@@ -167,9 +207,11 @@ export function LoginForm() {
             <button
               data-testid="login-submit-button"
               type="submit"
-              className="flex w-full items-center justify-center rounded-[63px] bg-[#CAFF33] px-[20px] py-[18px] text-[18px] font-semibold text-[#262626] transition-opacity hover:opacity-90"
+              disabled={isSubmitting}
+              aria-busy={isSubmitting}
+              className="flex w-full items-center justify-center rounded-[63px] bg-[#CAFF33] px-[20px] py-[18px] text-[18px] font-semibold text-[#262626] transition-opacity hover:opacity-90 disabled:opacity-60"
             >
-              {LOGIN_BUTTON_LABEL}
+              {isSubmitting ? "Logging in..." : LOGIN_BUTTON_LABEL}
             </button>
 
             {/* Sign up button */}
