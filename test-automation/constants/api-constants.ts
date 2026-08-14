@@ -5,6 +5,7 @@ export const API_PATHS = {
   CTA_CONFIG: "/api/config/cta",
   TESTIMONIALS: "/api/testimonials",
   HERO: "/api/home/hero",
+  CAREERS_HERO: "/api/careers/hero",
 } as const;
 
 export const authStatusSchema = z.object({
@@ -245,4 +246,27 @@ export interface FeaturesResponse {
 
 export const FEATURES_SCHEMA_LABELS = {
   FEATURES_RESPONSE: "features response schema",
+} as const;
+
+// BC-33 — Careers Hero Section
+export const careersHeroSchema = z.object({
+  headline: z.string().min(1),
+  body: z.string().min(1),
+  ctaLabel: z.string().min(1),
+  imageUrl: z.string().min(1),
+});
+
+export interface CareersHeroData {
+  headline: string;
+  body: string;
+  ctaLabel: string;
+  imageUrl: string;
+}
+
+export const CAREERS_HERO_ENDPOINTS = {
+  HERO: API_PATHS.CAREERS_HERO,
+} as const;
+
+export const CAREERS_HERO_SCHEMA_LABELS = {
+  CAREERS_HERO_RESPONSE: "careers hero response schema",
 } as const;
