@@ -9,3 +9,9 @@ test.describe("Careers Page Hero Section", () => {
     await careersPage.assertCareersHeroAbstractDesign();
   });
 });
+
+test.describe("Careers Page Values Section", () => {
+  test("values section renders ≥4 cards validated against API response", async ({ careersPage }) => {
+    await careersPage.assertValuesFromApi();
+  });
+});

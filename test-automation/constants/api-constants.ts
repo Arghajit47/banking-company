@@ -6,6 +6,7 @@ export const API_PATHS = {
   TESTIMONIALS: "/api/testimonials",
   HERO: "/api/home/hero",
   CAREERS_HERO: "/api/careers/hero",
+  CAREERS_VALUES: "/api/careers/values",
 } as const;
 
 export const authStatusSchema = z.object({
@@ -269,4 +270,35 @@ export const CAREERS_HERO_ENDPOINTS = {
 
 export const CAREERS_HERO_SCHEMA_LABELS = {
   CAREERS_HERO_RESPONSE: "careers hero response schema",
+} as const;
+
+// BC-35/BC-36 — Careers Values Section
+export const careersValueItemSchema = z.object({
+  id: z.number().int(),
+  icon: z.string(),
+  title: z.string().min(1),
+  description: z.string().min(1),
+});
+
+export const careersValuesResponseSchema = z.object({
+  values: z.array(careersValueItemSchema),
+});
+
+export interface CareersValueItem {
+  id: number;
+  icon: string;
+  title: string;
+  description: string;
+}
+
+export interface CareersValuesData {
+  values: CareersValueItem[];
+}
+
+export const CAREERS_VALUES_ENDPOINTS = {
+  VALUES: API_PATHS.CAREERS_VALUES,
+} as const;
+
+export const CAREERS_VALUES_SCHEMA_LABELS = {
+  CAREERS_VALUES_RESPONSE: "careers values response schema",
 } as const;
