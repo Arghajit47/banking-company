@@ -1,6 +1,62 @@
+"use client";
+
 import Image from "next/image";
+import { useCareersHeroData } from "@/lib/careers-hero";
+import { useMounted } from "@/lib/use-mounted";
+
+function CareersHeroSkeleton() {
+  return (
+    <section
+      data-testid="careers-hero-section"
+      className="relative mx-auto w-full max-w-[1599px] overflow-hidden rounded-[20px] bg-[#1C1C1C] p-[50px]"
+    >
+      <Image
+        data-testid="careers-hero-abstract"
+        src="/assets/illustrations/abstract_design_hero_illustration.svg"
+        alt=""
+        width={505}
+        height={480}
+        className="pointer-events-none absolute right-0 top-0 hidden md:block"
+        aria-hidden="true"
+      />
+      <div className="flex flex-col items-start md:flex-row">
+        <div
+          data-testid="careers-hero-text-container"
+          className="relative z-10 flex shrink-0 flex-col gap-[23px] rounded-[20px_0_80px_20px] bg-[#1A1A1A] p-8 md:p-[80px] md:w-[791px]"
+        >
+          <div
+            data-testid="careers-hero-heading"
+            aria-hidden="true"
+            className="flex flex-col gap-2"
+          >
+            <div className="h-10 w-3/4 animate-pulse rounded bg-[#333333]" />
+            <div className="h-10 w-1/2 animate-pulse rounded bg-[#333333]" />
+          </div>
+          <div
+            data-testid="careers-hero-paragraph"
+            aria-hidden="true"
+            className="h-24 w-full animate-pulse rounded bg-[#333333]"
+          />
+        </div>
+        <div
+          data-testid="careers-hero-image-wrapper"
+          className="mt-6 flex-1 md:mt-0 md:-ml-[260px]"
+        >
+          <div className="h-[400px] w-full animate-pulse rounded-[16px] bg-[#333333]" />
+        </div>
+      </div>
+    </section>
+  );
+}
 
 export function CareersHeroSection() {
+  const mounted = useMounted();
+  const { data, error, isLoading } = useCareersHeroData();
+
+  if (!mounted || isLoading || !data) {
+    return <CareersHeroSkeleton />;
+  }
+
   return (
     <section
       data-testid="careers-hero-section"
@@ -24,25 +80,22 @@ export function CareersHeroSection() {
           data-testid="careers-hero-text-container"
           className="relative z-10 flex shrink-0 flex-col gap-[23px] rounded-[20px_0_80px_20px] bg-[#1A1A1A] p-8 md:p-[80px] md:w-[791px]"
         >
+          {error && (
+            <p className="text-sm text-red-400">
+              Unable to load content. Please refresh.
+            </p>
+          )}
           <h1
             data-testid="careers-hero-heading"
             className="font-[var(--font-lexend)] text-[32px] font-medium leading-[130%] text-white md:text-[48px] lg:text-[58px]"
           >
-            Welcome to{" "}
-            <span className="text-[#CAFF33]">YourBank</span>
-            {" "}Careers!
+            {data.headline}
           </h1>
           <p
             data-testid="careers-hero-paragraph"
             className="font-[var(--font-lexend)] text-[18px] font-light leading-[150%] text-[#B3B3B3]"
           >
-            Join our team and embark on a rewarding journey in the banking
-            industry. At YourBank, we are committed to fostering a culture of
-            excellence and providing opportunities for professional growth. With
-            a focus on innovation, customer service, and integrity, we strive to
-            make a positive impact in the lives of our customers and communities.
-            Join us today and be a part of our mission to shape the future of
-            banking.
+            {data.body}
           </p>
         </div>
 
@@ -53,7 +106,7 @@ export function CareersHeroSection() {
         >
           <Image
             data-testid="careers-hero-image"
-            src="/assets/images/hero_image.png"
+            src={data.imageUrl}
             alt="Careers at YourBank"
             width={968}
             height={716}
