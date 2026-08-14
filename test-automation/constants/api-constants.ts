@@ -185,6 +185,39 @@ export const PRODUCTS_SCHEMA_LABELS = {
   PRODUCTS_RESPONSE: "products response schema",
 } as const;
 
+// BC-27 — Use Cases Section
+export const useCaseSchema = z.object({
+  id: z.number().int(),
+  icon: z.string().min(1),
+  title: z.string().min(1),
+  description: z.string().min(1),
+  audience: z.enum(["individual", "business"]),
+});
+
+export const useCasesResponseSchema = z.object({
+  useCases: z.array(useCaseSchema),
+});
+
+export interface UseCase {
+  id: number;
+  icon: string;
+  title: string;
+  description: string;
+  audience: "individual" | "business";
+}
+
+export interface UseCasesResponse {
+  useCases: UseCase[];
+}
+
+export const USE_CASES_ENDPOINTS = {
+  LIST: "/api/use-cases",
+} as const;
+
+export const USE_CASES_SCHEMA_LABELS = {
+  USE_CASES_RESPONSE: "use cases response schema",
+} as const;
+
 // BC-30 — Features Section
 export const FEATURES_API_PATH = "/api/features" as const;
 

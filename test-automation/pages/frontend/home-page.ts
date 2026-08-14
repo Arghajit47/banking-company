@@ -34,6 +34,12 @@ import {
   TESTIMONIALS_ENDPOINTS,
   type TestimonialsResponse,
   testimonialsResponseSchema,
+  USE_CASES_COUNTS,
+  USE_CASES_ENDPOINTS,
+  USE_CASES_SCHEMA_LABELS,
+  USE_CASES_TEXT,
+  useCasesResponseSchema,
+  type UseCasesResponse,
   UI_ROUTES,
 } from "@constants/index";
 
@@ -201,6 +207,53 @@ export class HomePage {
     );
     const cards = this.initializationPage.page.locator(HOMEPAGE_LOCATORS.testimonialsCard);
     expect(await cards.count()).toBeGreaterThanOrEqual(TESTIMONIALS_COUNTS.MIN_VISIBLE);
+  }
+
+  async assertUseCasesSectionFromApi(): Promise<void> {
+    await this.initializationPage.goto(UI_ROUTES.HOME);
+    await this.initializationPage.expectVisible(HOMEPAGE_LOCATORS.useCasesSection);
+
+    const useCasesResponse = (await this.apiHelper.getRequest(
+      USE_CASES_ENDPOINTS.LIST
+    )) as UseCasesResponse;
+    const validation = useCasesResponseSchema.safeParse(useCasesResponse);
+    this.apiHelper.assertSchemaValid(validation, USE_CASES_SCHEMA_LABELS.USE_CASES_RESPONSE);
+
+    expect(useCasesResponse.useCases).toHaveLength(USE_CASES_COUNTS.EXPECTED_API_TOTAL);
+
+    const individualCards = useCasesResponse.useCases.filter(
+      (u) => u.audience === "individual"
+    );
+    const businessCards = useCasesResponse.useCases.filter(
+      (u) => u.audience === "business"
+    );
+    expect(individualCards).toHaveLength(USE_CASES_COUNTS.EXPECTED_INDIVIDUAL);
+    expect(businessCards).toHaveLength(USE_CASES_COUNTS.EXPECTED_BUSINESS);
+
+    await this.initializationPage.expectTextContains(
+      HOMEPAGE_LOCATORS.useCasesHeading,
+      USE_CASES_TEXT.HEADING
+    );
+    await this.initializationPage.expectTextContains(
+      HOMEPAGE_LOCATORS.useCasesSubheading,
+      USE_CASES_TEXT.SUBHEADING_START
+    );
+    await this.initializationPage.expectVisible(HOMEPAGE_LOCATORS.useCasesRowIndividuals);
+    await this.initializationPage.expectVisible(HOMEPAGE_LOCATORS.useCasesRowBusinesses);
+
+    await this.initializationPage.expectVisibleWithTimeout(
+      HOMEPAGE_LOCATORS.useCaseCardFirst,
+      0,
+      USE_CASES_COUNTS.SWR_LOAD_TIMEOUT_MS
+    );
+
+    const cards = this.initializationPage.page.locator(HOMEPAGE_LOCATORS.useCaseCard);
+    expect(await cards.count()).toBe(USE_CASES_COUNTS.EXPECTED_API_TOTAL);
+
+    await this.initializationPage.expectTextContains(
+      HOMEPAGE_LOCATORS.useCaseTitleFirst,
+      useCasesResponse.useCases[0].title
+    );
   }
 
   private async assertNoAuthConsoleErrors(): Promise<void> {

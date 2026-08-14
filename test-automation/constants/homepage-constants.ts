@@ -76,6 +76,19 @@ export const PRODUCTS_COUNTS = {
   SWR_LOAD_TIMEOUT_MS: 15000,
 } as const;
 
+// BC-27 — Use Cases Section
+export const USE_CASES_TEXT = {
+  HEADING: "Use Cases",
+  SUBHEADING_START: "At YourBank, we cater to the diverse needs of individuals and businesses alike",
+} as const;
+
+export const USE_CASES_COUNTS = {
+  EXPECTED_API_TOTAL: 8,
+  EXPECTED_INDIVIDUAL: 4,
+  EXPECTED_BUSINESS: 4,
+  SWR_LOAD_TIMEOUT_MS: 15000,
+} as const;
+
 // BC-30 — Features Section
 export const FEATURES_TEXT = {
   HEADING: "Our Features",

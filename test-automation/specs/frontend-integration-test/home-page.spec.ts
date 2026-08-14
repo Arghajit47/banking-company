@@ -68,6 +68,12 @@ test.describe("Home Page Products Section", () => {
   });
 });
 
+test.describe("Home Page Use Cases Section", () => {
+  test("use cases section renders all 8 cards from /api/use-cases with Zod-validated schema", async ({ homepage }) => {
+    await homepage.assertUseCasesSectionFromApi();
+  });
+});
+
 test.describe("Home Page Features Section", () => {
   test("features section fetches /api/features and renders 4 cards", async ({ homepage }) => {
     await homepage.assertFeaturesSectionFromApi();
