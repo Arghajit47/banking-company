@@ -17,4 +17,12 @@ export const ABOUT_LOCATORS = {
   visionCardHeading: '[data-testid="vision-card-heading"]',
   visionCardBody: '[data-testid="vision-card-body"]',
   visionCardImage: '[data-testid="vision-card-image"]',
+  pressReleasesSection: '[data-testid="press-releases-section"]',
+  pressReleasesSectionHeading: '[data-testid="press-releases-section-heading"]',
+  pressReleasesSectionParagraph: '[data-testid="press-releases-section-paragraph"]',
+  pressReleasesGrid: '[data-testid="press-releases-grid"]',
+  pressReleaseCard1: '[data-testid="press-release-card-1"]',
+  pressReleaseCardTitle1: '[data-testid="press-release-card-title-1"]',
+  pressReleaseCardDate1: '[data-testid="press-release-card-date-1"]',
+  pressReleaseCardExcerpt1: '[data-testid="press-release-card-excerpt-1"]',
 } as const;

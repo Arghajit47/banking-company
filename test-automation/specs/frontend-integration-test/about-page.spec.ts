@@ -11,3 +11,9 @@ test.describe("About Page Mission & Vision Section", () => {
     await aboutPage.assertMissionVisionFromApi();
   });
 });
+
+test.describe("About Page Press Releases Section", () => {
+  test("press releases section renders and validates against API response", async ({ aboutPage }) => {
+    await aboutPage.assertPressReleasesFromApi();
+  });
+});
