@@ -1,42 +1,66 @@
-import type { ValueCard } from "@/lib/values";
+"use client";
 
-const VALUES: ValueCard[] = [
-  {
-    id: 1,
-    title: "Integrity",
-    description:
-      "We conduct ourselves with utmost honesty, transparency, and ethical behavior. We believe in doing what is right for our customers, colleagues, and stakeholders, even when faced with difficult choices.",
-  },
-  {
-    id: 2,
-    title: "Customer Centricity",
-    description:
-      "Our customers are at the heart of everything we do. We are dedicated to understanding their needs, providing personalized solutions, and delivering exceptional service that exceeds expectations.",
-  },
-  {
-    id: 3,
-    title: "Collaboration",
-    description:
-      "We foster a collaborative and inclusive work environment, where teamwork and diversity are celebrated. By leveraging the unique strengths and perspectives of our employees, we drive innovation and achieve greater success together.",
-  },
-  {
-    id: 4,
-    title: "Innovation",
-    description:
-      "We embrace change and constantly seek innovative solutions to meet the evolving needs of our customers. We encourage our employees to think creatively, challenge conventions, and explore new ideas to drive the future of banking.",
-  },
-];
+import { useCareersValuesData, type CareersValueItem } from "@/lib/careers-values";
+import { useMounted } from "@/lib/use-mounted";
 
 const SECTION_HEADING_PREFIX = "Our ";
 const SECTION_HEADING_ACCENT = "Values";
 const SECTION_BODY =
   "At YourBank, our values form the foundation of our organization and guide our actions. We believe in upholding the highest standards of integrity, delivering exceptional service, and embracing innovation. These values define our culture and shape the way we work together to achieve our goals.";
 
+function ValuesSkeleton() {
+  return (
+    <section
+      data-testid="values-section"
+      className="px-4 py-12 font-[var(--font-lexend)] md:px-8 md:py-16 lg:px-12 lg:py-20 desktop:px-[162px]"
+    >
+      <div
+        data-testid="values-section-header"
+        className="mb-[60px] flex flex-col gap-[14px] md:mb-[80px] lg:pr-[300px]"
+      >
+        <div
+          data-testid="values-section-heading"
+          aria-hidden="true"
+          className="h-12 w-1/3 animate-pulse rounded bg-[#333333]"
+        />
+        <div
+          data-testid="values-section-paragraph"
+          aria-hidden="true"
+          className="h-20 w-full animate-pulse rounded bg-[#333333]"
+        />
+      </div>
+      <div
+        data-testid="values-section-grid"
+        className="flex flex-col gap-[50px] md:gap-[80px]"
+      >
+        {[0, 1].map((rowIdx) => (
+          <div
+            key={rowIdx}
+            className="flex flex-col gap-[40px] md:flex-row md:gap-[80px]"
+          >
+            {[0, 1].map((colIdx) => (
+              <div
+                key={colIdx}
+                data-testid={`values-card-${rowIdx * 2 + colIdx}`}
+                aria-hidden="true"
+                className="flex flex-1 flex-col gap-[20px] border-l border-[#CAFF33] pl-[30px] md:gap-[30px]"
+              >
+                <div className="h-14 w-2/3 animate-pulse rounded bg-[#333333]" />
+                <div className="h-20 w-full animate-pulse rounded bg-[#333333]" />
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function ValueCardItem({
   card,
   index,
 }: {
-  card: ValueCard;
+  card: CareersValueItem;
   index: number;
 }) {
   return (
@@ -61,9 +85,17 @@ function ValueCardItem({
 }
 
 export function ValuesSection() {
-  const rows: [ValueCard, ValueCard][] = [
-    [VALUES[0], VALUES[1]],
-    [VALUES[2], VALUES[3]],
+  const mounted = useMounted();
+  const { data, error, isLoading } = useCareersValuesData();
+
+  if (!mounted || isLoading || !data) {
+    return <ValuesSkeleton />;
+  }
+
+  const values = data.values;
+  const rows: [CareersValueItem, CareersValueItem][] = [
+    [values[0], values[1]],
+    [values[2], values[3]],
   ];
 
   return (
@@ -89,6 +121,12 @@ export function ValuesSection() {
           {SECTION_BODY}
         </p>
       </div>
+
+      {error && (
+        <p className="mb-6 text-sm text-red-400">
+          Unable to load values. Please refresh.
+        </p>
+      )}
 
       <div
         data-testid="values-section-grid"
