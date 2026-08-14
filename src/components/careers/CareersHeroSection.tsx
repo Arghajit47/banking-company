@@ -53,14 +53,14 @@ export function CareersHeroSection() {
       data-testid="careers-hero-section"
       className="relative mx-auto w-full max-w-[1599px] overflow-hidden rounded-[20px] bg-[#1C1C1C] p-[50px]"
     >
-      {/* Careers abstract design — Figma node 659:2, desktop only */}
+      {/* Careers abstract design — Figma node 659:2, desktop only — z-0 keeps it behind the hero image */}
       <Image
         data-testid="careers-hero-abstract-design"
         src="/assets/illustrations/careers_abstract_design.svg"
         alt=""
         width={480}
         height={505}
-        className="pointer-events-none absolute right-0 top-0 hidden md:block"
+        className="pointer-events-none absolute right-0 top-0 z-0 hidden md:block"
         aria-hidden="true"
       />
 
@@ -90,10 +90,10 @@ export function CareersHeroSection() {
           </p>
         </div>
 
-        {/* Hero image */}
+        {/* Hero image — relative z-10 keeps it above the abstract design */}
         <div
           data-testid="careers-hero-image-wrapper"
-          className="mt-6 flex-1 md:mt-0 md:-ml-[260px]"
+          className="relative z-10 mt-6 flex-1 md:mt-0 md:-ml-[260px]"
         >
           <Image
             data-testid="careers-hero-image"
