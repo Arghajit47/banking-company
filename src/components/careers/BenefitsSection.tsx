@@ -1,47 +1,13 @@
+"use client";
+
 import Image from "next/image";
+import { useCareersBenefitsData, type CareersBenefitItem } from "@/lib/careers-benefits";
+import { useMounted } from "@/lib/use-mounted";
 
 const SECTION_HEADING_PREFIX = "Our ";
 const SECTION_HEADING_ACCENT = "Benefits";
 const SECTION_BODY =
   "At YourBank, we value our employees and are dedicated to their well-being and success. We offer a comprehensive range of benefits designed to support their personal and professional growth.";
-
-interface BenefitItem {
-  id: number;
-  icon: string;
-  title: string;
-  description: string;
-}
-
-const BENEFITS: BenefitItem[] = [
-  {
-    id: 1,
-    icon: "/assets/icons/icon_benefit_1.svg",
-    title: "Competitive Compensation",
-    description:
-      "We provide a competitive salary package that recognizes the skills and expertise of our employees. YourBank believes in rewarding exceptional performance and offering opportunities for financial growth.",
-  },
-  {
-    id: 2,
-    icon: "/assets/icons/icon_benefit_2.svg",
-    title: "Health and Wellness",
-    description:
-      "We prioritize the health and well-being of our employees by providing comprehensive medical, dental, and vision insurance plans. We also offer wellness programs, gym memberships, and resources to support a healthy lifestyle.",
-  },
-  {
-    id: 3,
-    icon: "/assets/icons/icon_benefit_3.svg",
-    title: "Retirement Planning",
-    description:
-      "YourBank is committed to helping employees plan for their future. We offer a retirement savings plan with a generous employer match to help them build a secure financial foundation for the long term.",
-  },
-  {
-    id: 4,
-    icon: "/assets/icons/icon_benefit_4.svg",
-    title: "Work-Life Balance",
-    description:
-      "We understand the importance of maintaining a healthy work-life balance. YourBank offers flexible work arrangements, paid time off, parental leave, and other programs that support employees in managing their personal and professional commitments.",
-  },
-];
 
 const CORNER_RADII = [
   "rounded-tl-[50px] rounded-tr-[20px] rounded-br-[50px] rounded-bl-[20px]",
@@ -50,11 +16,59 @@ const CORNER_RADII = [
   "rounded-tl-[50px] rounded-tr-[20px] rounded-br-[50px] rounded-bl-[20px]",
 ];
 
-function BenefitCard({ benefit, index }: { benefit: BenefitItem; index: number }) {
+function BenefitsSkeleton() {
+  return (
+    <section
+      data-testid="benefits-section"
+      className="px-4 py-12 font-[var(--font-lexend)] md:px-8 md:py-16 lg:px-12 lg:py-20 desktop:px-[162px]"
+    >
+      <div
+        data-testid="benefits-section-header"
+        className="mb-[60px] flex flex-col gap-[14px] md:mb-[80px] lg:pr-[300px]"
+      >
+        <div
+          data-testid="benefits-section-heading"
+          aria-hidden="true"
+          className="h-12 w-1/3 animate-pulse rounded bg-[#333333]"
+        />
+        <div
+          data-testid="benefits-section-paragraph"
+          aria-hidden="true"
+          className="h-20 w-full animate-pulse rounded bg-[#333333]"
+        />
+      </div>
+      <div
+        data-testid="benefits-section-grid"
+        className="flex flex-col gap-[50px]"
+      >
+        {[0, 1].map((rowIdx) => (
+          <div key={rowIdx} className="flex flex-col gap-[40px] md:flex-row md:gap-0">
+            {[0, 1].map((colIdx) => (
+              <div
+                key={colIdx}
+                data-testid={`benefit-card-${rowIdx * 2 + colIdx}`}
+                aria-hidden="true"
+                className="flex flex-1 flex-col gap-[30px] rounded-[20px] bg-[#1C1C1C] p-[30px] md:p-[50px]"
+              >
+                <div className="flex gap-[20px]">
+                  <div className="h-[98px] w-[98px] animate-pulse rounded-full bg-[#262626]" />
+                  <div className="h-9 flex-1 animate-pulse rounded bg-[#262626]" />
+                </div>
+                <div className="h-20 animate-pulse rounded bg-[#262626]" />
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function BenefitCard({ benefit, index }: { benefit: CareersBenefitItem; index: number }) {
   return (
     <article
       data-testid={`benefit-card-${index}`}
-      className={`relative flex flex-1 flex-col gap-[30px] overflow-hidden border border-[#CAFF33]/10 bg-[#1C1C1C] p-[30px] md:p-[50px] ${CORNER_RADII[index]}`}
+      className={`relative flex flex-1 flex-col gap-[30px] overflow-hidden border border-[#CAFF33]/10 bg-[#1C1C1C] p-[30px] md:p-[50px] ${CORNER_RADII[index % 4]}`}
     >
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#CAFF33]/5 to-transparent" />
       <div className="flex flex-row items-center gap-[20px]">
@@ -91,9 +105,17 @@ function BenefitCard({ benefit, index }: { benefit: BenefitItem; index: number }
 }
 
 export function BenefitsSection() {
-  const rows: [BenefitItem, BenefitItem][] = [
-    [BENEFITS[0], BENEFITS[1]],
-    [BENEFITS[2], BENEFITS[3]],
+  const mounted = useMounted();
+  const { data, error, isLoading } = useCareersBenefitsData();
+
+  if (!mounted || isLoading || !data) {
+    return <BenefitsSkeleton />;
+  }
+
+  const benefits = data.benefits;
+  const rows: [CareersBenefitItem, CareersBenefitItem][] = [
+    [benefits[0], benefits[1]],
+    [benefits[2], benefits[3]],
   ];
 
   return (
@@ -119,6 +141,12 @@ export function BenefitsSection() {
           {SECTION_BODY}
         </p>
       </div>
+
+      {error && (
+        <p className="mb-6 text-sm text-red-400">
+          Unable to load benefits. Please refresh.
+        </p>
+      )}
 
       <div
         data-testid="benefits-section-grid"
