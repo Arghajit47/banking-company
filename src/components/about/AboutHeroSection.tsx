@@ -1,12 +1,60 @@
+"use client";
+
 import Image from "next/image";
+import { useAboutHeroData } from "@/lib/about-hero";
+import { useMounted } from "@/lib/use-mounted";
 
 const LABEL = "Welcome to YourBank";
-const HEADING_WHITE = "Where Banking Meets ";
-const HEADING_ACCENT = "Excellence!";
-const BODY =
-  "At YourBank, we believe that banking should be more than just transactions. It should be an experience that empowers individuals and businesses to thrive and reach their financial goals. As a trusted financial institution, we are committed to delivering exceptional banking services that go beyond expectations. With a focus on innovation, personalized solutions, and unwavering integrity, we strive to provide the best banking experience for our valued customers. Join us on this exciting journey and discover a new level of banking excellence.";
+
+function AboutHeroSkeleton() {
+  return (
+    <section
+      data-testid="about-hero-section"
+      className="relative mx-auto w-full max-w-[1599px] overflow-hidden rounded-[20px] bg-[#1C1C1C] p-[50px]"
+    >
+      <div className="flex flex-col items-start md:flex-row">
+        <div
+          data-testid="about-hero-text-container"
+          className="relative z-20 flex shrink-0 flex-col gap-[23px] rounded-[20px_0_80px_20px] bg-[#1A1A1A] p-8 md:w-[791px] md:p-[80px]"
+        >
+          <div
+            data-testid="about-hero-label"
+            aria-hidden="true"
+            className="h-5 w-1/3 animate-pulse rounded bg-[#333333]"
+          />
+          <div
+            data-testid="about-hero-heading"
+            aria-hidden="true"
+            className="flex flex-col gap-2"
+          >
+            <div className="h-10 w-3/4 animate-pulse rounded bg-[#333333]" />
+            <div className="h-10 w-1/2 animate-pulse rounded bg-[#333333]" />
+          </div>
+          <div
+            data-testid="about-hero-paragraph"
+            aria-hidden="true"
+            className="h-32 w-full animate-pulse rounded bg-[#333333]"
+          />
+        </div>
+        <div
+          data-testid="about-hero-image-wrapper"
+          className="mt-6 flex-1 md:-ml-[260px] md:mt-0"
+        >
+          <div className="h-[400px] w-full animate-pulse rounded-[16px] bg-[#333333]" />
+        </div>
+      </div>
+    </section>
+  );
+}
 
 export function AboutHeroSection() {
+  const mounted = useMounted();
+  const { data, error, isLoading } = useAboutHeroData();
+
+  if (!mounted || isLoading || !data) {
+    return <AboutHeroSkeleton />;
+  }
+
   return (
     <section
       data-testid="about-hero-section"
@@ -26,6 +74,11 @@ export function AboutHeroSection() {
           data-testid="about-hero-text-container"
           className="relative z-20 flex shrink-0 flex-col gap-[23px] rounded-[20px_0_80px_20px] bg-[#1A1A1A] p-8 md:w-[791px] md:p-[80px]"
         >
+          {error && (
+            <p className="text-sm text-red-400">
+              Unable to load content. Please refresh.
+            </p>
+          )}
           <p
             data-testid="about-hero-label"
             className="font-[var(--font-lexend)] text-[18px] font-normal leading-[150%] text-white md:text-[20px]"
@@ -36,14 +89,14 @@ export function AboutHeroSection() {
             data-testid="about-hero-heading"
             className="font-[var(--font-lexend)] text-[32px] font-medium leading-[130%] md:text-[48px] lg:text-[58px]"
           >
-            <span className="text-white">{HEADING_WHITE}</span>
-            <span className="text-[#CAFF33]">{HEADING_ACCENT}</span>
+            <span className="text-white">{data.headline}</span>
+            <span className="text-[#CAFF33]">{data.subheadline}</span>
           </h1>
           <p
             data-testid="about-hero-paragraph"
             className="font-[var(--font-lexend)] text-[16px] font-light leading-[150%] text-[#B3B3B3] md:text-[18px]"
           >
-            {BODY}
+            {data.body}
           </p>
         </div>
 
@@ -53,7 +106,7 @@ export function AboutHeroSection() {
         >
           <Image
             data-testid="about-hero-image"
-            src="/assets/images/about_hero_image.png"
+            src={data.imageUrl}
             alt="YourBank team"
             width={968}
             height={716}
