@@ -8,6 +8,11 @@ import {
   SECURITY_HERO_TEXT,
   securityHeroSchema,
   type SecurityHeroDataType,
+  SECURITY_PROTECTIONS_ENDPOINTS,
+  SECURITY_PROTECTIONS_SCHEMA_LABELS,
+  SECURITY_PROTECTIONS_TEXT,
+  protectionsResponseSchema,
+  type ProtectionsDataType,
   UI_ROUTES,
 } from "@constants/index";
 
@@ -53,5 +58,36 @@ export class SecurityPage {
 
     await this.initializationPage.expectVisible(SECURITY_LOCATORS.heroImageWrapper);
     await this.initializationPage.expectVisible(SECURITY_LOCATORS.heroImage);
+  }
+
+  async assertProtectionsFromApi(): Promise<void> {
+    const body = (await this.apiHelper.getRequest(
+      SECURITY_PROTECTIONS_ENDPOINTS.LIST
+    )) as ProtectionsDataType;
+
+    const parsed = protectionsResponseSchema.safeParse(body);
+    this.apiHelper.assertSchemaValid(
+      parsed,
+      SECURITY_PROTECTIONS_SCHEMA_LABELS.PROTECTIONS_RESPONSE
+    );
+
+    await this.initializationPage.goto(UI_ROUTES.SECURITY);
+    await this.initializationPage.expectVisible(SECURITY_LOCATORS.protectionSection);
+
+    await this.initializationPage.expectTextContains(
+      SECURITY_LOCATORS.protectionSectionHeading,
+      SECURITY_PROTECTIONS_TEXT.SECTION_HEADING_CONTAINS
+    );
+    await this.initializationPage.expectTextContains(
+      SECURITY_LOCATORS.protectionSectionParagraph,
+      SECURITY_PROTECTIONS_TEXT.SECTION_BODY_STARTS_WITH
+    );
+
+    await this.initializationPage.expectVisible(SECURITY_LOCATORS.protectionCardsContainer);
+    await this.initializationPage.expectVisible(SECURITY_LOCATORS.protectionCard1);
+    await this.initializationPage.expectTextContains(
+      SECURITY_LOCATORS.protectionCardTitle1,
+      SECURITY_PROTECTIONS_TEXT.FIRST_CARD_TITLE
+    );
   }
 }

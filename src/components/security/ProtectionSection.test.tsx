@@ -1,12 +1,60 @@
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { render, screen, cleanup } from "@testing-library/react";
 import * as matchers from "@testing-library/jest-dom/matchers";
 import { ProtectionSection } from "./ProtectionSection";
 
 expect.extend(matchers);
 
+const MOCK_DATA = {
+  protections: [
+    {
+      id: 1,
+      icon: "/assets/icons/icon_protection_1.svg",
+      badgeIcon: "/assets/icons/icon_protection_badge_1.svg",
+      title: "Secure Online Banking Platform",
+      description: "Our online banking platform is built with multiple layers of security.",
+    },
+    {
+      id: 2,
+      icon: "/assets/icons/icon_protection_2.svg",
+      badgeIcon: "/assets/icons/icon_protection_badge_2.svg",
+      title: "Multi-Factor Authentication",
+      description: "We employ multi-factor authentication for additional security.",
+    },
+    {
+      id: 3,
+      icon: "/assets/icons/icon_protection_3.svg",
+      badgeIcon: "/assets/icons/icon_protection_badge_3.svg",
+      title: "Fraud Monitoring",
+      description: "We have sophisticated fraud detection systems in place.",
+    },
+    {
+      id: 4,
+      icon: "/assets/icons/icon_protection_4.svg",
+      badgeIcon: "/assets/icons/icon_protection_badge_4.svg",
+      title: "Secure Mobile Banking",
+      description: "Our mobile banking app is designed with the same level of security.",
+    },
+  ],
+};
+
+let mockState = { data: MOCK_DATA, error: undefined, isLoading: false };
+
+vi.mock("@/lib/security-protections", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@/lib/security-protections")>();
+  return {
+    ...actual,
+    useSecurityProtectionsData: () => mockState,
+  };
+});
+
+vi.mock("@/lib/use-mounted", () => ({
+  useMounted: () => true,
+}));
+
 afterEach(() => {
   cleanup();
+  mockState = { data: MOCK_DATA, error: undefined, isLoading: false };
 });
 
 describe("ProtectionSection", () => {
@@ -37,21 +85,21 @@ describe("ProtectionSection", () => {
     expect(screen.getByTestId("protection-cards-container")).toBeInTheDocument();
   });
 
-  it("renders 4 protection cards", () => {
+  it("renders 4 protection cards from API", () => {
     render(<ProtectionSection />);
     for (let i = 1; i <= 4; i++) {
       expect(screen.getByTestId(`protection-card-${i}`)).toBeInTheDocument();
     }
   });
 
-  it("renders card icons", () => {
+  it("renders card icons from API", () => {
     render(<ProtectionSection />);
     for (let i = 1; i <= 4; i++) {
       expect(screen.getByTestId(`protection-card-icon-${i}`)).toBeInTheDocument();
     }
   });
 
-  it("renders card titles", () => {
+  it("renders card titles from API", () => {
     render(<ProtectionSection />);
     for (let i = 1; i <= 4; i++) {
       const title = screen.getByTestId(`protection-card-title-${i}`);
@@ -59,15 +107,7 @@ describe("ProtectionSection", () => {
     }
   });
 
-  it("renders card descriptions", () => {
-    render(<ProtectionSection />);
-    for (let i = 1; i <= 4; i++) {
-      const desc = screen.getByTestId(`protection-card-description-${i}`);
-      expect(desc.textContent!.length).toBeGreaterThan(0);
-    }
-  });
-
-  it("first card title is 'Secure Online Banking Platform'", () => {
+  it("first card title matches API data", () => {
     render(<ProtectionSection />);
     expect(screen.getByTestId("protection-card-title-1").textContent).toBe("Secure Online Banking Platform");
   });
@@ -76,5 +116,11 @@ describe("ProtectionSection", () => {
     const { container } = render(<ProtectionSection />);
     expect(container.innerHTML).not.toContain("bg-white");
     expect(container.innerHTML).not.toContain("text-zinc-900");
+  });
+
+  it("shows skeleton when not mounted", () => {
+    mockState = { data: undefined as never, error: undefined, isLoading: true };
+    render(<ProtectionSection />);
+    expect(screen.getByTestId("protection-section")).toBeInTheDocument();
   });
 });

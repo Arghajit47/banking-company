@@ -5,3 +5,9 @@ test.describe("Security Page Hero Section", () => {
     await securityPage.assertSecurityHeroFromApi();
   });
 });
+
+test.describe("Security Page Protection Section", () => {
+  test("protection section renders and validates against API response", async ({ securityPage }) => {
+    await securityPage.assertProtectionsFromApi();
+  });
+});

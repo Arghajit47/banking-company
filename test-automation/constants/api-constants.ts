@@ -478,3 +478,36 @@ export const SECURITY_HERO_ENDPOINTS = {
 export const SECURITY_HERO_SCHEMA_LABELS = {
   SECURITY_HERO_RESPONSE: "security hero response schema",
 } as const;
+
+// BC-56/BC-57 — Security Protections Section
+export const protectionItemSchema = z.object({
+  id: z.number().int(),
+  icon: z.string().min(1),
+  badgeIcon: z.string().min(1),
+  title: z.string().min(1),
+  description: z.string().min(1),
+});
+
+export const protectionsResponseSchema = z.object({
+  protections: z.array(protectionItemSchema),
+});
+
+export interface ProtectionItemType {
+  id: number;
+  icon: string;
+  badgeIcon: string;
+  title: string;
+  description: string;
+}
+
+export interface ProtectionsDataType {
+  protections: ProtectionItemType[];
+}
+
+export const SECURITY_PROTECTIONS_ENDPOINTS = {
+  LIST: "/api/security/protections",
+} as const;
+
+export const SECURITY_PROTECTIONS_SCHEMA_LABELS = {
+  PROTECTIONS_RESPONSE: "security protections response schema",
+} as const;
