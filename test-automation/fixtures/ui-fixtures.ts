@@ -3,12 +3,14 @@ import { HomePage } from "@pages/frontend/home-page";
 import { FAQPage } from "@pages/frontend/faq-page";
 import { FooterPage } from "@pages/frontend/footer-page";
 import { CareersPage } from "@pages/frontend/careers-page";
+import { AboutPage } from "@pages/frontend/about-page";
 
 type UiFixtures = {
   homepage: HomePage;
   faqPage: FAQPage;
   footerPage: FooterPage;
   careersPage: CareersPage;
+  aboutPage: AboutPage;
 };
 
 export const test = base.extend<UiFixtures>({
@@ -27,6 +29,10 @@ export const test = base.extend<UiFixtures>({
   careersPage: async ({ page }, fixtureUse) => {
     const cp = new CareersPage(page);
     await fixtureUse(cp);
+  },
+  aboutPage: async ({ page }, fixtureUse) => {
+    const ap = new AboutPage(page);
+    await fixtureUse(ap);
   },
 });
 
