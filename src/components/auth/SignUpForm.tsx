@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const HEADING = "Sign Up";
 const SUBTEXT = "Join our community today!";
@@ -12,6 +13,9 @@ const CONFIRM_PASSWORD_PLACEHOLDER = "Confirm your Password";
 const SIGNUP_BUTTON_LABEL = "Sign Up";
 const LOGIN_BUTTON_LABEL = "Login";
 const OR_DIVIDER_LABEL = "Or";
+const SIGNUP_API_ENDPOINT = "/api/auth/signup";
+const ERROR_NETWORK = "Something went wrong. Please try again.";
+const SUCCESS_MESSAGE = "Account created successfully! Welcome to YourBank.";
 
 interface FormErrors {
   name?: string;
@@ -21,12 +25,16 @@ interface FormErrors {
 }
 
 export function SignUpForm() {
+  const router = useRouter();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
+  const [apiError, setApiError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   function validate(): boolean {
     const next: FormErrors = {};
@@ -50,9 +58,35 @@ export function SignUpForm() {
     return Object.keys(next).length === 0;
   }
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    validate();
+    setApiError(null);
+    setSuccessMessage(null);
+    if (!validate()) return;
+
+    setIsSubmitting(true);
+    try {
+      const res = await fetch(SIGNUP_API_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password, confirmPassword }),
+      });
+      const data = (await res.json()) as { success: boolean; userId?: string; error?: string };
+      if (data.success) {
+        setName("");
+        setEmail("");
+        setPassword("");
+        setConfirmPassword("");
+        setSuccessMessage(SUCCESS_MESSAGE);
+        setTimeout(() => router.push("/"), 2000);
+      } else {
+        setApiError(data.error ?? ERROR_NETWORK);
+      }
+    } catch {
+      setApiError(ERROR_NETWORK);
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -98,6 +132,28 @@ export function SignUpForm() {
             {SUBTEXT}
           </p>
         </div>
+
+        {/* Success banner */}
+        {successMessage && (
+          <div
+            data-testid="signup-success-message"
+            role="status"
+            className="rounded-[12px] border border-green-500/30 bg-green-500/10 px-[24px] py-[16px] text-sm text-green-400"
+          >
+            {successMessage}
+          </div>
+        )}
+
+        {/* API error banner */}
+        {apiError && (
+          <div
+            data-testid="signup-api-error"
+            role="alert"
+            className="rounded-[12px] border border-red-500/30 bg-red-500/10 px-[24px] py-[16px] text-sm text-red-400"
+          >
+            {apiError}
+          </div>
+        )}
 
         {/* Form */}
         <form
@@ -216,9 +272,11 @@ export function SignUpForm() {
             <button
               data-testid="signup-submit-button"
               type="submit"
-              className="flex w-full items-center justify-center rounded-[63px] bg-[#CAFF33] px-[20px] py-[18px] text-[18px] font-semibold text-[#262626] transition-opacity hover:opacity-90"
+              disabled={isSubmitting}
+              aria-busy={isSubmitting}
+              className="flex w-full items-center justify-center rounded-[63px] bg-[#CAFF33] px-[20px] py-[18px] text-[18px] font-semibold text-[#262626] transition-opacity hover:opacity-90 disabled:opacity-60"
             >
-              {SIGNUP_BUTTON_LABEL}
+              {isSubmitting ? "Creating account..." : SIGNUP_BUTTON_LABEL}
             </button>
 
             {/* Login button */}

@@ -1,6 +1,10 @@
-import { render, screen, fireEvent, cleanup } from "@testing-library/react";
-import { afterEach, describe, expect, test, vi } from "vitest";
+import { render, screen, fireEvent, cleanup, waitFor } from "@testing-library/react";
+import { afterEach, describe, expect, test, vi, beforeEach } from "vitest";
 import { SignUpForm } from "./SignUpForm";
+
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({ push: vi.fn() }),
+}));
 
 vi.mock("next/image", () => ({
   default: (props: React.ImgHTMLAttributes<HTMLImageElement>) => {
@@ -8,6 +12,10 @@ vi.mock("next/image", () => ({
     return <img {...props} alt={props.alt ?? ""} />;
   },
 }));
+
+beforeEach(() => {
+  vi.resetAllMocks();
+});
 
 afterEach(() => {
   cleanup();
@@ -70,7 +78,7 @@ describe("SignUpForm", () => {
     expect(screen.getByTestId("signup-name-error").textContent).toBe("Name is required");
   });
 
-  test("shows email required error on empty submit", () => {
+  test("shows email required error when name present but email empty", () => {
     render(<SignUpForm />);
     fireEvent.change(screen.getByTestId("signup-name-input"), { target: { value: "John" } });
     fireEvent.submit(screen.getByTestId("signup-form"));
@@ -103,7 +111,7 @@ describe("SignUpForm", () => {
     expect(screen.getByTestId("signup-confirm-password-error").textContent).toBe("Passwords do not match");
   });
 
-  test("no validation errors when all fields are valid and passwords match", () => {
+  test("no validation errors when all fields valid and passwords match", () => {
     render(<SignUpForm />);
     fireEvent.change(screen.getByTestId("signup-name-input"), { target: { value: "John" } });
     fireEvent.change(screen.getByTestId("signup-email-input"), { target: { value: "john@example.com" } });
@@ -122,5 +130,67 @@ describe("SignUpForm", () => {
     expect(confirmInput.type).toBe("password");
     fireEvent.click(screen.getByTestId("signup-password-toggle"));
     expect(confirmInput.type).toBe("text");
+  });
+
+  test("shows api error banner on failed signup", async () => {
+    global.fetch = vi.fn().mockResolvedValueOnce({
+      json: async () => ({ success: false, error: "Passwords do not match" }),
+    } as Response);
+
+    render(<SignUpForm />);
+    fireEvent.change(screen.getByTestId("signup-name-input"), { target: { value: "John" } });
+    fireEvent.change(screen.getByTestId("signup-email-input"), { target: { value: "john@example.com" } });
+    fireEvent.change(screen.getByTestId("signup-password-input"), { target: { value: "password123" } });
+    fireEvent.change(screen.getByTestId("signup-confirm-password-input"), { target: { value: "password123" } });
+    fireEvent.submit(screen.getByTestId("signup-form"));
+
+    await waitFor(() => {
+      expect(screen.getByTestId("signup-api-error")).toBeDefined();
+    });
+  });
+
+  test("shows success message on successful signup", async () => {
+    global.fetch = vi.fn().mockResolvedValueOnce({
+      json: async () => ({ success: true, userId: "mock-user-id" }),
+    } as Response);
+
+    render(<SignUpForm />);
+    fireEvent.change(screen.getByTestId("signup-name-input"), { target: { value: "John" } });
+    fireEvent.change(screen.getByTestId("signup-email-input"), { target: { value: "john@example.com" } });
+    fireEvent.change(screen.getByTestId("signup-password-input"), { target: { value: "password123" } });
+    fireEvent.change(screen.getByTestId("signup-confirm-password-input"), { target: { value: "password123" } });
+    fireEvent.submit(screen.getByTestId("signup-form"));
+
+    await waitFor(() => {
+      expect(screen.getByTestId("signup-success-message")).toBeDefined();
+    });
+  });
+
+  test("calls signup API with correct payload on valid submit", async () => {
+    global.fetch = vi.fn().mockResolvedValueOnce({
+      json: async () => ({ success: true, userId: "mock-user-id" }),
+    } as Response);
+
+    render(<SignUpForm />);
+    fireEvent.change(screen.getByTestId("signup-name-input"), { target: { value: "John" } });
+    fireEvent.change(screen.getByTestId("signup-email-input"), { target: { value: "john@example.com" } });
+    fireEvent.change(screen.getByTestId("signup-password-input"), { target: { value: "password123" } });
+    fireEvent.change(screen.getByTestId("signup-confirm-password-input"), { target: { value: "password123" } });
+    fireEvent.submit(screen.getByTestId("signup-form"));
+
+    await waitFor(() => {
+      expect(global.fetch).toHaveBeenCalledWith(
+        "/api/auth/signup",
+        expect.objectContaining({
+          method: "POST",
+          body: JSON.stringify({
+            name: "John",
+            email: "john@example.com",
+            password: "password123",
+            confirmPassword: "password123",
+          }),
+        })
+      );
+    });
   });
 });
