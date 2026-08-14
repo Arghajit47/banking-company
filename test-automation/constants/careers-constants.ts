@@ -1,3 +1,15 @@
+export const CAREERS_JOBS_TEXT = {
+  HEADING: "Job Openings",
+  SECTION_BODY_STARTS_WITH: "Explore exciting job openings",
+  EXPECTED_TITLES: [
+    "Relationship Manager",
+    "Risk Analyst",
+    "IT Security Specialist",
+  ] as const,
+  APPLY_BUTTON_TEXT: "Apply Now",
+  MIN_CARD_COUNT: 2,
+} as const;
+
 export const CAREERS_BENEFITS_TEXT = {
   HEADING_PREFIX: "Our ",
   HEADING_ACCENT: "Benefits",
