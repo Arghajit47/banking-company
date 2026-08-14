@@ -5,3 +5,9 @@ test.describe("About Page Hero Section", () => {
     await aboutPage.assertAboutHeroFromApi();
   });
 });
+
+test.describe("About Page Mission & Vision Section", () => {
+  test("mission and vision section renders and validates against API response", async ({ aboutPage }) => {
+    await aboutPage.assertMissionVisionFromApi();
+  });
+});
