@@ -3,4 +3,5 @@ export const UI_ROUTES = {
   ABOUT: "/about",
   CAREERS: "/careers",
   SECURITY: "/security",
+  LOGIN: "/login",
 } as const;
