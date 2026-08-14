@@ -303,6 +303,29 @@ export const CAREERS_VALUES_SCHEMA_LABELS = {
   CAREERS_VALUES_RESPONSE: "careers values response schema",
 } as const;
 
+// BC-44/BC-45 — About Page Hero Section
+export const aboutHeroSchema = z.object({
+  headline: z.string().min(1),
+  subheadline: z.string().min(1),
+  body: z.string().min(1),
+  imageUrl: z.string().min(1),
+});
+
+export interface AboutHeroData {
+  headline: string;
+  subheadline: string;
+  body: string;
+  imageUrl: string;
+}
+
+export const ABOUT_HERO_ENDPOINTS = {
+  HERO: "/api/about/hero",
+} as const;
+
+export const ABOUT_HERO_SCHEMA_LABELS = {
+  ABOUT_HERO_RESPONSE: "about hero response schema",
+} as const;
+
 // BC-41/BC-42 — Careers Job Openings Section
 export const jobOpeningSchema = z.object({
   id: z.number().int(),
