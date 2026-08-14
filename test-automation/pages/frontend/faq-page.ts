@@ -31,12 +31,18 @@ export class FAQPage {
     const validation = faqResponseSchema.safeParse(faqResponse);
     this.apiHelper.assertSchemaValid(validation, FAQ_SCHEMA_LABELS.FAQ_RESPONSE);
 
-    await this.initializationPage.expectTextContains(
-      FAQ_LOCATORS.faqHeading,
-      FAQ_TEXT.HEADING_ACCENT
+    await this.initializationPage.expectVisibleWithTimeout(
+      FAQ_LOCATORS.faqHeadingReal
     );
     await this.initializationPage.expectTextContains(
-      FAQ_LOCATORS.faqSubheading,
+      FAQ_LOCATORS.faqHeadingReal,
+      FAQ_TEXT.HEADING_ACCENT
+    );
+    await this.initializationPage.expectVisibleWithTimeout(
+      FAQ_LOCATORS.faqSubheadingReal
+    );
+    await this.initializationPage.expectTextContains(
+      FAQ_LOCATORS.faqSubheadingReal,
       FAQ_TEXT.SUBHEADING_START
     );
 
