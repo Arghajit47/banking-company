@@ -303,6 +303,41 @@ export const CAREERS_VALUES_SCHEMA_LABELS = {
   CAREERS_VALUES_RESPONSE: "careers values response schema",
 } as const;
 
+// BC-41/BC-42 — Careers Job Openings Section
+export const jobOpeningSchema = z.object({
+  id: z.number().int(),
+  title: z.string().min(1),
+  department: z.string().min(1),
+  location: z.string().min(1),
+  type: z.enum(["Full-Time", "Part-Time"]),
+  description: z.string().min(1),
+});
+
+export const jobsResponseSchema = z.object({
+  jobs: z.array(jobOpeningSchema),
+});
+
+export interface JobOpeningItem {
+  id: number;
+  title: string;
+  department: string;
+  location: string;
+  type: "Full-Time" | "Part-Time";
+  description: string;
+}
+
+export interface JobsData {
+  jobs: JobOpeningItem[];
+}
+
+export const CAREERS_JOBS_ENDPOINTS = {
+  LIST: "/api/careers/jobs",
+} as const;
+
+export const CAREERS_JOBS_SCHEMA_LABELS = {
+  JOBS_RESPONSE: "careers jobs response schema",
+} as const;
+
 // BC-38/BC-39 — Careers Benefits Section
 export const careersBenefitItemSchema = z.object({
   id: z.number().int(),
