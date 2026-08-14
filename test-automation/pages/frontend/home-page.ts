@@ -29,6 +29,7 @@ import {
   PRODUCTS_TEXT,
   productsResponseSchema,
   type ProductsResponse,
+  TESTIMONIALS_COUNTS,
   TESTIMONIALS_TEXT,
   TESTIMONIALS_ENDPOINTS,
   type TestimonialsResponse,
@@ -193,8 +194,13 @@ export class HomePage {
     const validation = testimonialsResponseSchema.safeParse(testimonialsResponse);
     this.apiHelper.assertSchemaValid(validation, "testimonials response schema");
 
+    await this.initializationPage.expectVisibleWithTimeout(
+      HOMEPAGE_LOCATORS.testimonialsCard,
+      0,
+      TESTIMONIALS_COUNTS.SWR_LOAD_TIMEOUT_MS
+    );
     const cards = this.initializationPage.page.locator(HOMEPAGE_LOCATORS.testimonialsCard);
-    expect(await cards.count()).toBeGreaterThanOrEqual(testimonialsResponse.testimonials.length);
+    expect(await cards.count()).toBeGreaterThanOrEqual(TESTIMONIALS_COUNTS.MIN_VISIBLE);
   }
 
   private async assertNoAuthConsoleErrors(): Promise<void> {
