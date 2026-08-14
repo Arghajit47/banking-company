@@ -4,4 +4,5 @@ export const UI_ROUTES = {
   CAREERS: "/careers",
   SECURITY: "/security",
   LOGIN: "/login",
+  SIGNUP: "/signup",
 } as const;

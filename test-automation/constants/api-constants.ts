@@ -541,3 +541,32 @@ export const LOGIN_TEXT = {
   SIGNUP_BUTTON: "Sign Up",
   OR_DIVIDER: "Or",
 } as const;
+
+// BC-62/BC-63 — Sign Up Form API
+export const signupResponseSchema = z.object({
+  success: z.boolean(),
+  userId: z.string().optional(),
+  error: z.string().optional(),
+});
+
+export interface SignupResponseType {
+  success: boolean;
+  userId?: string;
+  error?: string;
+}
+
+export const SIGNUP_ENDPOINTS = {
+  SIGNUP: "/api/auth/signup",
+} as const;
+
+export const SIGNUP_SCHEMA_LABELS = {
+  SIGNUP_RESPONSE: "signup response schema",
+} as const;
+
+export const SIGNUP_TEXT = {
+  HEADING: "Sign Up",
+  SUBTEXT: "Join our community today!",
+  SIGNUP_BUTTON: "Sign Up",
+  LOGIN_BUTTON: "Login",
+  OR_DIVIDER: "Or",
+} as const;
