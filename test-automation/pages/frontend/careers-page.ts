@@ -3,14 +3,19 @@ import InitializationPage from "@base/ui-base";
 import { ApiHelper } from "@base/api-base";
 import { CAREERS_LOCATORS } from "@locators/careers-locators";
 import {
+  CAREERS_BENEFITS_ENDPOINTS,
+  CAREERS_BENEFITS_SCHEMA_LABELS,
+  CAREERS_BENEFITS_TEXT,
   CAREERS_HERO_ENDPOINTS,
   CAREERS_HERO_SCHEMA_LABELS,
   CAREERS_HERO_TEXT,
   CAREERS_VALUES_ENDPOINTS,
   CAREERS_VALUES_SCHEMA_LABELS,
   CAREERS_VALUES_TEXT,
+  careersBenefitsResponseSchema,
   careersHeroSchema,
   careersValuesResponseSchema,
+  type CareersBenefitsData,
   type CareersHeroData,
   type CareersValuesData,
   UI_ROUTES,
@@ -58,6 +63,69 @@ export class CareersPage {
 
     await this.initializationPage.expectVisible(CAREERS_LOCATORS.heroImageWrapper);
     await this.initializationPage.expectVisible(CAREERS_LOCATORS.heroImage);
+  }
+
+  async assertBenefitsFromApi(): Promise<void> {
+    const body = (await this.apiHelper.getRequest(
+      CAREERS_BENEFITS_ENDPOINTS.BENEFITS
+    )) as CareersBenefitsData;
+
+    const parsed = careersBenefitsResponseSchema.safeParse(body);
+    this.apiHelper.assertSchemaValid(
+      parsed,
+      CAREERS_BENEFITS_SCHEMA_LABELS.CAREERS_BENEFITS_RESPONSE
+    );
+
+    await this.initializationPage.goto(UI_ROUTES.CAREERS);
+    await this.initializationPage.expectVisible(CAREERS_LOCATORS.benefitsSection);
+    await this.initializationPage.expectVisible(CAREERS_LOCATORS.benefitsSectionHeader);
+
+    await this.initializationPage.page.waitForSelector(
+      CAREERS_LOCATORS.benefitsSectionHeadingReal
+    );
+    await this.initializationPage.expectTextContains(
+      CAREERS_LOCATORS.benefitsSectionHeadingReal,
+      CAREERS_BENEFITS_TEXT.HEADING_PREFIX
+    );
+    await this.initializationPage.expectTextContains(
+      CAREERS_LOCATORS.benefitsSectionHeadingReal,
+      CAREERS_BENEFITS_TEXT.HEADING_ACCENT
+    );
+
+    await this.initializationPage.page.waitForSelector(
+      CAREERS_LOCATORS.benefitsSectionParagraphReal
+    );
+    await this.initializationPage.expectTextContains(
+      CAREERS_LOCATORS.benefitsSectionParagraphReal,
+      CAREERS_BENEFITS_TEXT.SECTION_BODY_STARTS_WITH
+    );
+
+    await this.initializationPage.expectVisible(CAREERS_LOCATORS.benefitsSectionGrid);
+
+    const cardCount = await this.initializationPage.page
+      .locator(CAREERS_LOCATORS.benefitCardArticles)
+      .count();
+    await this.initializationPage.expectNumberGreaterThan(
+      cardCount,
+      CAREERS_BENEFITS_TEXT.MIN_CARD_COUNT - 1
+    );
+
+    await this.initializationPage.expectTextContains(
+      CAREERS_LOCATORS.benefitCardTitle0,
+      CAREERS_BENEFITS_TEXT.EXPECTED_TITLES[0]
+    );
+    await this.initializationPage.expectTextContains(
+      CAREERS_LOCATORS.benefitCardTitle1,
+      CAREERS_BENEFITS_TEXT.EXPECTED_TITLES[1]
+    );
+    await this.initializationPage.expectTextContains(
+      CAREERS_LOCATORS.benefitCardTitle2,
+      CAREERS_BENEFITS_TEXT.EXPECTED_TITLES[2]
+    );
+    await this.initializationPage.expectTextContains(
+      CAREERS_LOCATORS.benefitCardTitle3,
+      CAREERS_BENEFITS_TEXT.EXPECTED_TITLES[3]
+    );
   }
 
   async assertCareersHeroAbstractDesign(): Promise<void> {
