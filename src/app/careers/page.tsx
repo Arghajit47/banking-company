@@ -1,4 +1,5 @@
 import { CareersHeroSection } from "@/components/careers/CareersHeroSection";
+import { ValuesSection } from "@/components/careers/ValuesSection";
 import { Navbar } from "@/components/layout/Navbar";
 
 export default function CareersPage() {
@@ -7,6 +8,7 @@ export default function CareersPage() {
       <Navbar />
       <main>
         <CareersHeroSection />
+        <ValuesSection />
       </main>
     </div>
   );
