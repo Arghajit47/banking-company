@@ -178,20 +178,20 @@ export function Navbar() {
             </div>
           ) : (
             <>
-              <button
-                type="button"
+              <Link
+                href="/signup"
                 data-testid="nav-sign-up"
                 className="text-sm leading-[21px] font-medium text-white transition hover:text-[#CAFF33] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#CAFF33] desktop:text-lg"
               >
                 Sign Up
-              </button>
-              <button
-                type="button"
+              </Link>
+              <Link
+                href="/login"
                 data-testid="nav-login"
                 className="rounded-[82px] bg-[#CAFF33] px-6 py-3 text-sm font-semibold text-[#1E1E1E] transition hover:brightness-110 hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#1A1A1A] desktop:px-[30px] desktop:py-[14px] desktop:text-lg"
               >
                 Login
-              </button>
+              </Link>
             </>
           )}
         </div>
@@ -254,20 +254,22 @@ export function Navbar() {
               </div>
             ) : (
               <>
-                <button
-                  type="button"
+                <Link
+                  href="/signup"
                   data-testid="mobile-sign-up"
+                  onClick={closeMenu}
                   className="w-full rounded-md py-2 text-center text-base font-medium text-white transition hover:text-[#CAFF33] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#CAFF33]"
                 >
                   Sign Up
-                </button>
-                <button
-                  type="button"
+                </Link>
+                <Link
+                  href="/login"
                   data-testid="mobile-login"
+                  onClick={closeMenu}
                   className="w-full rounded-[82px] bg-[#CAFF33] py-3 text-center text-base font-semibold text-[#1E1E1E] transition hover:brightness-110 hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#1A1A1A]"
                 >
                   Login
-                </button>
+                </Link>
               </>
             )}
           </div>
