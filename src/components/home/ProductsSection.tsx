@@ -71,9 +71,9 @@ export function ProductsSection() {
           <div className="max-w-[800px]">
             <h2
               data-testid="products-heading"
-              className="mb-4 text-2xl font-medium text-[#CAFF33] sm:text-3xl md:text-4xl lg:text-[48px] lg:leading-[58px] laptop:text-[38px] laptop:leading-[48px]"
+              className="mb-4 text-2xl font-medium text-white sm:text-3xl md:text-4xl lg:text-[48px] lg:leading-[58px] laptop:text-[38px] laptop:leading-[48px]"
             >
-              Our Products
+              Our <span className="text-[#CAFF33]">Products</span>
             </h2>
             <p
               data-testid="products-subheading"
@@ -125,13 +125,13 @@ export function ProductsSection() {
         ) : (
           <div
             data-testid="products-grid"
-            className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
+            className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-6 laptop:grid-cols-3 laptop:gap-0 laptop:divide-x laptop:divide-[#262626] laptop:overflow-hidden laptop:rounded-2xl laptop:border laptop:border-[#262626]"
           >
             {visibleProducts.map((product) => (
               <article
                 key={product.id}
                 data-testid={`product-card-${product.id}`}
-                className="flex flex-col rounded-2xl border border-[#262626] bg-[#1E1E1E] p-6 transition hover:border-[#333333] sm:p-8"
+                className="flex flex-col rounded-2xl border border-[#262626] bg-[#1E1E1E] p-6 transition hover:border-[#333333] sm:p-8 laptop:rounded-none laptop:border-0"
               >
                 <div className="mb-6 flex items-center gap-4">
                   <div

@@ -1,0 +1,23 @@
+<svg width="300" height="275" viewBox="0 0 300 275" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Lime arrow group illustration (node 104:616) -->
+  <defs>
+    <linearGradient id="arrowGrad1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#CAFF33" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#CAFF33" stop-opacity="0.2"/>
+    </linearGradient>
+    <linearGradient id="arrowGrad2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#CAFF33" stop-opacity="0.7"/>
+      <stop offset="100%" stop-color="#CAFF33" stop-opacity="0.1"/>
+    </linearGradient>
+  </defs>
+  <!-- Arrow 1 (large) -->
+  <path d="M50 220 L170 100 L170 140 L250 60 L250 30 L220 30 L300 0" stroke="url(#arrowGrad1)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <!-- Arrow 2 (medium) -->
+  <path d="M20 275 L140 155 L140 195 L220 115 L220 85 L190 85 L270 55" stroke="url(#arrowGrad2)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <!-- Arrow 3 (small) -->
+  <path d="M80 275 L180 175 L180 205 L250 135 L250 110 L225 110 L290 80" stroke="#CAFF33" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.5"/>
+  <!-- Arrowheads -->
+  <polygon points="296,0 300,10 290,5" fill="url(#arrowGrad1)"/>
+  <polygon points="266,55 270,65 260,60" fill="url(#arrowGrad2)"/>
+  <polygon points="286,80 290,90 280,85" fill="#CAFF33" opacity="0.5"/>
+</svg>

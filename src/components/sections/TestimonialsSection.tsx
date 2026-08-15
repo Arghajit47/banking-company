@@ -64,7 +64,7 @@ const FALLBACK_BUSINESSES: Testimonial[] = [
 ];
 
 export function TestimonialsSection() {
-  const [activeTab, setActiveTab] = useState<TabKey>("individuals");
+  const [activeTab, setActiveTab] = useState<TabKey>("businesses");
   const [activeIndex, setActiveIndex] = useState(0);
 
   const mounted = useMounted();

@@ -13,7 +13,7 @@ function HeroSkeleton() {
   return (
     <>
       {/* Left text column skeleton */}
-      <div className="z-10 flex w-full max-w-[826px] flex-col items-center text-center md:items-start md:text-left">
+      <div className="z-10 flex w-full max-w-[826px] laptop:max-w-[650px] flex-col items-center text-center md:items-start md:text-left">
         <div
           data-testid="hero-badge"
           className="mb-6 inline-flex h-11 items-center gap-1.5 rounded-[61px] bg-[#262626] pl-3 pr-5 py-2.5"
@@ -48,7 +48,7 @@ function HeroSkeleton() {
       {/* Right mockup column skeleton */}
       <div
         data-testid="hero-mockup"
-        className="relative z-10 mt-12 w-full max-w-[700px] md:mt-0 lg:max-w-[780px] desktop:max-w-[515px]"
+        className="relative z-10 mt-12 w-full max-w-[700px] md:mt-0 lg:max-w-[780px] laptop:max-w-[410px] desktop:max-w-[515px]"
       >
         <div className="relative flex flex-col gap-4">
           <div
@@ -192,7 +192,7 @@ export function HeroSection() {
         ) : (
           <>
             {/* Left text column */}
-            <div className="z-10 flex w-full max-w-[826px] flex-col items-center text-center md:items-start md:text-left">
+            <div className="z-10 flex w-full max-w-[826px] laptop:max-w-[650px] flex-col items-center text-center md:items-start md:text-left">
               {/* Trust badge */}
               <div
                 data-testid="hero-badge"
@@ -251,19 +251,19 @@ export function HeroSection() {
 
             {/* Lime arrows illustration — far-right of hero, placed before mockup so mockup (z-10) paints on top */}
             <Image
-              src="/assets/illustrations/abstract_design_hero_illustration.svg"
+              src="/assets/illustrations/abstract_design_hero_arrows.svg"
               alt=""
-              width={418}
-              height={383}
+              width={300}
+              height={275}
               aria-hidden="true"
               data-testid="hero-abstract-illustration"
-              className="pointer-events-none absolute right-0 top-0 hidden w-[280px] [mix-blend-mode:screen] md:block lg:w-[340px] xl:w-[418px]"
+              className="pointer-events-none absolute right-0 top-0 hidden w-[200px] laptop:w-[300px] md:block"
             />
 
             {/* Right mockup column */}
             <div
               data-testid="hero-mockup"
-              className="relative z-10 mt-12 w-full max-w-[700px] md:mt-0 lg:max-w-[780px] desktop:max-w-[515px]"
+              className="relative z-10 mt-12 w-full max-w-[700px] md:mt-0 lg:max-w-[780px] laptop:max-w-[410px] desktop:max-w-[515px]"
             >
               <div className="relative flex flex-col gap-4">
                 {/* Monthly Income floating badge */}
