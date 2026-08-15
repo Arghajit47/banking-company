@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 const HEADING = "Sign Up";
@@ -12,7 +13,7 @@ const PASSWORD_PLACEHOLDER = "Enter your Password";
 const CONFIRM_PASSWORD_PLACEHOLDER = "Confirm your Password";
 const SIGNUP_BUTTON_LABEL = "Sign Up";
 const LOGIN_BUTTON_LABEL = "Login";
-const OR_DIVIDER_LABEL = "Or";
+const OR_DIVIDER_LABEL = "Or Continue with";
 const SIGNUP_API_ENDPOINT = "/api/auth/signup";
 const ERROR_NETWORK = "Something went wrong. Please try again.";
 const SUCCESS_MESSAGE = "Account created successfully! Welcome to YourBank.";
@@ -280,13 +281,13 @@ export function SignUpForm() {
             </button>
 
             {/* Login button */}
-            <button
+            <Link
+              href="/login"
               data-testid="signup-login-button"
-              type="button"
               className="flex w-full items-center justify-center rounded-[63px] border border-[#333333] bg-[#262626] px-[20px] py-[18px] text-[18px] font-semibold text-white transition-opacity hover:opacity-80"
             >
               {LOGIN_BUTTON_LABEL}
-            </button>
+            </Link>
 
             {/* OR divider + social buttons */}
             <div className="flex flex-col gap-[30px]">

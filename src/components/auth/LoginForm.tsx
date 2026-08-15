@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 const HEADING = "Login";
@@ -11,7 +12,7 @@ const PASSWORD_PLACEHOLDER = "Enter your Password";
 const FORGOT_PASSWORD_LABEL = "Forgot Password?";
 const LOGIN_BUTTON_LABEL = "Login";
 const REGISTER_BUTTON_LABEL = "Sign Up";
-const OR_DIVIDER_LABEL = "Or";
+const OR_DIVIDER_LABEL = "Or Continue with";
 const LOGIN_API_ENDPOINT = "/api/auth/login";
 const ERROR_INVALID_CREDENTIALS = "Invalid credentials. Please check your email and password.";
 const ERROR_NETWORK = "Something went wrong. Please try again.";
@@ -215,13 +216,13 @@ export function LoginForm() {
             </button>
 
             {/* Sign up button */}
-            <button
+            <Link
+              href="/signup"
               data-testid="login-signup-button"
-              type="button"
               className="flex w-full items-center justify-center rounded-[63px] border border-[#333333] bg-[#262626] px-[20px] py-[18px] text-[18px] font-semibold text-white transition-opacity hover:opacity-80"
             >
               {REGISTER_BUTTON_LABEL}
-            </button>
+            </Link>
 
             {/* OR divider + social buttons */}
             <div className="flex flex-col gap-[30px]">
