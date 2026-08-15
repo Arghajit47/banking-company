@@ -13,7 +13,7 @@ function HeroSkeleton() {
   return (
     <>
       {/* Left text column skeleton */}
-      <div className="z-10 flex w-full max-w-[826px] laptop:max-w-[650px] flex-col items-center text-center md:items-start md:text-left">
+      <div className="relative z-10 flex w-full max-w-[826px] laptop:max-w-[650px] flex-col items-center text-center md:items-start md:text-left">
         <div
           data-testid="hero-badge"
           className="mb-6 inline-flex h-11 items-center gap-1.5 rounded-[61px] bg-[#262626] pl-3 pr-5 py-2.5"
@@ -192,7 +192,7 @@ export function HeroSection() {
         ) : (
           <>
             {/* Left text column */}
-            <div className="z-10 flex w-full max-w-[826px] laptop:max-w-[650px] flex-col items-center text-center md:items-start md:text-left">
+            <div className="relative z-10 flex w-full max-w-[826px] laptop:max-w-[650px] flex-col items-center text-center md:items-start md:text-left">
               {/* Trust badge */}
               <div
                 data-testid="hero-badge"
@@ -257,7 +257,7 @@ export function HeroSection() {
               height={275}
               aria-hidden="true"
               data-testid="hero-abstract-illustration"
-              className="pointer-events-none absolute right-0 top-0 hidden w-[200px] laptop:w-[300px] md:block"
+              className="pointer-events-none absolute right-0 top-0 z-0 hidden w-[200px] laptop:w-[300px] md:block"
             />
 
             {/* Right mockup column */}
