@@ -155,7 +155,9 @@ describe("CTASection", () => {
   it("card has min-h-[288px] to match Figma compact height", () => {
     render(<CTASection />);
     const section = screen.getByTestId("cta-section");
-    const card = section.querySelector(".rounded-2xl");
+    // BC-147 changed the card radius from rounded-2xl to rounded-[20px].
+    const card = section.querySelector('[class*="rounded-[20px]"]');
+    expect(card).not.toBeNull();
     expect(card?.className).toContain("min-h-[288px]");
   });
 

@@ -29,7 +29,9 @@ describe("LoginForm", () => {
 
   test("renders Welcome back! subtext", () => {
     render(<LoginForm />);
-    expect(screen.getByTestId("login-form-subtext").textContent).toBe("Welcome back!");
+    expect(screen.getByTestId("login-form-subtext").textContent).toBe(
+      "Welcome back! Please log in to access your account.",
+    );
   });
 
   test("renders email input", () => {
