@@ -5,6 +5,7 @@
 [build.environment]
   NODE_VERSION = "20"
   DATABASE_URL = "file:./prisma/dev.db"
+  NEXT_PUBLIC_SITE_URL = "https://banking-company-440.netlify.app"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
