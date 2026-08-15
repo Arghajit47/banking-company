@@ -26,6 +26,18 @@ const STATIC_ROUTES: MetadataRoute.Sitemap = [
     changeFrequency: "monthly",
     priority: 0.7,
   },
+  {
+    url: `${SITE_URL}/login`,
+    lastModified: new Date(),
+    changeFrequency: "monthly",
+    priority: 0.5,
+  },
+  {
+    url: `${SITE_URL}/signup`,
+    lastModified: new Date(),
+    changeFrequency: "monthly",
+    priority: 0.5,
+  },
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {
