@@ -85,9 +85,24 @@ describe("Navbar (desktop)", () => {
 
     expect(homeLink).toBeTruthy();
     expect(homeLink?.getAttribute("aria-current")).toBe("page");
-    // BC-148 changed the active pill from rounded-[10px] to a fully rounded pill.
-    expect(homeLink?.className).toContain("rounded-full");
+    // BC-158: Figma node 104:600 specifies cornerRadius 82 and a 77x41 pill
+    // (18/10 implied padding around a 41x21 text node). The previous
+    // "rounded-full" + px-6 py-3 assertion encoded the defect.
+    expect(homeLink?.className).toContain("rounded-[82px]");
+    expect(homeLink?.className).not.toContain("rounded-full");
+    expect(homeLink?.className).toContain("px-5");
+    expect(homeLink?.className).toContain("py-[10px]");
     expect(homeLink?.className).toContain("bg-[#262626]");
+  });
+
+  it("desktop nav links keep 14px text at every breakpoint", () => {
+    const { container } = renderWithSWR(<Navbar />);
+    const homeLink = container.querySelector('[data-testid="nav-link-home"]');
+
+    // BC-158: `desktop:text-lg` bumped the font to 18px at >=1920, which grew
+    // the active pill past the 77px Figma width. Figma is 14px at 1440 and 1920.
+    expect(homeLink?.className).toContain("text-sm");
+    expect(homeLink?.className).not.toContain("desktop:text-lg");
   });
 });
 
