@@ -68,7 +68,7 @@ export function ProtectionSection() {
         >
           <h2
             data-testid="protection-section-heading"
-            className="text-[36px] font-normal leading-[150%] text-white md:text-[42px] lg:text-[48px] laptop:text-[38px] laptop:font-medium"
+            className="text-[36px] font-normal leading-[150%] text-white md:text-[42px] lg:text-[48px] laptop:text-[38px] laptop:font-medium desktop:text-[48px]"
           >
             <span className="text-white">{SECTION_HEADING_PREFIX}</span>
             <span className="text-[#CAFF33]">{SECTION_HEADING_ACCENT}</span>
