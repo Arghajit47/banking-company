@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 const HEADING = "Login";
-const SUBTEXT = "Welcome back!";
+const SUBTEXT = "Welcome back! Please log in to access your account.";
 const EMAIL_PLACEHOLDER = "Enter your Email Address";
 const PASSWORD_PLACEHOLDER = "Enter your Password";
 const FORGOT_PASSWORD_LABEL = "Forgot Password?";
@@ -69,7 +69,7 @@ export function LoginForm() {
   return (
     <div
       data-testid="login-form-card"
-      className="relative overflow-hidden rounded-[20px] border border-[#262626] bg-[#1C1C1C] px-[150px] py-[100px] font-[var(--font-lexend)]"
+      className="relative overflow-hidden rounded-[20px] border border-[#262626] bg-[#1C1C1C] px-[150px] py-[100px] font-[var(--font-urbanist)]"
     >
       {/* Background image overlay */}
       <div

@@ -169,7 +169,7 @@ export function HeroSection() {
     return (
       <section
         data-testid="hero-section"
-        className="relative w-full overflow-hidden bg-[#1A1A1A] font-[var(--font-lexend)]"
+        className="relative w-full overflow-hidden bg-[#1A1A1A] font-[var(--font-urbanist)]"
       >
         <div className="relative mx-auto flex min-h-[824px] max-w-[1920px] flex-col items-center justify-center px-4 py-16 md:flex-row md:items-center md:justify-start md:px-8 lg:px-12 laptop:px-20 desktop:px-[162px]">
           <HeroErrorFallback />
@@ -184,7 +184,7 @@ export function HeroSection() {
   return (
     <section
       data-testid="hero-section"
-      className="relative w-full overflow-hidden bg-[#1A1A1A] font-[var(--font-lexend)]"
+      className="relative w-full overflow-hidden bg-[#1A1A1A] font-[var(--font-urbanist)]"
     >
       <div className="relative mx-auto flex min-h-[824px] max-w-[1920px] flex-col items-center justify-center px-4 py-16 md:flex-row md:items-center md:justify-start md:px-8 lg:px-12 laptop:px-20 desktop:px-[162px]">
         {showSkeleton ? (
@@ -243,7 +243,7 @@ export function HeroSection() {
               <button
                 type="button"
                 data-testid="hero-open-account"
-                className="rounded-[82px] bg-[#CAFF33] px-[30px] py-[18px] text-[18px] font-normal leading-[150%] text-[#1C1C1C] transition hover:brightness-110 hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#1A1A1A]"
+                className="rounded-[82px] bg-[#CAFF33] px-[30px] py-[18px] text-[18px] font-semibold leading-[150%] text-[#1C1C1C] transition hover:brightness-110 hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#1A1A1A]"
               >
                 {hero.ctaLabel}
               </button>
@@ -257,7 +257,7 @@ export function HeroSection() {
               height={383}
               aria-hidden="true"
               data-testid="hero-abstract-illustration"
-              className="pointer-events-none absolute right-0 top-16 hidden w-[280px] [mix-blend-mode:screen] md:block lg:w-[340px] xl:w-[418px]"
+              className="pointer-events-none absolute right-0 top-0 hidden w-[280px] [mix-blend-mode:screen] md:block lg:w-[340px] xl:w-[418px]"
             />
 
             {/* Right mockup column */}
