@@ -219,6 +219,17 @@ describe("UseCasesSection", () => {
     expect(heading.className).toContain("text-[#CAFF33]");
   });
 
+  // BC-160 — `laptop` is a min-width variant, so the 38px laptop override kept
+  // applying at 1920. Figma desktop (21:140) is 48px; `leading-[150%]` derives the
+  // 72px / 57px line boxes on its own.
+  it("heading carries a desktop 48px override above the laptop 38px one", () => {
+    render(<UseCasesSection />);
+    const heading = screen.getByTestId("use-cases-heading");
+    expect(heading.className).toContain("laptop:text-[38px]");
+    expect(heading.className).toContain("desktop:text-[48px]");
+    expect(heading.className).toContain("leading-[150%]");
+  });
+
   it("card panels have correct dark background", () => {
     render(<UseCasesSection />);
     const panel = screen.getByTestId("use-cases-cards-panel-individuals");

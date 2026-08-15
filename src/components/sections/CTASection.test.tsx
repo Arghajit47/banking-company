@@ -55,12 +55,18 @@ describe("CTASection", () => {
     expect(heading.querySelector("span")).toHaveClass("text-[#CAFF33]");
   });
 
-  // BC-157 — heading must render 38px at the laptop breakpoint
-  it("heading carries the laptop 38px override matching the other section headings", () => {
+  // BC-160 — the CTA heading is NOT a 48/38/28 heading. Figma sizes it smaller than
+  // the other section headings: desktop (11:89110) 40px/60px, laptop (108:2701) 30px/45px.
+  // The blanket `laptop:text-[38px]` applied in BC-157 was wrong for this component.
+  it("heading carries the CTA-specific laptop 30/45 and desktop 40/60 overrides", () => {
     render(<CTASection />);
     const heading = screen.getByTestId("cta-heading");
-    expect(heading.className).toContain("laptop:text-[38px]");
-    expect(heading.className).toContain("laptop:leading-[48px]");
+    expect(heading.className).toContain("laptop:text-[30px]");
+    expect(heading.className).toContain("laptop:leading-[45px]");
+    expect(heading.className).toContain("desktop:text-[40px]");
+    expect(heading.className).toContain("desktop:leading-[60px]");
+    expect(heading.className).not.toContain("laptop:text-[38px]");
+    expect(heading.className).not.toContain("laptop:leading-[48px]");
   });
 
   it("renders body text from API data", () => {

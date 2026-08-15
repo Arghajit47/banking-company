@@ -100,14 +100,18 @@ describe("FAQSection", () => {
   });
 
   // BC-157 — heading must render 38px at the laptop breakpoint
-  it("heading carries the laptop 38px override matching the other section headings", () => {
+  // BC-160 — laptop line box is 150% of 38px = 57px, plus a desktop (1920) 48/72 override.
+  it("heading carries the laptop 38/57 and desktop 48/72 overrides", () => {
     mockUseFAQConfig.mockReturnValue(
       baseReturn({ faqs: DEFAULT_FAQS, hasMore: false })
     );
     render(<FAQSection />);
     const heading = screen.getByTestId("faq-heading");
     expect(heading.className).toContain("laptop:text-[38px]");
-    expect(heading.className).toContain("laptop:leading-[48px]");
+    expect(heading.className).toContain("laptop:leading-[57px]");
+    expect(heading.className).toContain("desktop:text-[48px]");
+    expect(heading.className).toContain("desktop:leading-[72px]");
+    expect(heading.className).not.toContain("laptop:leading-[48px]");
   });
 
   it("displays FAQ subheading", () => {

@@ -84,6 +84,17 @@ describe("FeaturesSection (SWR integration)", () => {
     ).toBeDefined();
   });
 
+  // BC-160 — `laptop` is a min-width variant, so the 38px laptop override kept
+  // applying at 1920. Figma desktop (41:76) is 48px; `leading-[150%]` derives the
+  // 72px / 57px line boxes on its own.
+  it("heading carries a desktop 48px override above the laptop 38px one", () => {
+    render(<FeaturesSection />);
+    const heading = screen.getByTestId("features-heading");
+    expect(heading.className).toContain("laptop:text-[38px]");
+    expect(heading.className).toContain("desktop:text-[48px]");
+    expect(heading.className).toContain("leading-[150%]");
+  });
+
   it("renders 3 tab buttons", () => {
     render(<FeaturesSection />);
     expect(screen.getByTestId("features-tab-online-banking")).toBeDefined();

@@ -115,19 +115,27 @@ describe("TestimonialsSection", () => {
   });
 
   // BC-155 QA remediation — BUG B: heading must render 38px at the laptop breakpoint
-  it("heading carries the laptop 38px override matching the other section headings", () => {
+  // BC-160: laptop line box is 150% of 38px = 57px, and the desktop (1920) frame
+  // needs its own 48px/72px override because `laptop` is a min-width variant.
+  it("heading carries the laptop 38/57 and desktop 48/72 overrides", () => {
     render(<TestimonialsSection />);
     const heading = screen.getByTestId("testimonials-heading");
     expect(heading.className).toContain("laptop:text-[38px]");
-    expect(heading.className).toContain("laptop:leading-[48px]");
+    expect(heading.className).toContain("laptop:leading-[57px]");
+    expect(heading.className).toContain("desktop:text-[48px]");
+    expect(heading.className).toContain("desktop:leading-[72px]");
+    expect(heading.className).not.toContain("laptop:leading-[48px]");
   });
 
-  it("heading keeps both laptop overrides in the loading skeleton too", () => {
+  it("heading keeps the laptop and desktop overrides in the loading skeleton too", () => {
     vi.mocked(useSWR).mockReturnValue({ data: undefined, isLoading: true, error: undefined } as ReturnType<typeof useSWR>);
     render(<TestimonialsSection />);
     const heading = screen.getByTestId("testimonials-heading");
     expect(heading.className).toContain("laptop:text-[38px]");
-    expect(heading.className).toContain("laptop:leading-[48px]");
+    expect(heading.className).toContain("laptop:leading-[57px]");
+    expect(heading.className).toContain("desktop:text-[48px]");
+    expect(heading.className).toContain("desktop:leading-[72px]");
+    expect(heading.className).not.toContain("laptop:leading-[48px]");
   });
 
   // BC-155 QA remediation — BUG C: tabs must expose tab semantics

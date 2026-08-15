@@ -229,6 +229,19 @@ describe("ProductsSection", () => {
     expect(accent?.className).toContain("text-[#CAFF33]");
   });
 
+  // BC-160 — `laptop` is a min-width variant, so the 38px laptop override kept
+  // applying at 1920. The desktop frame (Figma 11:86819) is 48px / 72px, and the
+  // laptop line box is 150% of 38px = 57px, not 48px.
+  it("heading carries the laptop 38/57 and desktop 48/72 overrides", () => {
+    render(<ProductsSection />);
+    const heading = screen.getByTestId("products-heading");
+    expect(heading.className).toContain("laptop:text-[38px]");
+    expect(heading.className).toContain("laptop:leading-[57px]");
+    expect(heading.className).toContain("desktop:text-[48px]");
+    expect(heading.className).toContain("desktop:leading-[72px]");
+    expect(heading.className).not.toContain("laptop:leading-[48px]");
+  });
+
   it("tab container has correct padding class", () => {
     render(<ProductsSection />);
     const tabs = screen.getByTestId("products-tabs");
