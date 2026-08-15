@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState, type KeyboardEvent } from "react";
 import QuoteIcon from "@/components/icons/QuoteIcon";
 import ChevronLeftIcon from "@/components/icons/ChevronLeftIcon";
 import ChevronRightIcon from "@/components/icons/ChevronRightIcon";
@@ -8,6 +8,21 @@ import { useTestimonials, type Testimonial } from "@/lib/testimonials";
 import { useMounted } from "@/lib/use-mounted";
 
 type TabKey = "individuals" | "businesses";
+
+/**
+ * Stable ids wiring the tablist to its tabpanel.
+ *
+ * Both render branches (`!mounted || isLoading` and the loaded branch) reuse
+ * these ids, which is safe because only one branch is ever mounted at a time —
+ * the same reason `id="testimonials-heading"` can appear in both.
+ */
+const TAB_IDS: Record<TabKey, string> = {
+  individuals: "testimonials-tab-individuals",
+  businesses: "testimonials-tab-businesses",
+};
+const TAB_PANEL_ID = "testimonials-panel";
+/** Visual left-to-right order of the pills, which is what the arrow keys follow. */
+const TAB_ORDER: TabKey[] = ["individuals", "businesses"];
 
 const FALLBACK_INDIVIDUALS: Testimonial[] = [
   {
@@ -79,6 +94,30 @@ export function TestimonialsSection() {
     setActiveIndex((prev) => (prev + 1) % testimonials.length);
   };
 
+  const tabRefs = useRef<Partial<Record<TabKey, HTMLButtonElement | null>>>({});
+
+  /** Same effect as clicking a pill: switch tab and rewind the carousel. */
+  const selectTab = (tab: TabKey) => {
+    setActiveTab(tab);
+    setActiveIndex(0);
+  };
+
+  /**
+   * Horizontal arrow-key navigation across the tablist with automatic
+   * activation — focus moves and the tab activates in one step, matching the
+   * click behaviour. Wraps around at both ends.
+   */
+  const handleTabKeyDown = (event: KeyboardEvent<HTMLButtonElement>) => {
+    if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") return;
+    event.preventDefault();
+    const delta = event.key === "ArrowRight" ? 1 : -1;
+    const currentIndex = TAB_ORDER.indexOf(activeTab);
+    const nextTab =
+      TAB_ORDER[(currentIndex + delta + TAB_ORDER.length) % TAB_ORDER.length];
+    selectTab(nextTab);
+    tabRefs.current[nextTab]?.focus();
+  };
+
   if (!mounted || isLoading) {
     return (
       <section
@@ -114,14 +153,20 @@ export function TestimonialsSection() {
               data-testid="testimonials-tabs"
               role="tablist"
               aria-label="Testimonial audience"
+              aria-orientation="horizontal"
               className="flex shrink-0 items-center rounded-[82px] border border-[#262626] bg-[#1C1C1C] p-[14px]"
             >
               <button
                 data-testid="testimonials-tab-individuals"
+                id={TAB_IDS.individuals}
                 type="button"
                 role="tab"
                 aria-selected={activeTab === "individuals"}
-                onClick={() => { setActiveTab("individuals"); setActiveIndex(0); }}
+                aria-controls={TAB_PANEL_ID}
+                tabIndex={activeTab === "individuals" ? 0 : -1}
+                ref={(el) => { tabRefs.current.individuals = el; }}
+                onKeyDown={handleTabKeyDown}
+                onClick={() => selectTab("individuals")}
                 className={`rounded-[140px] px-6 py-[14px] text-[18px] font-normal transition-all focus:outline-none focus:ring-2 focus:ring-[#CAFF33] focus:ring-offset-2 focus:ring-offset-[#1C1C1C] ${
                   activeTab === "individuals"
                     ? "bg-[#CAFF33] text-[#1C1C1C]"
@@ -132,10 +177,15 @@ export function TestimonialsSection() {
               </button>
               <button
                 data-testid="testimonials-tab-businesses"
+                id={TAB_IDS.businesses}
                 type="button"
                 role="tab"
                 aria-selected={activeTab === "businesses"}
-                onClick={() => { setActiveTab("businesses"); setActiveIndex(0); }}
+                aria-controls={TAB_PANEL_ID}
+                tabIndex={activeTab === "businesses" ? 0 : -1}
+                ref={(el) => { tabRefs.current.businesses = el; }}
+                onKeyDown={handleTabKeyDown}
+                onClick={() => selectTab("businesses")}
                 className={`rounded-[140px] px-6 py-[14px] text-[18px] font-normal transition-all focus:outline-none focus:ring-2 focus:ring-[#CAFF33] focus:ring-offset-2 focus:ring-offset-[#1C1C1C] ${
                   activeTab === "businesses"
                     ? "bg-[#CAFF33] text-[#1C1C1C]"
@@ -148,7 +198,13 @@ export function TestimonialsSection() {
           </div>
 
           {/* Skeleton cards */}
-          <div className="flex items-center gap-4">
+          <div
+            id={TAB_PANEL_ID}
+            data-testid="testimonials-panel"
+            role="tabpanel"
+            aria-labelledby={TAB_IDS[activeTab]}
+            className="flex items-center gap-4"
+          >
             <div className="flex flex-1 gap-4 overflow-x-auto pb-2 md:gap-6 md:overflow-x-visible md:pb-0">
               {[0, 1, 2].map((i) => (
                 <div
@@ -201,14 +257,20 @@ export function TestimonialsSection() {
             data-testid="testimonials-tabs"
             role="tablist"
             aria-label="Testimonial audience"
+            aria-orientation="horizontal"
             className="flex shrink-0 items-center rounded-[82px] border border-[#262626] bg-[#1C1C1C] p-[14px]"
           >
             <button
               data-testid="testimonials-tab-individuals"
+              id={TAB_IDS.individuals}
               type="button"
               role="tab"
               aria-selected={activeTab === "individuals"}
-              onClick={() => { setActiveTab("individuals"); setActiveIndex(0); }}
+              aria-controls={TAB_PANEL_ID}
+              tabIndex={activeTab === "individuals" ? 0 : -1}
+              ref={(el) => { tabRefs.current.individuals = el; }}
+              onKeyDown={handleTabKeyDown}
+              onClick={() => selectTab("individuals")}
               className={`rounded-[140px] px-6 py-[14px] text-[18px] font-normal transition-all focus:outline-none focus:ring-2 focus:ring-[#CAFF33] focus:ring-offset-2 focus:ring-offset-[#1C1C1C] ${
                 activeTab === "individuals"
                   ? "bg-[#CAFF33] text-[#1C1C1C]"
@@ -219,10 +281,15 @@ export function TestimonialsSection() {
             </button>
             <button
               data-testid="testimonials-tab-businesses"
+              id={TAB_IDS.businesses}
               type="button"
               role="tab"
               aria-selected={activeTab === "businesses"}
-              onClick={() => { setActiveTab("businesses"); setActiveIndex(0); }}
+              aria-controls={TAB_PANEL_ID}
+              tabIndex={activeTab === "businesses" ? 0 : -1}
+              ref={(el) => { tabRefs.current.businesses = el; }}
+              onKeyDown={handleTabKeyDown}
+              onClick={() => selectTab("businesses")}
               className={`rounded-[140px] px-6 py-[14px] text-[18px] font-normal transition-all focus:outline-none focus:ring-2 focus:ring-[#CAFF33] focus:ring-offset-2 focus:ring-offset-[#1C1C1C] ${
                 activeTab === "businesses"
                   ? "bg-[#CAFF33] text-[#1C1C1C]"
@@ -235,7 +302,13 @@ export function TestimonialsSection() {
         </div>
 
         {/* Cards row with chevrons */}
-        <div className="flex items-center gap-4">
+        <div
+          id={TAB_PANEL_ID}
+          data-testid="testimonials-panel"
+          role="tabpanel"
+          aria-labelledby={TAB_IDS[activeTab]}
+          className="flex items-center gap-4"
+        >
           {/* Left chevron */}
           <button
             data-testid="testimonials-prev"
