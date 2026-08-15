@@ -113,9 +113,18 @@ export function Navbar() {
 
   return (
     <header
-      className="w-full bg-transparent px-4 pt-6 font-[var(--font-urbanist)] laptop:px-20 desktop:px-[162px]"
+      className="relative w-full bg-transparent px-4 pt-6 font-[var(--font-urbanist)] laptop:px-20 desktop:px-[162px]"
       data-testid="navbar"
     >
+      <Image
+        src="/assets/illustrations/abstract_design_navbar_topleft.svg"
+        alt=""
+        aria-hidden="true"
+        data-testid="navbar-abstract-topleft"
+        width={547}
+        height={440}
+        className="pointer-events-none absolute left-0 top-0 z-0 hidden laptop:block"
+      />
       <nav
         aria-label="Primary navigation"
         className="mx-auto flex h-[68px] max-w-[1596px] items-center justify-between rounded-[100px] border border-[#262626] bg-[#1C1C1C] px-5 laptop:h-[73px] laptop:px-10 desktop:h-[95px] desktop:px-10"
