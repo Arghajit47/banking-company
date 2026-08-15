@@ -180,7 +180,7 @@ export function UseCasesSection() {
         <div className="mb-20 flex flex-col gap-3.5">
           <h2
             data-testid="use-cases-heading"
-            className="text-2xl font-medium leading-[150%] text-[#CAFF33] sm:text-[48px] laptop:text-[38px]"
+            className="text-2xl font-medium leading-[150%] text-[#CAFF33] sm:text-[48px] laptop:text-[38px] desktop:text-[48px]"
           >
             Use Cases
           </h2>
