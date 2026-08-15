@@ -121,13 +121,13 @@ export function Navbar() {
         alt=""
         aria-hidden="true"
         data-testid="navbar-abstract-topleft"
-        width={547}
-        height={440}
+        width={497}
+        height={353}
         className="pointer-events-none absolute left-0 top-0 z-0 hidden laptop:block"
       />
       <nav
         aria-label="Primary navigation"
-        className="mx-auto flex h-[68px] max-w-[1596px] items-center justify-between rounded-[100px] border border-[#262626] bg-[#1C1C1C] px-5 laptop:h-[73px] laptop:px-10 desktop:h-[95px] desktop:px-10"
+        className="relative z-10 mx-auto flex h-[68px] max-w-[1596px] items-center justify-between rounded-[100px] border border-[#262626] bg-[#1C1C1C] px-5 laptop:h-[73px] laptop:px-10 desktop:h-[95px] desktop:px-10"
       >
         {/* Logo */}
         <Link
