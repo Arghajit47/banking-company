@@ -68,7 +68,7 @@ export function ProtectionSection() {
         >
           <h2
             data-testid="protection-section-heading"
-            className="text-[36px] font-normal leading-[150%] md:text-[42px] lg:text-[48px]"
+            className="text-[36px] font-normal leading-[150%] md:text-[42px] lg:text-[48px] laptop:text-[38px] laptop:font-medium"
           >
             <span className="text-white">{SECTION_HEADING_PREFIX}</span>
             <span className="text-[#CAFF33]">{SECTION_HEADING_ACCENT}</span>
@@ -126,7 +126,7 @@ export function ProtectionSection() {
                   </div>
                   <h3
                     data-testid={`protection-card-title-${idx + 1}`}
-                    className="text-[18px] font-medium leading-[150%] text-white md:text-[22px]"
+                    className="text-[18px] font-medium leading-[150%] text-white md:text-[22px] laptop:text-[20px] laptop:font-normal"
                   >
                     {feature.title}
                   </h3>

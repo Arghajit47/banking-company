@@ -124,13 +124,13 @@ export function Footer() {
       data-testid="footer"
       className="w-full bg-[#1C1C1C] font-[var(--font-urbanist)]"
     >
-      <div className="mx-auto max-w-[1596px] px-4 py-[50px] md:px-6 xl:px-[162px]">
+      <div className="mx-auto max-w-[1596px] px-4 py-[50px] md:px-6 xl:px-20 desktop:px-[162px]">
         {/* Top: logo + nav */}
         <div className="flex flex-col items-center gap-[50px]">
           <Link
             href="/"
             data-testid="footer-logo"
-            className="flex items-center gap-[5.17px]"
+            className="flex items-center gap-[5.17px] text-white"
           >
             <LogoIcon size={34} />
             <span className="text-xl font-medium tracking-tight text-white">
@@ -147,7 +147,7 @@ export function Footer() {
                 key={link.href + link.label}
                 href={link.href}
                 data-testid={`footer-nav-${link.label.toLowerCase()}`}
-                className="text-lg font-normal text-[#E4E4E7] transition-opacity hover:opacity-70"
+                className="text-base font-normal text-[#E4E4E7] transition-opacity hover:opacity-70"
               >
                 <SkeletonText isLoading={showSkeleton} className="min-w-[60px]">
                   {link.label}
@@ -167,7 +167,7 @@ export function Footer() {
           <Link
             href={`mailto:${config.contact.email}`}
             data-testid="footer-email"
-            className="flex items-center gap-[18px] text-lg text-[#E4E4E7] transition-opacity hover:opacity-70"
+            className="flex items-center gap-[18px] text-base text-[#E4E4E7] transition-opacity hover:opacity-70"
           >
             <MailIcon />
             <SkeletonText isLoading={showSkeleton} className="min-w-[180px]">
@@ -177,7 +177,7 @@ export function Footer() {
           <Link
             href={`tel:${config.contact.phone.replace(/\s/g, "")}`}
             data-testid="footer-phone"
-            className="flex items-center gap-[18px] text-lg text-[#E4E4E7] transition-opacity hover:opacity-70"
+            className="flex items-center gap-[18px] text-base text-[#E4E4E7] transition-opacity hover:opacity-70"
           >
             <PhoneIcon />
             <SkeletonText isLoading={showSkeleton} className="min-w-[160px]">
@@ -186,7 +186,7 @@ export function Footer() {
           </Link>
           <span
             data-testid="footer-location"
-            className="flex items-center gap-[18px] text-lg text-[#E4E4E7]"
+            className="flex items-center gap-[18px] text-base text-[#E4E4E7]"
           >
             <LocationIcon />
             <SkeletonText isLoading={showSkeleton} className="min-w-[180px]">
@@ -221,7 +221,7 @@ export function Footer() {
 
           <p
             data-testid="footer-copyright"
-            className="text-center text-lg text-[#B3B3B3]"
+            className="text-center text-sm text-[#B3B3B3]"
           >
             <SkeletonText isLoading={showSkeleton} className="min-w-[220px]">
               {config.copyright}
@@ -230,7 +230,7 @@ export function Footer() {
 
           <div
             data-testid="footer-legal"
-            className="flex items-center gap-[10px] text-lg text-[#E4E4E7]"
+            className="flex items-center gap-[10px] text-sm text-[#E4E4E7]"
           >
             <Link
               href="/privacy-policy"

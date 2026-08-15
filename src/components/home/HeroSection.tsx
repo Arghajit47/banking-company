@@ -171,7 +171,7 @@ export function HeroSection() {
         data-testid="hero-section"
         className="relative w-full overflow-hidden bg-[#1A1A1A] font-[var(--font-urbanist)]"
       >
-        <div className="relative mx-auto flex min-h-[824px] max-w-[1920px] flex-col items-center justify-center px-4 py-16 md:flex-row md:items-center md:justify-start md:px-8 lg:px-12 laptop:px-20 desktop:px-[162px]">
+        <div className="relative mx-auto flex min-h-[824px] max-w-[1920px] flex-col items-center justify-center px-4 py-16 md:flex-row md:items-center md:justify-start md:px-8 lg:px-12 laptop:min-h-[621px] laptop:px-20 desktop:px-[162px]">
           <HeroErrorFallback />
         </div>
       </section>
@@ -186,7 +186,7 @@ export function HeroSection() {
       data-testid="hero-section"
       className="relative w-full overflow-hidden bg-[#1A1A1A] font-[var(--font-urbanist)]"
     >
-      <div className="relative mx-auto flex min-h-[824px] max-w-[1920px] flex-col items-center justify-center px-4 py-16 md:flex-row md:items-center md:justify-start md:px-8 lg:px-12 laptop:px-20 desktop:px-[162px]">
+      <div className="relative mx-auto flex min-h-[824px] max-w-[1920px] flex-col items-center justify-center px-4 py-16 md:flex-row md:items-center md:justify-start md:px-8 lg:px-12 laptop:min-h-[621px] laptop:px-20 desktop:px-[162px]">
         {showSkeleton ? (
           <HeroSkeleton />
         ) : (
@@ -214,7 +214,7 @@ export function HeroSection() {
               {/* Heading */}
               <h1
                 data-testid="hero-heading"
-                className="mb-6 w-full text-[28px] font-medium leading-[42px] text-white sm:text-[34px] sm:leading-[51px] md:text-[40px] md:leading-[60px] lg:text-[44px] lg:leading-[66px] desktop:text-[48px] desktop:leading-[72px]"
+                className="mb-6 w-full text-[28px] font-medium leading-[42px] text-white sm:text-[34px] sm:leading-[51px] md:text-[40px] md:leading-[60px] lg:text-[44px] lg:leading-[66px] laptop:text-[38px] laptop:leading-[57px] desktop:text-[48px] desktop:leading-[72px]"
               >
                 <span className="block" data-testid="hero-line-welcome">
                   {hero.headline}
@@ -243,7 +243,7 @@ export function HeroSection() {
               <button
                 type="button"
                 data-testid="hero-open-account"
-                className="rounded-[82px] bg-[#CAFF33] px-[30px] py-[18px] text-[18px] font-semibold leading-[150%] text-[#1C1C1C] transition hover:brightness-110 hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#1A1A1A]"
+                className="rounded-[82px] bg-[#CAFF33] px-[30px] py-[18px] text-[18px] font-semibold leading-[150%] text-[#1C1C1C] transition hover:brightness-110 hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#1A1A1A] laptop:text-[14px]"
               >
                 {hero.ctaLabel}
               </button>

@@ -71,7 +71,7 @@ export function ProductsSection() {
           <div className="max-w-[800px]">
             <h2
               data-testid="products-heading"
-              className="mb-4 text-2xl font-medium text-[#CAFF33] sm:text-3xl md:text-4xl lg:text-[48px] lg:leading-[58px]"
+              className="mb-4 text-2xl font-medium text-[#CAFF33] sm:text-3xl md:text-4xl lg:text-[48px] lg:leading-[58px] laptop:text-[38px] laptop:leading-[48px]"
             >
               Our Products
             </h2>
