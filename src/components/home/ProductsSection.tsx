@@ -125,13 +125,13 @@ export function ProductsSection() {
         ) : (
           <div
             data-testid="products-grid"
-            className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-6 laptop:grid-cols-3 laptop:gap-0 laptop:divide-x laptop:divide-[#262626] laptop:overflow-hidden laptop:rounded-2xl laptop:border laptop:border-[#262626]"
+            className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-6 laptop:grid-cols-3 laptop:gap-0 laptop:overflow-hidden laptop:rounded-2xl laptop:border laptop:border-[#262626]"
           >
             {visibleProducts.map((product) => (
               <article
                 key={product.id}
                 data-testid={`product-card-${product.id}`}
-                className="flex flex-col rounded-2xl border border-[#262626] bg-[#1E1E1E] p-6 transition hover:border-[#333333] sm:p-8 laptop:rounded-none laptop:border-0"
+                className="flex flex-col rounded-2xl border border-[#262626] bg-[#1E1E1E] p-6 transition hover:border-[#333333] sm:p-8 laptop:rounded-none laptop:border-y-0 laptop:border-r-0 laptop:border-l laptop:border-l-[#262626] laptop:first:border-l-0"
               >
                 <div className="mb-6 flex items-center gap-4">
                   <div

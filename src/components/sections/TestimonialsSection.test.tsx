@@ -113,4 +113,193 @@ describe("TestimonialsSection", () => {
     const card1 = screen.getByTestId("testimonials-card-1");
     expect(card1.className).not.toContain("opacity-40");
   });
+
+  // BC-155 QA remediation — BUG B: heading must render 38px at the laptop breakpoint
+  it("heading carries the laptop 38px override matching the other section headings", () => {
+    render(<TestimonialsSection />);
+    const heading = screen.getByTestId("testimonials-heading");
+    expect(heading.className).toContain("laptop:text-[38px]");
+    expect(heading.className).toContain("laptop:leading-[48px]");
+  });
+
+  it("heading keeps both laptop overrides in the loading skeleton too", () => {
+    vi.mocked(useSWR).mockReturnValue({ data: undefined, isLoading: true, error: undefined } as ReturnType<typeof useSWR>);
+    render(<TestimonialsSection />);
+    const heading = screen.getByTestId("testimonials-heading");
+    expect(heading.className).toContain("laptop:text-[38px]");
+    expect(heading.className).toContain("laptop:leading-[48px]");
+  });
+
+  // BC-155 QA remediation — BUG C: tabs must expose tab semantics
+  it("tab container exposes role=tablist and buttons expose role=tab", () => {
+    render(<TestimonialsSection />);
+    expect(screen.getByTestId("testimonials-tabs")).toHaveAttribute("role", "tablist");
+    expect(screen.getByTestId("testimonials-tab-individuals")).toHaveAttribute("role", "tab");
+    expect(screen.getByTestId("testimonials-tab-businesses")).toHaveAttribute("role", "tab");
+  });
+
+  it("on load businesses tab is aria-selected=true and individuals is false", () => {
+    render(<TestimonialsSection />);
+    expect(screen.getByTestId("testimonials-tab-businesses")).toHaveAttribute("aria-selected", "true");
+    expect(screen.getByTestId("testimonials-tab-individuals")).toHaveAttribute("aria-selected", "false");
+  });
+
+  it("aria-selected swaps when the individuals tab is clicked", () => {
+    render(<TestimonialsSection />);
+    fireEvent.click(screen.getByTestId("testimonials-tab-individuals"));
+    expect(screen.getByTestId("testimonials-tab-individuals")).toHaveAttribute("aria-selected", "true");
+    expect(screen.getByTestId("testimonials-tab-businesses")).toHaveAttribute("aria-selected", "false");
+  });
+
+  it("adding tab semantics leaves the active/inactive pill colours unchanged", () => {
+    render(<TestimonialsSection />);
+    expect(screen.getByTestId("testimonials-tab-businesses").className).toContain("bg-[#CAFF33]");
+    expect(screen.getByTestId("testimonials-tab-individuals").className).toContain("bg-transparent");
+  });
+
+  // BC-155 QA remediation — BUG C follow-up: complete tab-widget semantics
+  it("each tab points at the tabpanel via aria-controls", () => {
+    render(<TestimonialsSection />);
+    const panel = screen.getByTestId("testimonials-panel");
+    const panelId = panel.getAttribute("id");
+    expect(panelId).toBeTruthy();
+    expect(screen.getByTestId("testimonials-tab-individuals")).toHaveAttribute("aria-controls", panelId as string);
+    expect(screen.getByTestId("testimonials-tab-businesses")).toHaveAttribute("aria-controls", panelId as string);
+  });
+
+  it("the panel is a tabpanel labelled by the active tab and relabels on switch", () => {
+    render(<TestimonialsSection />);
+    const panel = screen.getByTestId("testimonials-panel");
+    expect(panel).toHaveAttribute("role", "tabpanel");
+    expect(panel).toHaveAttribute(
+      "aria-labelledby",
+      screen.getByTestId("testimonials-tab-businesses").getAttribute("id") as string,
+    );
+
+    fireEvent.click(screen.getByTestId("testimonials-tab-individuals"));
+    expect(screen.getByTestId("testimonials-panel")).toHaveAttribute(
+      "aria-labelledby",
+      screen.getByTestId("testimonials-tab-individuals").getAttribute("id") as string,
+    );
+  });
+
+  it("roving tabindex keeps only the active tab in the tab sequence", () => {
+    render(<TestimonialsSection />);
+    expect(screen.getByTestId("testimonials-tab-businesses")).toHaveAttribute("tabindex", "0");
+    expect(screen.getByTestId("testimonials-tab-individuals")).toHaveAttribute("tabindex", "-1");
+
+    fireEvent.click(screen.getByTestId("testimonials-tab-individuals"));
+    expect(screen.getByTestId("testimonials-tab-individuals")).toHaveAttribute("tabindex", "0");
+    expect(screen.getByTestId("testimonials-tab-businesses")).toHaveAttribute("tabindex", "-1");
+  });
+
+  it("ArrowLeft moves focus and activates the previous tab", () => {
+    render(<TestimonialsSection />);
+    const businesses = screen.getByTestId("testimonials-tab-businesses");
+    businesses.focus();
+    fireEvent.keyDown(businesses, { key: "ArrowLeft" });
+
+    const individuals = screen.getByTestId("testimonials-tab-individuals");
+    expect(individuals).toHaveAttribute("aria-selected", "true");
+    expect(businesses).toHaveAttribute("aria-selected", "false");
+    expect(individuals).toHaveFocus();
+  });
+
+  it("ArrowRight wraps from the last tab back to the first", () => {
+    render(<TestimonialsSection />);
+    const businesses = screen.getByTestId("testimonials-tab-businesses");
+    businesses.focus();
+    fireEvent.keyDown(businesses, { key: "ArrowRight" });
+
+    const individuals = screen.getByTestId("testimonials-tab-individuals");
+    expect(individuals).toHaveAttribute("aria-selected", "true");
+    expect(individuals).toHaveFocus();
+  });
+
+  it("ArrowRight from the first tab activates the next one", () => {
+    render(<TestimonialsSection />);
+    fireEvent.click(screen.getByTestId("testimonials-tab-individuals"));
+
+    const individuals = screen.getByTestId("testimonials-tab-individuals");
+    individuals.focus();
+    fireEvent.keyDown(individuals, { key: "ArrowRight" });
+
+    const businesses = screen.getByTestId("testimonials-tab-businesses");
+    expect(businesses).toHaveAttribute("aria-selected", "true");
+    expect(businesses).toHaveFocus();
+  });
+
+  it("arrow-key activation also rewinds the carousel to the first testimonial", () => {
+    render(<TestimonialsSection />);
+    fireEvent.click(screen.getByTestId("testimonials-next"));
+
+    const businesses = screen.getByTestId("testimonials-tab-businesses");
+    fireEvent.keyDown(businesses, { key: "ArrowLeft" });
+
+    // useSWR is mocked to always return the individuals fixture, so index 0 is Sara T
+    expect(screen.getByTestId("testimonials-card-1").textContent).toContain("Sara T");
+  });
+
+  it("non-horizontal keys leave the tablist untouched", () => {
+    render(<TestimonialsSection />);
+    const businesses = screen.getByTestId("testimonials-tab-businesses");
+    fireEvent.keyDown(businesses, { key: "ArrowDown" });
+    expect(businesses).toHaveAttribute("aria-selected", "true");
+    expect(screen.getByTestId("testimonials-tab-individuals")).toHaveAttribute("aria-selected", "false");
+  });
+
+  describe("loading branch", () => {
+    beforeEach(() => {
+      vi.mocked(useSWR).mockReturnValue({ data: undefined, isLoading: true, error: undefined } as ReturnType<typeof useSWR>);
+    });
+
+    it("retains role=tablist and role=tab while loading", () => {
+      render(<TestimonialsSection />);
+      expect(screen.getByTestId("testimonials-tabs")).toHaveAttribute("role", "tablist");
+      expect(screen.getByTestId("testimonials-tab-individuals")).toHaveAttribute("role", "tab");
+      expect(screen.getByTestId("testimonials-tab-businesses")).toHaveAttribute("role", "tab");
+    });
+
+    it("retains correct aria-selected values while loading", () => {
+      render(<TestimonialsSection />);
+      expect(screen.getByTestId("testimonials-tab-businesses")).toHaveAttribute("aria-selected", "true");
+      expect(screen.getByTestId("testimonials-tab-individuals")).toHaveAttribute("aria-selected", "false");
+    });
+
+    it("exposes the tabpanel, aria-controls and roving tabindex while loading", () => {
+      render(<TestimonialsSection />);
+      const panel = screen.getByTestId("testimonials-panel");
+      const panelId = panel.getAttribute("id");
+      expect(panel).toHaveAttribute("role", "tabpanel");
+      expect(panel).toHaveAttribute(
+        "aria-labelledby",
+        screen.getByTestId("testimonials-tab-businesses").getAttribute("id") as string,
+      );
+      expect(screen.getByTestId("testimonials-tab-individuals")).toHaveAttribute("aria-controls", panelId as string);
+      expect(screen.getByTestId("testimonials-tab-businesses")).toHaveAttribute("aria-controls", panelId as string);
+      expect(screen.getByTestId("testimonials-tab-businesses")).toHaveAttribute("tabindex", "0");
+      expect(screen.getByTestId("testimonials-tab-individuals")).toHaveAttribute("tabindex", "-1");
+    });
+
+    it("supports arrow-key tab navigation while loading", () => {
+      render(<TestimonialsSection />);
+      const businesses = screen.getByTestId("testimonials-tab-businesses");
+      businesses.focus();
+      fireEvent.keyDown(businesses, { key: "ArrowLeft" });
+
+      const individuals = screen.getByTestId("testimonials-tab-individuals");
+      expect(individuals).toHaveAttribute("aria-selected", "true");
+      expect(individuals).toHaveFocus();
+      expect(screen.getByTestId("testimonials-panel")).toHaveAttribute(
+        "aria-labelledby",
+        individuals.getAttribute("id") as string,
+      );
+    });
+
+    it("keeps the pill colours unchanged while loading", () => {
+      render(<TestimonialsSection />);
+      expect(screen.getByTestId("testimonials-tab-businesses").className).toContain("bg-[#CAFF33]");
+      expect(screen.getByTestId("testimonials-tab-individuals").className).toContain("bg-transparent");
+    });
+  });
 });

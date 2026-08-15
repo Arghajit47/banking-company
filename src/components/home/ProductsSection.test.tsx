@@ -243,4 +243,35 @@ describe("ProductsSection", () => {
     expect(businessesTab.className).not.toContain("bg-[#CAFF33]");
     expect(businessesTab.className).toContain("text-[#999999]");
   });
+
+  // BC-155 QA remediation — BUG A: vertical dividers between product cards
+  it("product cards draw a 1px left divider at the laptop breakpoint", () => {
+    render(<ProductsSection />);
+    const card = screen.getByTestId("product-card-2");
+    expect(card.className).toContain("laptop:border-l");
+    expect(card.className).toContain("laptop:border-l-[#262626]");
+  });
+
+  it("the first product card suppresses its left divider so the container edge is not doubled", () => {
+    render(<ProductsSection />);
+    expect(screen.getByTestId("product-card-1").className).toContain("laptop:first:border-l-0");
+  });
+
+  it("product cards no longer zero every border at laptop (laptop:border-0 clobbered the divider)", () => {
+    render(<ProductsSection />);
+    const card = screen.getByTestId("product-card-1");
+    expect(card.className).not.toContain("laptop:border-0");
+    expect(card.className).toContain("laptop:border-y-0");
+    expect(card.className).toContain("laptop:border-r-0");
+  });
+
+  it("grid keeps a single container border with no gap and drops the wrong-direction divide-x", () => {
+    render(<ProductsSection />);
+    const grid = screen.getByTestId("products-grid");
+    expect(grid.className).toContain("laptop:gap-0");
+    expect(grid.className).toContain("laptop:border");
+    expect(grid.className).toContain("laptop:border-[#262626]");
+    expect(grid.className).toContain("laptop:rounded-2xl");
+    expect(grid.className).not.toContain("laptop:divide-x");
+  });
 });
