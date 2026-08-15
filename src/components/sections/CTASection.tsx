@@ -106,7 +106,7 @@ export function CTASection({
                 <h2
                   id="cta-heading"
                   data-testid="cta-heading"
-                  className="text-2xl font-semibold leading-tight text-white sm:text-3xl md:text-4xl lg:text-[40px] lg:leading-[48px]"
+                  className="text-2xl font-semibold leading-tight text-white sm:text-3xl md:text-4xl lg:text-[40px] lg:leading-[48px] laptop:text-[38px] laptop:leading-[48px]"
                 >
                   {headlineStart}
                   <span className="text-[#CAFF33]">{headlineAccent}</span>

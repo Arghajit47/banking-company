@@ -99,6 +99,17 @@ describe("FAQSection", () => {
     expect(heading).toHaveTextContent("Asked Questions");
   });
 
+  // BC-157 — heading must render 38px at the laptop breakpoint
+  it("heading carries the laptop 38px override matching the other section headings", () => {
+    mockUseFAQConfig.mockReturnValue(
+      baseReturn({ faqs: DEFAULT_FAQS, hasMore: false })
+    );
+    render(<FAQSection />);
+    const heading = screen.getByTestId("faq-heading");
+    expect(heading.className).toContain("laptop:text-[38px]");
+    expect(heading.className).toContain("laptop:leading-[48px]");
+  });
+
   it("displays FAQ subheading", () => {
     mockUseFAQConfig.mockReturnValue(
       baseReturn({ faqs: DEFAULT_FAQS, hasMore: false })

@@ -55,6 +55,14 @@ describe("CTASection", () => {
     expect(heading.querySelector("span")).toHaveClass("text-[#CAFF33]");
   });
 
+  // BC-157 — heading must render 38px at the laptop breakpoint
+  it("heading carries the laptop 38px override matching the other section headings", () => {
+    render(<CTASection />);
+    const heading = screen.getByTestId("cta-heading");
+    expect(heading.className).toContain("laptop:text-[38px]");
+    expect(heading.className).toContain("laptop:leading-[48px]");
+  });
+
   it("renders body text from API data", () => {
     render(<CTASection />);
     expect(screen.getByTestId("cta-body")).toHaveTextContent(
