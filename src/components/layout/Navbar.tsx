@@ -80,7 +80,7 @@ function NavbarLink({
             ? "text-sm leading-[21px] desktop:text-lg"
             : "text-base leading-6"
         }
-        ${active ? "rounded-[10px] bg-[#262626] px-6 py-3" : "rounded-md px-2 py-1"}
+        ${active ? "rounded-full bg-[#262626] px-6 py-3" : "rounded-md px-2 py-1"}
       `}
       aria-current={active ? "page" : undefined}
     >

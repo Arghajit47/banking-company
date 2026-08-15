@@ -77,7 +77,7 @@ export function PressReleasesSection() {
         >
           <h2
             data-testid="press-releases-section-heading"
-            className="text-[36px] font-normal leading-[150%] text-[#CAFF33] md:text-[42px] lg:text-[48px]"
+            className="text-[36px] font-normal leading-[150%] text-[#CAFF33] md:text-[42px] lg:text-[48px] laptop:text-[38px] laptop:font-medium"
           >
             {SECTION_HEADING}
           </h2>
@@ -119,7 +119,7 @@ export function PressReleasesSection() {
                 <div className="flex flex-col gap-[20px]">
                   <h3
                     data-testid={`press-release-card-title-${idx + 1}`}
-                    className="text-[20px] font-normal leading-[150%] text-white md:text-[24px]"
+                    className="text-[20px] font-normal leading-[150%] text-white md:text-[24px] laptop:text-[20px]"
                   >
                     {pr.headline}
                   </h3>

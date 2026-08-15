@@ -36,7 +36,7 @@ function FeatureCard({ feature }: { feature: Feature }) {
       <div className="flex items-start gap-[10px]">
         <h3
           data-testid={`feature-card-title-${feature.id}`}
-          className="flex-1 text-[22px] font-medium leading-[150%] text-white"
+          className="flex-1 text-[22px] font-medium leading-[150%] text-white laptop:text-[18px] laptop:font-normal"
         >
           {feature.title}
         </h3>
@@ -123,7 +123,7 @@ export function FeaturesSection() {
       <div className="mb-[50px] lg:pr-[300px]" data-testid="features-header">
         <h2
           data-testid="features-heading"
-          className="mb-[14px] font-urbanist text-[48px] font-medium leading-[150%] text-[#CAFF33]"
+          className="mb-[14px] font-urbanist text-[48px] font-medium leading-[150%] text-[#CAFF33] laptop:text-[38px]"
         >
           Our Features
         </h2>

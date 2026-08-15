@@ -102,7 +102,7 @@ export function MissionVisionSection() {
         >
           <h2
             data-testid="mission-vision-section-heading"
-            className="text-[36px] font-normal leading-[150%] text-[#CAFF33] md:text-[42px] lg:text-[48px]"
+            className="text-[36px] font-normal leading-[150%] text-[#CAFF33] md:text-[42px] lg:text-[48px] laptop:text-[38px] laptop:font-medium"
           >
             {SECTION_HEADING}
           </h2>
@@ -154,7 +154,7 @@ export function MissionVisionSection() {
             >
               <h3
                 data-testid="mission-card-heading"
-                className="text-[28px] font-medium leading-[150%] text-white md:text-[34px] lg:text-[38px]"
+                className="text-[28px] font-medium leading-[150%] text-white md:text-[34px] lg:text-[38px] laptop:text-[32px]"
               >
                 {data.mission.title}
               </h3>
@@ -178,7 +178,7 @@ export function MissionVisionSection() {
             >
               <h3
                 data-testid="vision-card-heading"
-                className="text-[28px] font-medium leading-[150%] text-white md:text-[34px] lg:text-[38px]"
+                className="text-[28px] font-medium leading-[150%] text-white md:text-[34px] lg:text-[38px] laptop:text-[32px]"
               >
                 {data.vision.title}
               </h3>

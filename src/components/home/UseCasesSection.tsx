@@ -59,7 +59,7 @@ function TextPanel({
       className="flex w-full flex-col justify-center gap-[62px] lg:w-1/2"
     >
       <div className="flex flex-col gap-3.5">
-        <h3 className="text-[30px] font-medium leading-[150%] text-white">{heading}</h3>
+        <h3 className="text-[30px] font-medium leading-[150%] text-white laptop:text-[26px]">{heading}</h3>
         <p className="text-lg font-light text-[#B3B3B3]">{paragraph}</p>
       </div>
       <StatsRow stats={stats} />
@@ -180,7 +180,7 @@ export function UseCasesSection() {
         <div className="mb-20 flex flex-col gap-3.5">
           <h2
             data-testid="use-cases-heading"
-            className="text-[48px] font-medium leading-[150%] text-[#CAFF33]"
+            className="text-[48px] font-medium leading-[150%] text-[#CAFF33] laptop:text-[38px]"
           >
             Use Cases
           </h2>
