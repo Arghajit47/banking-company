@@ -85,9 +85,38 @@ describe("Navbar (desktop)", () => {
 
     expect(homeLink).toBeTruthy();
     expect(homeLink?.getAttribute("aria-current")).toBe("page");
-    // BC-148 changed the active pill from rounded-[10px] to a fully rounded pill.
-    expect(homeLink?.className).toContain("rounded-full");
+    // BC-158: both Figma navbar frames specify cornerRadius 82 on the active
+    // pill (laptop 104:610, desktop 5:27282). The previous "rounded-full"
+    // assertion came from PR #124 without a Figma check and encoded the defect.
+    expect(homeLink?.className).toContain("rounded-[82px]");
+    expect(homeLink?.className).not.toContain("rounded-full");
     expect(homeLink?.className).toContain("bg-[#262626]");
+  });
+
+  it("active pill uses breakpoint-specific padding for the laptop and desktop frames", () => {
+    const { container } = renderWithSWR(<Navbar />);
+    const homeLink = container.querySelector('[data-testid="nav-link-home"]');
+
+    // BC-158: the laptop pill (104:610) is 77x41 and the desktop pill
+    // (5:27282) is 100x51 — deliberately BIGGER at >=1920. A single uniform
+    // `px-6 py-3` cannot satisfy both frames.
+    expect(homeLink?.className).toContain("px-5");
+    expect(homeLink?.className).toContain("py-[10px]");
+    expect(homeLink?.className).toContain("desktop:px-[26.5px]");
+    expect(homeLink?.className).toContain("desktop:py-3");
+  });
+
+  it("desktop nav links step up to 18px/27px type at the desktop breakpoint", () => {
+    const { container } = renderWithSWR(<Navbar />);
+    const homeLink = container.querySelector('[data-testid="nav-link-home"]');
+
+    // BC-158: Figma text node 5:27283 is 18px at 150% (=27px) on the desktop
+    // frame vs 14px/21px on laptop (104:611). `desktop:leading-[27px]` was
+    // missing, which is why the pill measured 45px tall instead of 51px at 1920.
+    expect(homeLink?.className).toContain("text-sm");
+    expect(homeLink?.className).toContain("leading-[21px]");
+    expect(homeLink?.className).toContain("desktop:text-lg");
+    expect(homeLink?.className).toContain("desktop:leading-[27px]");
   });
 });
 
