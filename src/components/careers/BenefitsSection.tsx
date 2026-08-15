@@ -20,7 +20,7 @@ function BenefitsSkeleton() {
   return (
     <section
       data-testid="benefits-section"
-      className="px-4 py-12 font-[var(--font-lexend)] md:px-8 md:py-16 lg:px-12 lg:py-20 desktop:px-[162px]"
+      className="px-4 py-12 font-[var(--font-urbanist)] md:px-8 md:py-16 lg:px-12 lg:py-20 desktop:px-[162px]"
     >
       <div
         data-testid="benefits-section-header"
@@ -121,7 +121,7 @@ export function BenefitsSection() {
   return (
     <section
       data-testid="benefits-section"
-      className="px-4 py-12 font-[var(--font-lexend)] md:px-8 md:py-16 lg:px-12 lg:py-20 desktop:px-[162px]"
+      className="px-4 py-12 font-[var(--font-urbanist)] md:px-8 md:py-16 lg:px-12 lg:py-20 desktop:px-[162px]"
     >
       <div
         data-testid="benefits-section-header"

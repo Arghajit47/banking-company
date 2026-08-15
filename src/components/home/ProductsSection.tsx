@@ -63,7 +63,7 @@ export function ProductsSection() {
   return (
     <section
       data-testid="products-section"
-      className="w-full bg-[#1E1E1E] px-4 py-16 font-[var(--font-lexend)] md:px-8 lg:px-12 laptop:px-20 desktop:px-[162px]"
+      className="w-full bg-[#1E1E1E] px-4 py-16 font-[var(--font-urbanist)] md:px-8 lg:px-12 laptop:px-20 desktop:px-[162px]"
     >
       <div className="mx-auto max-w-[1920px]">
         {/* Header */}
@@ -71,7 +71,7 @@ export function ProductsSection() {
           <div className="max-w-[800px]">
             <h2
               data-testid="products-heading"
-              className="mb-4 text-2xl font-semibold text-[#CAFF33] sm:text-3xl md:text-4xl lg:text-[40px] lg:leading-[50px]"
+              className="mb-4 text-2xl font-medium text-[#CAFF33] sm:text-3xl md:text-4xl lg:text-[48px] lg:leading-[58px]"
             >
               Our Products
             </h2>

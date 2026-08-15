@@ -123,7 +123,7 @@ export function FeaturesSection() {
       <div className="mb-[50px] lg:pr-[300px]" data-testid="features-header">
         <h2
           data-testid="features-heading"
-          className="mb-[14px] font-lexend text-[48px] font-medium leading-[150%] text-[#CAFF33]"
+          className="mb-[14px] font-urbanist text-[48px] font-medium leading-[150%] text-[#CAFF33]"
         >
           Our Features
         </h2>

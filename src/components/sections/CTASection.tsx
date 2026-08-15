@@ -69,7 +69,7 @@ export function CTASection({
       className="w-full bg-[#1A1A1A]"
     >
       <div className="mx-auto max-w-[1920px] px-4 md:px-6 lg:px-8 xl:px-12">
-        <div className="relative flex min-h-[288px] flex-col items-center gap-8 overflow-hidden rounded-2xl bg-[#262626] px-5 py-10 md:flex-row md:items-center md:justify-between md:px-12 md:py-0 lg:px-16">
+        <div className="relative flex min-h-[288px] flex-col items-center gap-8 overflow-hidden rounded-[20px] bg-[#1C1C1C] px-5 py-10 md:flex-row md:items-center md:justify-between md:px-12 md:py-0 lg:px-16">
           {/*
             TODO: Replace this CSS placeholder with the exported Figma SVG once the
             Local AI Bridge plugin is synced to the correct page.

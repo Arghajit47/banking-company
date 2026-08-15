@@ -8,7 +8,7 @@ function CareersHeroSkeleton() {
   return (
     <section
       data-testid="careers-hero-section"
-      className="relative mx-auto w-full max-w-[1599px] overflow-hidden rounded-[20px] bg-[#1C1C1C] p-[50px]"
+      className="relative mx-auto w-full max-w-[1599px] rounded-[20px] bg-[#1C1C1C] p-[50px]"
     >
       <div className="flex flex-col items-start md:flex-row">
         <div
@@ -51,7 +51,7 @@ export function CareersHeroSection() {
   return (
     <section
       data-testid="careers-hero-section"
-      className="relative mx-auto w-full max-w-[1599px] overflow-hidden rounded-[20px] bg-[#1C1C1C] p-[50px]"
+      className="relative mx-auto w-full max-w-[1599px] rounded-[20px] bg-[#1C1C1C] p-[50px]"
     >
       {/* Careers abstract design — Figma node 659:2, desktop only — z-0 keeps it behind the hero image */}
       <Image
@@ -78,7 +78,7 @@ export function CareersHeroSection() {
           )}
           <h1
             data-testid="careers-hero-heading"
-            className="font-[var(--font-lexend)] text-[32px] font-medium leading-[130%] text-white md:text-[48px] lg:text-[58px]"
+            className="font-[var(--font-urbanist)] text-[32px] font-medium leading-[130%] text-white md:text-[48px] lg:text-[58px]"
           >
             {data.headline.split("YourBank").map((part, i, arr) => (
               <span key={i}>
@@ -91,7 +91,7 @@ export function CareersHeroSection() {
           </h1>
           <p
             data-testid="careers-hero-paragraph"
-            className="font-[var(--font-lexend)] text-[18px] font-light leading-[150%] text-[#B3B3B3]"
+            className="font-[var(--font-urbanist)] text-[18px] font-light leading-[150%] text-[#B3B3B3]"
           >
             {data.body}
           </p>

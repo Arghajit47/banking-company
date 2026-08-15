@@ -8,7 +8,7 @@ function SecurityHeroSkeleton() {
   return (
     <section
       data-testid="security-hero-section"
-      className="relative mx-auto w-full max-w-[1599px] overflow-hidden rounded-[20px] bg-[#1C1C1C] p-[50px]"
+      className="relative mx-auto w-full max-w-[1599px] rounded-[20px] bg-[#1C1C1C] p-[50px]"
     >
       <div className="flex flex-col items-start md:flex-row">
         <div
@@ -51,7 +51,7 @@ export function SecurityHeroSection() {
   return (
     <section
       data-testid="security-hero-section"
-      className="relative mx-auto w-full max-w-[1599px] overflow-hidden rounded-[20px] bg-[#1C1C1C] p-[50px]"
+      className="relative mx-auto w-full max-w-[1599px] rounded-[20px] bg-[#1C1C1C] p-[50px]"
     >
       <Image
         src="/assets/illustrations/abstract_design_hero_illustration.svg"
@@ -74,14 +74,14 @@ export function SecurityHeroSection() {
           )}
           <h1
             data-testid="security-hero-heading"
-            className="font-[var(--font-lexend)] text-[32px] font-medium leading-[130%] md:text-[48px] lg:text-[58px]"
+            className="font-[var(--font-urbanist)] text-[32px] font-medium leading-[130%] md:text-[48px] lg:text-[58px]"
           >
             <span className="text-white">{data.headline} </span>
             <span className="text-[#CAFF33]">{data.headlineAccent}</span>
           </h1>
           <p
             data-testid="security-hero-paragraph"
-            className="font-[var(--font-lexend)] text-[16px] font-light leading-[150%] text-[#B3B3B3] md:text-[18px]"
+            className="font-[var(--font-urbanist)] text-[16px] font-light leading-[150%] text-[#B3B3B3] md:text-[18px]"
           >
             {data.body}
           </p>

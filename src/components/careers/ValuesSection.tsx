@@ -12,7 +12,7 @@ function ValuesSkeleton() {
   return (
     <section
       data-testid="values-section"
-      className="px-4 py-12 font-[var(--font-lexend)] md:px-8 md:py-16 lg:px-12 lg:py-20 desktop:px-[162px]"
+      className="px-4 py-12 font-[var(--font-urbanist)] md:px-8 md:py-16 lg:px-12 lg:py-20 desktop:px-[162px]"
     >
       <div
         data-testid="values-section-header"
@@ -70,13 +70,13 @@ function ValueCardItem({
     >
       <h3
         data-testid={`values-card-title-${index}`}
-        className="font-[var(--font-lexend)] text-[36px] font-medium leading-[150%] text-[#4C4C4D] md:text-[48px] lg:text-[58px]"
+        className="font-[var(--font-urbanist)] text-[36px] font-medium leading-[150%] text-[#4C4C4D] md:text-[48px] lg:text-[58px]"
       >
         {card.title}
       </h3>
       <p
         data-testid={`values-card-body-${index}`}
-        className="font-[var(--font-lexend)] text-[16px] font-light leading-[150%] text-[#B3B3B3] md:text-[18px]"
+        className="font-[var(--font-urbanist)] text-[16px] font-light leading-[150%] text-[#B3B3B3] md:text-[18px]"
       >
         {card.description}
       </p>
@@ -101,7 +101,7 @@ export function ValuesSection() {
   return (
     <section
       data-testid="values-section"
-      className="px-4 py-12 font-[var(--font-lexend)] md:px-8 md:py-16 lg:px-12 lg:py-20 desktop:px-[162px]"
+      className="px-4 py-12 font-[var(--font-urbanist)] md:px-8 md:py-16 lg:px-12 lg:py-20 desktop:px-[162px]"
     >
       <div
         data-testid="values-section-header"

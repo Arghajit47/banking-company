@@ -122,7 +122,7 @@ export function Footer() {
   return (
     <footer
       data-testid="footer"
-      className="w-full bg-[#1A1A1A] font-[var(--font-lexend)]"
+      className="w-full bg-[#1C1C1C] font-[var(--font-urbanist)]"
     >
       <div className="mx-auto max-w-[1596px] px-4 py-[50px] md:px-6 xl:px-[162px]">
         {/* Top: logo + nav */}

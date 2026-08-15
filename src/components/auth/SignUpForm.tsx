@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 const HEADING = "Sign Up";
-const SUBTEXT = "Join our community today!";
+const SUBTEXT = "Join our community today! Create an account to unlock exclusive features and personalized experiences.";
 const NAME_PLACEHOLDER = "Enter your Name";
 const EMAIL_PLACEHOLDER = "Enter your Email Address";
 const PASSWORD_PLACEHOLDER = "Enter your Password";
@@ -92,7 +92,7 @@ export function SignUpForm() {
   return (
     <div
       data-testid="signup-form-card"
-      className="relative overflow-hidden rounded-[20px] border border-[#262626] bg-[#1C1C1C] px-[150px] py-[100px] font-[var(--font-lexend)]"
+      className="relative overflow-hidden rounded-[20px] border border-[#262626] bg-[#1C1C1C] px-[150px] py-[100px] font-[var(--font-urbanist)]"
     >
       {/* Background image overlay */}
       <div

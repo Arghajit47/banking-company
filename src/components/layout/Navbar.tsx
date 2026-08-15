@@ -113,12 +113,12 @@ export function Navbar() {
 
   return (
     <header
-      className="w-full bg-transparent font-[var(--font-lexend)]"
+      className="w-full bg-transparent px-4 pt-6 font-[var(--font-urbanist)] laptop:px-20 desktop:px-[162px]"
       data-testid="navbar"
     >
       <nav
         aria-label="Primary navigation"
-        className="mx-auto flex h-[68px] max-w-[1920px] items-center justify-between px-4 laptop:h-[73px] laptop:px-20 desktop:h-[95px] desktop:px-[162px]"
+        className="mx-auto flex h-[68px] max-w-[1596px] items-center justify-between rounded-[100px] border border-[#262626] bg-[#1C1C1C] px-5 laptop:h-[73px] laptop:px-10 desktop:h-[95px] desktop:px-10"
       >
         {/* Logo */}
         <Link

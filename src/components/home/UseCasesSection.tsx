@@ -173,7 +173,7 @@ export function UseCasesSection() {
   return (
     <section
       data-testid="use-cases-section"
-      className="w-full bg-[#1E1E1E] px-4 py-16 font-[var(--font-lexend)] md:px-8 lg:px-12 laptop:px-20 desktop:px-[162px]"
+      className="w-full bg-[#1E1E1E] px-4 py-16 font-[var(--font-urbanist)] md:px-8 lg:px-12 laptop:px-20 desktop:px-[162px]"
     >
       <div className="mx-auto max-w-[1920px]">
         {/* Section header */}
