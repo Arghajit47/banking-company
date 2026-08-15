@@ -8,7 +8,7 @@ function SecurityHeroSkeleton() {
   return (
     <section
       data-testid="security-hero-section"
-      className="relative mx-auto w-full max-w-[1599px] rounded-[20px] bg-[#1C1C1C] p-[50px] laptop:p-[40px]"
+      className="relative mx-auto w-full max-w-[1599px] rounded-[20px] bg-[#1C1C1C] p-[14px] sm:p-[50px] laptop:p-[40px]"
     >
       <div className="flex flex-col items-start md:flex-row">
         <div
@@ -51,7 +51,7 @@ export function SecurityHeroSection() {
   return (
     <section
       data-testid="security-hero-section"
-      className="relative mx-auto w-full max-w-[1599px] rounded-[20px] bg-[#1C1C1C] p-[50px] laptop:p-[40px]"
+      className="relative mx-auto w-full max-w-[1599px] rounded-[20px] bg-[#1C1C1C] p-[14px] sm:p-[50px] laptop:p-[40px]"
     >
       <Image
         src="/assets/illustrations/abstract_design_hero_illustration.svg"

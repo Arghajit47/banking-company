@@ -69,7 +69,7 @@ export function LoginForm() {
   return (
     <div
       data-testid="login-form-card"
-      className="relative overflow-hidden rounded-[20px] border border-[#262626] bg-[#1C1C1C] px-[150px] py-[100px] font-[var(--font-urbanist)]"
+      className="relative overflow-hidden rounded-[20px] border border-[#262626] bg-[#1C1C1C] px-6 py-8 font-[var(--font-urbanist)] sm:px-[150px] sm:py-[100px]"
     >
       {/* Background image overlay */}
       <div
@@ -129,7 +129,7 @@ export function LoginForm() {
           className="flex flex-col gap-[40px]"
         >
           {/* Input row */}
-          <div className="flex gap-[30px]">
+          <div className="flex flex-col gap-[30px] sm:flex-row">
             {/* Email input */}
             <div className="flex flex-1 flex-col gap-[8px]">
               <div
@@ -202,7 +202,7 @@ export function LoginForm() {
           </div>
 
           {/* CTA container */}
-          <div className="flex flex-col gap-[24px] px-[254px]">
+          <div className="flex flex-col gap-[24px] sm:px-[254px]">
             {/* Login button */}
             <button
               data-testid="login-submit-button"
