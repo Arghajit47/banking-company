@@ -1,5 +1,8 @@
 export const NODE_ENV = process.env.NODE_ENV ?? "development";
 
+export const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ?? "http://localhost:3000";
+
 export const APP_ENV =
   process.env.NEXT_PUBLIC_APP_ENV ??
   process.env.APP_ENV ??
