@@ -94,7 +94,7 @@ export function TestimonialsSection() {
               <h2
                 id="testimonials-heading"
                 data-testid="testimonials-heading"
-                className="text-2xl font-semibold leading-tight text-white sm:text-3xl md:text-4xl lg:text-[40px] lg:leading-[48px]"
+                className="text-2xl font-semibold leading-tight text-white sm:text-3xl md:text-4xl lg:text-[40px] lg:leading-[48px] laptop:text-[38px] laptop:leading-[48px]"
               >
                 Our{" "}
                 <span className="text-[#CAFF33]">Testimonials</span>
@@ -112,11 +112,15 @@ export function TestimonialsSection() {
             {/* Tab pills */}
             <div
               data-testid="testimonials-tabs"
+              role="tablist"
+              aria-label="Testimonial audience"
               className="flex shrink-0 items-center rounded-[82px] border border-[#262626] bg-[#1C1C1C] p-[14px]"
             >
               <button
                 data-testid="testimonials-tab-individuals"
                 type="button"
+                role="tab"
+                aria-selected={activeTab === "individuals"}
                 onClick={() => { setActiveTab("individuals"); setActiveIndex(0); }}
                 className={`rounded-[140px] px-6 py-[14px] text-[18px] font-normal transition-all focus:outline-none focus:ring-2 focus:ring-[#CAFF33] focus:ring-offset-2 focus:ring-offset-[#1C1C1C] ${
                   activeTab === "individuals"
@@ -129,6 +133,8 @@ export function TestimonialsSection() {
               <button
                 data-testid="testimonials-tab-businesses"
                 type="button"
+                role="tab"
+                aria-selected={activeTab === "businesses"}
                 onClick={() => { setActiveTab("businesses"); setActiveIndex(0); }}
                 className={`rounded-[140px] px-6 py-[14px] text-[18px] font-normal transition-all focus:outline-none focus:ring-2 focus:ring-[#CAFF33] focus:ring-offset-2 focus:ring-offset-[#1C1C1C] ${
                   activeTab === "businesses"
@@ -175,7 +181,7 @@ export function TestimonialsSection() {
             <h2
               id="testimonials-heading"
               data-testid="testimonials-heading"
-              className="text-2xl font-semibold leading-tight text-white sm:text-3xl md:text-4xl lg:text-[40px] lg:leading-[48px]"
+              className="text-2xl font-semibold leading-tight text-white sm:text-3xl md:text-4xl lg:text-[40px] lg:leading-[48px] laptop:text-[38px] laptop:leading-[48px]"
             >
               Our{" "}
               <span className="text-[#CAFF33]">Testimonials</span>
@@ -193,11 +199,15 @@ export function TestimonialsSection() {
           {/* Tab pills */}
           <div
             data-testid="testimonials-tabs"
+            role="tablist"
+            aria-label="Testimonial audience"
             className="flex shrink-0 items-center rounded-[82px] border border-[#262626] bg-[#1C1C1C] p-[14px]"
           >
             <button
               data-testid="testimonials-tab-individuals"
               type="button"
+              role="tab"
+              aria-selected={activeTab === "individuals"}
               onClick={() => { setActiveTab("individuals"); setActiveIndex(0); }}
               className={`rounded-[140px] px-6 py-[14px] text-[18px] font-normal transition-all focus:outline-none focus:ring-2 focus:ring-[#CAFF33] focus:ring-offset-2 focus:ring-offset-[#1C1C1C] ${
                 activeTab === "individuals"
@@ -210,6 +220,8 @@ export function TestimonialsSection() {
             <button
               data-testid="testimonials-tab-businesses"
               type="button"
+              role="tab"
+              aria-selected={activeTab === "businesses"}
               onClick={() => { setActiveTab("businesses"); setActiveIndex(0); }}
               className={`rounded-[140px] px-6 py-[14px] text-[18px] font-normal transition-all focus:outline-none focus:ring-2 focus:ring-[#CAFF33] focus:ring-offset-2 focus:ring-offset-[#1C1C1C] ${
                 activeTab === "businesses"

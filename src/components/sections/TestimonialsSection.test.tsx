@@ -113,4 +113,45 @@ describe("TestimonialsSection", () => {
     const card1 = screen.getByTestId("testimonials-card-1");
     expect(card1.className).not.toContain("opacity-40");
   });
+
+  // BC-155 QA remediation — BUG B: heading must render 38px at the laptop breakpoint
+  it("heading carries the laptop 38px override matching the other section headings", () => {
+    render(<TestimonialsSection />);
+    const heading = screen.getByTestId("testimonials-heading");
+    expect(heading.className).toContain("laptop:text-[38px]");
+    expect(heading.className).toContain("laptop:leading-[48px]");
+  });
+
+  it("heading keeps the laptop override in the loading skeleton too", () => {
+    vi.mocked(useSWR).mockReturnValue({ data: undefined, isLoading: true, error: undefined } as ReturnType<typeof useSWR>);
+    render(<TestimonialsSection />);
+    expect(screen.getByTestId("testimonials-heading").className).toContain("laptop:text-[38px]");
+  });
+
+  // BC-155 QA remediation — BUG C: tabs must expose tab semantics
+  it("tab container exposes role=tablist and buttons expose role=tab", () => {
+    render(<TestimonialsSection />);
+    expect(screen.getByTestId("testimonials-tabs")).toHaveAttribute("role", "tablist");
+    expect(screen.getByTestId("testimonials-tab-individuals")).toHaveAttribute("role", "tab");
+    expect(screen.getByTestId("testimonials-tab-businesses")).toHaveAttribute("role", "tab");
+  });
+
+  it("on load businesses tab is aria-selected=true and individuals is false", () => {
+    render(<TestimonialsSection />);
+    expect(screen.getByTestId("testimonials-tab-businesses")).toHaveAttribute("aria-selected", "true");
+    expect(screen.getByTestId("testimonials-tab-individuals")).toHaveAttribute("aria-selected", "false");
+  });
+
+  it("aria-selected swaps when the individuals tab is clicked", () => {
+    render(<TestimonialsSection />);
+    fireEvent.click(screen.getByTestId("testimonials-tab-individuals"));
+    expect(screen.getByTestId("testimonials-tab-individuals")).toHaveAttribute("aria-selected", "true");
+    expect(screen.getByTestId("testimonials-tab-businesses")).toHaveAttribute("aria-selected", "false");
+  });
+
+  it("adding tab semantics leaves the active/inactive pill colours unchanged", () => {
+    render(<TestimonialsSection />);
+    expect(screen.getByTestId("testimonials-tab-businesses").className).toContain("bg-[#CAFF33]");
+    expect(screen.getByTestId("testimonials-tab-individuals").className).toContain("bg-transparent");
+  });
 });
