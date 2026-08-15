@@ -92,7 +92,7 @@ export function SignUpForm() {
   return (
     <div
       data-testid="signup-form-card"
-      className="relative overflow-hidden rounded-[20px] border border-[#262626] bg-[#1C1C1C] px-[150px] py-[100px] font-[var(--font-urbanist)]"
+      className="relative overflow-hidden rounded-[20px] border border-[#262626] bg-[#1C1C1C] px-6 py-8 font-[var(--font-urbanist)] sm:px-[150px] sm:py-[100px]"
     >
       {/* Background image overlay */}
       <div
@@ -165,7 +165,7 @@ export function SignUpForm() {
           {/* Input rows container */}
           <div className="flex flex-col gap-[30px]">
             {/* Row 1: Name + Email */}
-            <div className="flex gap-[30px]">
+            <div className="flex flex-col gap-[30px] sm:flex-row">
               {/* Name input */}
               <div className="flex flex-1 flex-col gap-[8px]">
                 <div className="flex items-center rounded-[88px] border border-[#262626] bg-[#1A1A1A] px-[24px] py-[24px]">
@@ -208,7 +208,7 @@ export function SignUpForm() {
             </div>
 
             {/* Row 2: Password + Confirm Password */}
-            <div className="flex gap-[30px]">
+            <div className="flex flex-col gap-[30px] sm:flex-row">
               {/* Password input */}
               <div className="flex flex-1 flex-col gap-[8px]">
                 <div className="flex items-center rounded-[88px] border border-[#262626] bg-[#1A1A1A] px-[24px] py-[24px]">
@@ -267,7 +267,7 @@ export function SignUpForm() {
           </div>
 
           {/* CTA container */}
-          <div className="flex flex-col gap-[24px] px-[254px]">
+          <div className="flex flex-col gap-[24px] sm:px-[254px]">
             {/* Sign Up button */}
             <button
               data-testid="signup-submit-button"

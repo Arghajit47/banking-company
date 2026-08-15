@@ -68,7 +68,7 @@ export function ProtectionSection() {
         >
           <h2
             data-testid="protection-section-heading"
-            className="text-[36px] font-normal leading-[150%] md:text-[42px] lg:text-[48px] laptop:text-[38px] laptop:font-medium"
+            className="text-[36px] font-normal leading-[150%] text-white md:text-[42px] lg:text-[48px] laptop:text-[38px] laptop:font-medium"
           >
             <span className="text-white">{SECTION_HEADING_PREFIX}</span>
             <span className="text-[#CAFF33]">{SECTION_HEADING_ACCENT}</span>
@@ -92,7 +92,7 @@ export function ProtectionSection() {
             className="object-cover opacity-50"
             aria-hidden="true"
           />
-          <div className="relative z-10 grid grid-cols-1 gap-[30px] p-[50px] md:grid-cols-2">
+          <div className="relative z-10 grid grid-cols-1 gap-[30px] p-[20px] sm:p-[50px] md:grid-cols-2">
             {error && (
               <p className="col-span-2 text-sm text-red-400">
                 Unable to load content. Please refresh.
@@ -102,7 +102,7 @@ export function ProtectionSection() {
               <div
                 key={feature.id}
                 data-testid={`protection-card-${idx + 1}`}
-                className="flex flex-col gap-[24px] rounded-[20px] border border-[#262626] bg-[#1C1C1C]/80 p-[50px] backdrop-blur-sm"
+                className="flex flex-col gap-[24px] rounded-[20px] border border-[#262626] bg-[#1C1C1C]/80 p-[24px] sm:p-[50px] backdrop-blur-sm"
               >
                 <div className="flex items-center gap-[20px]">
                   <div className="relative flex h-[74px] w-[74px] items-center justify-center rounded-[50%] border border-[#262626] bg-[#1A1A1A]">
