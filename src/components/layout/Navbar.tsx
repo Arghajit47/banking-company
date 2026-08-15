@@ -77,10 +77,14 @@ function NavbarLink({
         text-white transition hover:text-[#CAFF33] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#CAFF33]
         ${
           desktop
-            ? "text-sm leading-[21px]"
+            ? "text-sm leading-[21px] desktop:text-lg desktop:leading-[27px]"
             : "text-base leading-6"
         }
-        ${active ? "rounded-[82px] bg-[#262626] px-5 py-[10px]" : "rounded-md px-2 py-1"}
+        ${
+          active
+            ? "rounded-[82px] bg-[#262626] px-5 py-[10px] desktop:px-[26.5px] desktop:py-3"
+            : "rounded-md px-2 py-1"
+        }
       `}
       aria-current={active ? "page" : undefined}
     >

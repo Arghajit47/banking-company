@@ -85,24 +85,38 @@ describe("Navbar (desktop)", () => {
 
     expect(homeLink).toBeTruthy();
     expect(homeLink?.getAttribute("aria-current")).toBe("page");
-    // BC-158: Figma node 104:600 specifies cornerRadius 82 and a 77x41 pill
-    // (18/10 implied padding around a 41x21 text node). The previous
-    // "rounded-full" + px-6 py-3 assertion encoded the defect.
+    // BC-158: both Figma navbar frames specify cornerRadius 82 on the active
+    // pill (laptop 104:610, desktop 5:27282). The previous "rounded-full"
+    // assertion came from PR #124 without a Figma check and encoded the defect.
     expect(homeLink?.className).toContain("rounded-[82px]");
     expect(homeLink?.className).not.toContain("rounded-full");
-    expect(homeLink?.className).toContain("px-5");
-    expect(homeLink?.className).toContain("py-[10px]");
     expect(homeLink?.className).toContain("bg-[#262626]");
   });
 
-  it("desktop nav links keep 14px text at every breakpoint", () => {
+  it("active pill uses breakpoint-specific padding for the laptop and desktop frames", () => {
     const { container } = renderWithSWR(<Navbar />);
     const homeLink = container.querySelector('[data-testid="nav-link-home"]');
 
-    // BC-158: `desktop:text-lg` bumped the font to 18px at >=1920, which grew
-    // the active pill past the 77px Figma width. Figma is 14px at 1440 and 1920.
+    // BC-158: the laptop pill (104:610) is 77x41 and the desktop pill
+    // (5:27282) is 100x51 — deliberately BIGGER at >=1920. A single uniform
+    // `px-6 py-3` cannot satisfy both frames.
+    expect(homeLink?.className).toContain("px-5");
+    expect(homeLink?.className).toContain("py-[10px]");
+    expect(homeLink?.className).toContain("desktop:px-[26.5px]");
+    expect(homeLink?.className).toContain("desktop:py-3");
+  });
+
+  it("desktop nav links step up to 18px/27px type at the desktop breakpoint", () => {
+    const { container } = renderWithSWR(<Navbar />);
+    const homeLink = container.querySelector('[data-testid="nav-link-home"]');
+
+    // BC-158: Figma text node 5:27283 is 18px at 150% (=27px) on the desktop
+    // frame vs 14px/21px on laptop (104:611). `desktop:leading-[27px]` was
+    // missing, which is why the pill measured 45px tall instead of 51px at 1920.
     expect(homeLink?.className).toContain("text-sm");
-    expect(homeLink?.className).not.toContain("desktop:text-lg");
+    expect(homeLink?.className).toContain("leading-[21px]");
+    expect(homeLink?.className).toContain("desktop:text-lg");
+    expect(homeLink?.className).toContain("desktop:leading-[27px]");
   });
 });
 
