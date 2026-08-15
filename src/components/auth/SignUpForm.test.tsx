@@ -29,7 +29,9 @@ describe("SignUpForm", () => {
 
   test("renders Join our community today! subtext", () => {
     render(<SignUpForm />);
-    expect(screen.getByTestId("signup-form-subtext").textContent).toBe("Join our community today!");
+    expect(screen.getByTestId("signup-form-subtext").textContent).toBe(
+      "Join our community today! Create an account to unlock exclusive features and personalized experiences.",
+    );
   });
 
   test("renders name input", () => {

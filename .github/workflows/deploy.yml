@@ -4,6 +4,12 @@ on:
   push:
     branches:
       - main
+  # Run the build + test gate on every PR targeting main so a red suite is caught
+  # BEFORE merge. The deploy steps below stay gated to pushes on main, so a PR
+  # never deploys — it only proves the gate would pass.
+  pull_request:
+    branches:
+      - main
 
 jobs:
   deploy:
@@ -32,9 +38,11 @@ jobs:
           DATABASE_URL: "file:./prisma/dev.db"
 
       - name: Install Netlify CLI
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: npm install -g netlify-cli
 
       - name: Deploy to Netlify
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: netlify deploy --prod --build
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}

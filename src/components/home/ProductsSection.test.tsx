@@ -218,10 +218,15 @@ describe("ProductsSection", () => {
     expect(card.className).not.toContain("bg-[#1A1A2E]");
   });
 
-  it("heading has lime green color class", () => {
+  it("heading renders 'Our' in white and 'Products' in lime green", () => {
     render(<ProductsSection />);
     const heading = screen.getByTestId("products-heading");
-    expect(heading.className).toContain("text-[#CAFF33]");
+    expect(heading.className).toContain("text-white");
+    expect(heading.textContent).toBe("Our Products");
+
+    const accent = heading.querySelector("span");
+    expect(accent?.textContent).toBe("Products");
+    expect(accent?.className).toContain("text-[#CAFF33]");
   });
 
   it("tab container has correct padding class", () => {

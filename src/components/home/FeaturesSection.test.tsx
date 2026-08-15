@@ -74,8 +74,11 @@ describe("FeaturesSection (SWR integration)", () => {
   it("renders section heading and subheading", () => {
     render(<FeaturesSection />);
     expect(screen.getByTestId("features-section")).toBeDefined();
-    expect(screen.getByTestId("features-heading")).toBeDefined();
-    expect(screen.getByText("Our Features")).toBeDefined();
+    // Heading is split into "Our " + <span>Features</span> (BC-155), so assert on
+    // the heading's combined textContent rather than a single text node.
+    expect(screen.getByTestId("features-heading").textContent).toBe(
+      "Our Features",
+    );
     expect(
       screen.getByText(/Experience a host of powerful features/)
     ).toBeDefined();
