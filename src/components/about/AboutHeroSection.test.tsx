@@ -212,4 +212,57 @@ describe("AboutHeroSection (SWR integration)", () => {
     expect(el).toHaveClass("desktop:p-[80px]");
     expect(el).toHaveClass("desktop:w-[791px]");
   });
+
+  // BC-169 — `laptop:` is min-width, so the 1440 type scale and the 1440 section
+  // padding also cascaded into 1920. Figma desktop (About Heading 58:1532 = 58px/130%,
+  // Text 58:1309 = 20px/150%, Paragraph 58:1533 = 18px/150%, Container 58:1537
+  // padding 50) needs explicit `desktop:` counterparts. The 1440 and 390 values
+  // asserted above must stay exactly as BC-165 QA verified them.
+  it("label is 20px at 1920 while 390/1440 stay 14px/18px", () => {
+    render(<AboutHeroSection />);
+    const el = screen.getByTestId("about-hero-label");
+    expect(el).toHaveClass("desktop:text-[20px]");
+    expect(el).toHaveClass("text-[14px]");
+    expect(el).toHaveClass("laptop:text-[18px]");
+    // line-height matches Figma 150% at every tier — single unprefixed class
+    expect(el).toHaveClass("leading-[150%]");
+  });
+
+  it("heading is 58px at 1920 while 390/1440 stay 28px/48px", () => {
+    render(<AboutHeroSection />);
+    const el = screen.getByTestId("about-hero-heading");
+    expect(el).toHaveClass("desktop:text-[58px]");
+    expect(el).toHaveClass("text-[28px]");
+    expect(el).toHaveClass("laptop:text-[48px]");
+    // line-height matches Figma 130% at every tier
+    expect(el).toHaveClass("leading-[130%]");
+  });
+
+  it("paragraph is 18px at 1920 while 390/1440 stay 14px/16px", () => {
+    render(<AboutHeroSection />);
+    const el = screen.getByTestId("about-hero-paragraph");
+    expect(el).toHaveClass("desktop:text-[18px]");
+    expect(el).toHaveClass("text-[14px]");
+    expect(el).toHaveClass("laptop:text-[16px]");
+    expect(el).toHaveClass("leading-[150%]");
+  });
+
+  it("section padding is 50px at 1920 while 390/1440 stay 14px/40px", () => {
+    render(<AboutHeroSection />);
+    const el = screen.getByTestId("about-hero-section");
+    expect(el).toHaveClass("desktop:p-[50px]");
+    expect(el).toHaveClass("p-[14px]");
+    expect(el).toHaveClass("sm:p-[50px]");
+    expect(el).toHaveClass("laptop:p-[40px]");
+  });
+
+  it("skeleton branch carries the same section padding tiers as the loaded branch", () => {
+    mockState = { data: undefined, error: undefined, isLoading: true };
+    render(<AboutHeroSection />);
+    const el = screen.getByTestId("about-hero-section");
+    expect(el).toHaveClass("p-[14px]");
+    expect(el).toHaveClass("sm:p-[50px]");
+    expect(el).toHaveClass("laptop:p-[40px]");
+    expect(el).toHaveClass("desktop:p-[50px]");
+  });
 });
