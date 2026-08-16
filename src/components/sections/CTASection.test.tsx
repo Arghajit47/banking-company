@@ -77,6 +77,21 @@ describe("CTASection", () => {
     expect(heading.className).not.toMatch(/(?:sm|md|lg|xl|2xl|laptop|desktop):leading-/);
   });
 
+  // BC-170 — heading font-weight must be uniform across every breakpoint.
+  // Figma "Start your financial journey with YourBank today!": desktop 11:89110,
+  // laptop 108:2701, mobile 113:4996 — all fontWeight 400 (Regular). This is NOT
+  // the 500 used by the other section headings; it was flagged in BC-160, BC-162
+  // and BC-167 QA and never fixed because those tickets were scoped to size.
+  // A `laptop:`/`desktop:` weight variant is a min-width override, so any such
+  // class would split the weight at 1440 and diverge from the design.
+  it("heading renders font-weight 400 at every breakpoint", () => {
+    render(<CTASection />);
+    const heading = screen.getByTestId("cta-heading");
+    expect(heading.className).toMatch(/(?:^|\s)font-normal(?:\s|$)/);
+    expect(heading.className).not.toMatch(/(?:^|\s)font-semibold(?:\s|$)/);
+    expect(heading.className).not.toMatch(/(?:sm|md|lg|xl|2xl|laptop|desktop):font-(?:thin|extralight|light|normal|medium|semibold|bold|extrabold|black)/);
+  });
+
   it("renders body text from API data", () => {
     render(<CTASection />);
     expect(screen.getByTestId("cta-body")).toHaveTextContent(

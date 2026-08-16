@@ -133,7 +133,7 @@ export function TestimonialsSection() {
               <h2
                 id="testimonials-heading"
                 data-testid="testimonials-heading"
-                className="text-[28px] font-semibold leading-[150%] text-white md:text-[38px] desktop:text-[48px]"
+                className="text-[28px] font-medium leading-[150%] text-white md:text-[38px] desktop:text-[48px]"
               >
                 Our{" "}
                 <span className="text-[#CAFF33]">Testimonials</span>
@@ -237,7 +237,7 @@ export function TestimonialsSection() {
             <h2
               id="testimonials-heading"
               data-testid="testimonials-heading"
-              className="text-[28px] font-semibold leading-[150%] text-white md:text-[38px] desktop:text-[48px]"
+              className="text-[28px] font-medium leading-[150%] text-white md:text-[38px] desktop:text-[48px]"
             >
               Our{" "}
               <span className="text-[#CAFF33]">Testimonials</span>

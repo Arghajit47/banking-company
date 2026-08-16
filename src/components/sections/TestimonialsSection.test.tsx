@@ -151,6 +151,30 @@ describe("TestimonialsSection", () => {
     expect(heading.className).not.toMatch(/(?:sm|md|lg|xl|2xl|laptop|desktop):leading-/);
   });
 
+  // BC-170 — heading font-weight must be uniform across every breakpoint.
+  // Figma "Our Testimonials": desktop 92:15, laptop 108:2691, mobile 113:4920 —
+  // all fontWeight 500 (Medium). A `laptop:`/`desktop:` weight variant is a
+  // min-width override, so any such class would split the weight at 1440 and
+  // diverge from the design.
+  it("heading renders font-weight 500 at every breakpoint", () => {
+    render(<TestimonialsSection />);
+    const heading = screen.getByTestId("testimonials-heading");
+    expect(heading.className).toMatch(/(?:^|\s)font-medium(?:\s|$)/);
+    expect(heading.className).not.toMatch(/(?:^|\s)font-semibold(?:\s|$)/);
+    expect(heading.className).not.toMatch(/(?:sm|md|lg|xl|2xl|laptop|desktop):font-(?:thin|extralight|light|normal|medium|semibold|bold|extrabold|black)/);
+  });
+
+  // BC-170 — the skeleton branch renders a second <h2> with the same testid;
+  // it must carry the identical weight, not drift from the loaded branch.
+  it("heading renders font-weight 500 in the loading skeleton branch", () => {
+    vi.mocked(useSWR).mockReturnValue({ data: undefined, isLoading: true, error: undefined } as ReturnType<typeof useSWR>);
+    render(<TestimonialsSection />);
+    const heading = screen.getByTestId("testimonials-heading");
+    expect(heading.className).toMatch(/(?:^|\s)font-medium(?:\s|$)/);
+    expect(heading.className).not.toMatch(/(?:^|\s)font-semibold(?:\s|$)/);
+    expect(heading.className).not.toMatch(/(?:sm|md|lg|xl|2xl|laptop|desktop):font-(?:thin|extralight|light|normal|medium|semibold|bold|extrabold|black)/);
+  });
+
   // BC-155 QA remediation — BUG C: tabs must expose tab semantics
   it("tab container exposes role=tablist and buttons expose role=tab", () => {
     render(<TestimonialsSection />);
