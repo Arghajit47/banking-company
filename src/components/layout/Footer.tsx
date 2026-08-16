@@ -182,7 +182,7 @@ export function Footer() {
           <Link
             href={`mailto:${config.contact.email}`}
             data-testid="footer-email"
-            className="flex items-center gap-[18px] text-base text-[#E4E4E7] transition-opacity hover:opacity-70"
+            className="flex items-center gap-[6px] text-base text-[#E4E4E7] transition-opacity hover:opacity-70"
           >
             <MailIcon />
             <SkeletonText isLoading={showSkeleton} className="min-w-[180px]">
@@ -192,7 +192,7 @@ export function Footer() {
           <Link
             href={`tel:${config.contact.phone.replace(/\s/g, "")}`}
             data-testid="footer-phone"
-            className="flex items-center gap-[18px] text-base text-[#E4E4E7] transition-opacity hover:opacity-70"
+            className="flex items-center gap-[6px] text-base text-[#E4E4E7] transition-opacity hover:opacity-70"
           >
             <PhoneIcon />
             <SkeletonText isLoading={showSkeleton} className="min-w-[160px]">
@@ -201,7 +201,7 @@ export function Footer() {
           </Link>
           <span
             data-testid="footer-location"
-            className="flex items-center gap-[18px] text-base text-[#E4E4E7]"
+            className="flex items-center gap-[6px] text-base text-[#E4E4E7]"
           >
             <LocationIcon />
             <SkeletonText isLoading={showSkeleton} className="min-w-[180px]">

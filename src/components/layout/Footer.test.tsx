@@ -108,6 +108,19 @@ describe("Footer", () => {
     expect(screen.getByTestId("footer-phone")).toContainElement(phone);
   });
 
+  it("spaces every contact icon 6px from its label", () => {
+    render(<Footer />);
+
+    // The contact row 11:89127 has three "Button" children, all HORIZONTAL
+    // auto-layout with itemSpacing: 6 — 11:89128 (email), 11:89132 (phone) and
+    // 11:89136 (location). Guards against the gap-[18px] regression.
+    ["footer-email", "footer-phone", "footer-location"].forEach((testId) => {
+      const item = screen.getByTestId(testId);
+      expect(item.className).toContain("gap-[6px]");
+      expect(item.className).not.toContain("gap-[18px]");
+    });
+  });
+
   it("renders social links, copyright, and legal links", () => {
     render(<Footer />);
     expect(screen.getByTestId("footer-socials")).toBeInTheDocument();
