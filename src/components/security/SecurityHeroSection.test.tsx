@@ -78,4 +78,70 @@ describe("SecurityHeroSection", () => {
     render(<SecurityHeroSection />);
     expect(screen.getByTestId("security-hero-section")).toBeInTheDocument();
   });
+
+  // BC-165 — Figma parity for the Security hero at 1440 (laptop 116:10706/116:10707)
+  // and 390 (mobile 116:11068/116:11071).
+  it("text container carries the 390 mobile tokens (gap 14, radius 20, pad 24, -41 overlap)", () => {
+    render(<SecurityHeroSection />);
+    const el = screen.getByTestId("security-hero-text-container");
+    expect(el).toHaveClass("gap-[14px]");
+    expect(el).toHaveClass("rounded-[20px]");
+    expect(el).toHaveClass("p-6");
+    expect(el).toHaveClass("-mt-[41px]");
+    expect(el).toHaveClass("md:mt-0");
+  });
+
+  it("text container carries the 1440 laptop tokens (width 658, gap 20, radius 20/0/60/20, pad 60)", () => {
+    render(<SecurityHeroSection />);
+    const el = screen.getByTestId("security-hero-text-container");
+    expect(el).toHaveClass("laptop:w-[658px]");
+    expect(el).toHaveClass("laptop:gap-[20px]");
+    expect(el).toHaveClass("laptop:rounded-[20px_0_60px_20px]");
+    expect(el).toHaveClass("laptop:p-[60px]");
+  });
+
+  it("stacks image above text at 390 via flex-col-reverse, keeping the laptop row order", () => {
+    render(<SecurityHeroSection />);
+    const row = screen.getByTestId("security-hero-text-container").parentElement;
+    expect(row).toHaveClass("flex-col-reverse");
+    expect(row).toHaveClass("md:flex-row");
+    expect(row).not.toHaveClass("flex-col");
+  });
+
+  it("image wrapper overlaps by 174px at 1440 and has no positive mobile top margin", () => {
+    render(<SecurityHeroSection />);
+    const el = screen.getByTestId("security-hero-image-wrapper");
+    expect(el).toHaveClass("laptop:-ml-[174px]");
+    expect(el).not.toHaveClass("mt-6");
+  });
+
+
+  it("heading is 28px at 390 and stays 48px at 1440", () => {
+    render(<SecurityHeroSection />);
+    const el = screen.getByTestId("security-hero-heading");
+    expect(el).toHaveClass("text-[28px]");
+    expect(el).toHaveClass("laptop:text-[48px]");
+  });
+
+  it("paragraph is 14px at 390 and 16px at 1440", () => {
+    render(<SecurityHeroSection />);
+    const el = screen.getByTestId("security-hero-paragraph");
+    expect(el).toHaveClass("text-[14px]");
+    expect(el).toHaveClass("laptop:text-[16px]");
+  });
+
+  it("skeleton branch carries the same layout tokens as the loaded branch", () => {
+    mockState = { data: undefined as never, error: undefined, isLoading: true };
+    render(<SecurityHeroSection />);
+    const el = screen.getByTestId("security-hero-text-container");
+    expect(el).toHaveClass("gap-[14px]");
+    expect(el).toHaveClass("p-6");
+    expect(el).toHaveClass("-mt-[41px]");
+    expect(el).toHaveClass("laptop:w-[658px]");
+    expect(el).toHaveClass("laptop:p-[60px]");
+    expect(el.parentElement).toHaveClass("flex-col-reverse");
+    expect(screen.getByTestId("security-hero-image-wrapper")).toHaveClass(
+      "laptop:-ml-[174px]",
+    );
+  });
 });
