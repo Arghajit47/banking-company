@@ -219,15 +219,23 @@ describe("UseCasesSection", () => {
     expect(heading.className).toContain("text-[#CAFF33]");
   });
 
-  // BC-160 — `laptop` is a min-width variant, so the 38px laptop override kept
-  // applying at 1920. Figma desktop (21:140) is 48px; `leading-[150%]` derives the
-  // 72px / 57px line boxes on its own.
-  it("heading carries a desktop 48px override above the laptop 38px one", () => {
+  // BC-167 — monotonic heading ladder. Figma has exactly three frames for this
+  // heading: 390 = 28px, 1440 = 38px, 1920 = 48px, lineHeight 150% at all three.
+  // Resolved: < 768 -> 28px, 768-1919 -> 38px, >= 1920 -> 48px. `lg` is 1024 while
+  // `laptop` is 1440, so an lg/laptop pair made 1280 render larger (48) than 1440 (38).
+  it("heading renders the Figma 28/38/48 ladder with 150% line-height", () => {
     render(<UseCasesSection />);
     const heading = screen.getByTestId("use-cases-heading");
-    expect(heading.className).toContain("laptop:text-[38px]");
+    expect(heading.className).toContain("text-[28px]");
+    expect(heading.className).toContain("md:text-[38px]");
     expect(heading.className).toContain("desktop:text-[48px]");
     expect(heading.className).toContain("leading-[150%]");
+    expect(heading.className).not.toMatch(/(?:^|\s)text-(?:xs|sm|base|lg|xl|2xl|3xl|4xl|5xl|6xl)(?:\s|$)/);
+    expect(heading.className).not.toMatch(/(?:sm|lg|xl|2xl|laptop):text-\[/);
+    expect(heading.className).not.toMatch(/(?:sm|md|lg|xl|2xl|laptop|desktop):text-(?:xs|sm|base|lg|xl|2xl|3xl|4xl|5xl|6xl)(?:\s|$)/);
+    expect(heading.className).not.toMatch(/leading-\[\d+px\]/);
+    expect(heading.className).not.toMatch(/(?:^|\s)leading-(?:tight|snug|normal|relaxed|loose)(?:\s|$)/);
+    expect(heading.className).not.toMatch(/(?:sm|md|lg|xl|2xl|laptop|desktop):leading-/);
   });
 
   it("card panels have correct dark background", () => {

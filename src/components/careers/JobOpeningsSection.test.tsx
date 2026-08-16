@@ -131,26 +131,25 @@ describe("JobOpeningsSection (SWR integration)", () => {
     expect(container.innerHTML).not.toContain("text-zinc-900");
   });
 
-  // BC-162 — `laptop` is a min-width variant, so the 38px laptop override kept
-  // applying at 1920. Figma "Job Openings": desktop 55:792 = 48px, laptop 113:7237 = 38px,
-  // mobile 113:9634 = 28px, lineHeight 150% at every breakpoint.
-  it("heading carries a desktop 48px override above the laptop 38px one", () => {
+  // BC-167 — monotonic heading ladder. Figma has exactly three frames for this
+  // heading: 390 = 28px, 1440 = 38px, 1920 = 48px, lineHeight 150% at all three.
+  // Resolved: < 768 -> 28px, 768-1919 -> 38px, >= 1920 -> 48px. `lg` is 1024 while
+  // `laptop` is 1440, so an lg/laptop pair made 1280 render larger (48) than 1440 (38).
+  it("heading renders the Figma 28/38/48 ladder with 150% line-height", () => {
     render(<JobOpeningsSection />);
     const heading = screen.getByTestId("job-openings-section-heading");
-    expect(heading.className).toContain("laptop:text-[38px]");
+    expect(heading.className).toContain("text-[28px]");
+    expect(heading.className).toContain("md:text-[38px]");
     expect(heading.className).toContain("desktop:text-[48px]");
     expect(heading.className).toContain("leading-[150%]");
+    expect(heading.className).not.toMatch(/(?:^|\s)text-(?:xs|sm|base|lg|xl|2xl|3xl|4xl|5xl|6xl)(?:\s|$)/);
+    expect(heading.className).not.toMatch(/(?:sm|lg|xl|2xl|laptop):text-\[/);
+    expect(heading.className).not.toMatch(/(?:sm|md|lg|xl|2xl|laptop|desktop):text-(?:xs|sm|base|lg|xl|2xl|3xl|4xl|5xl|6xl)(?:\s|$)/);
+    expect(heading.className).not.toMatch(/leading-\[\d+px\]/);
+    expect(heading.className).not.toMatch(/(?:^|\s)leading-(?:tight|snug|normal|relaxed|loose)(?:\s|$)/);
+    expect(heading.className).not.toMatch(/(?:sm|md|lg|xl|2xl|laptop|desktop):leading-/);
   });
 
-  // Line height must stay derived from `leading-[150%]`; a hardcoded per-breakpoint
-  // pixel leading would desync from the font size and reintroduce BC-162.
-  it("heading has no hardcoded per-breakpoint pixel line-height", () => {
-    render(<JobOpeningsSection />);
-    const heading = screen.getByTestId("job-openings-section-heading");
-    expect(heading.className).not.toMatch(/laptop:leading-\[/);
-    expect(heading.className).not.toMatch(/desktop:leading-\[/);
-    expect(heading.className).not.toMatch(/(?:^|\s)leading-\[\d+px\]/);
-  });
   // BC-164 — heading font-weight must be uniform across every breakpoint.
   // Figma "Job Openings": desktop 55:792, laptop 113:7237, mobile 113:9634 — all fontWeight 500.
   // A `laptop:`/`desktop:` weight variant is a min-width override, so any such

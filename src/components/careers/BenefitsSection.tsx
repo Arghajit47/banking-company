@@ -129,7 +129,7 @@ export function BenefitsSection() {
       >
         <h2
           data-testid="benefits-section-heading"
-          className="text-[36px] font-medium leading-[150%] text-white md:text-[42px] lg:text-[48px] laptop:text-[38px] desktop:text-[48px]"
+          className="text-[28px] font-medium leading-[150%] text-white md:text-[38px] desktop:text-[48px]"
         >
           <span className="text-white">{SECTION_HEADING_PREFIX}</span>
           <span className="text-[#CAFF33]">{SECTION_HEADING_ACCENT}</span>
