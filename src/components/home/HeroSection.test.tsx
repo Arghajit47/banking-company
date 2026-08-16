@@ -295,4 +295,74 @@ describe("HeroSection", () => {
     expect(pill.className).toContain("desktop:top-[637.01px]");
     expect(pill.className).toContain("desktop:w-[370.22px]");
   });
+
+  // BC-172 — the hero horizontal chain at 1920 (children of Figma hero frame 5:86791):
+  //   5:52362 left column   pageX  80.53, width 825.98
+  //   5:83437 exchange card pageX 906.51, width 515.02
+  //   5:86805 arrows        pageX 1421.53, width 417.95  (zero gap after the card)
+  // 80.53 + 825.98 = 906.51 -> + 515.02 = 1421.53 -> + 417.95 = 1839.48, and
+  // 1920 - 1839.48 = 80.52, the already-shipped arrows right offset.
+  describe("1920 horizontal chain (BC-172)", () => {
+    function getColumnAndContainer() {
+      const column = screen.getByTestId("hero-badge").parentElement!;
+      return { column, container: column.parentElement! };
+    }
+
+    it("uses the Figma 80.53px desktop container padding without moving 1440 or 390", () => {
+      render(<HeroSection />);
+      const { container } = getColumnAndContainer();
+
+      // Figma 5:52362 starts at pageX 80.53 -> the container's desktop padding.
+      expect(container.className).toContain("desktop:px-[80.53px]");
+      expect(container.className).not.toContain("desktop:px-[162px]");
+
+      // 1440 (laptop) and 390 (base) tiers are untouched.
+      expect(container.className).toContain("laptop:px-20");
+      expect(container.className).toContain("px-4");
+      expect(container.className).toContain("md:px-8");
+      expect(container.className).toContain("lg:px-12");
+      expect(container.className).toContain("laptop:min-h-[621px]");
+    });
+
+    it("gives the left text column the Figma 825.98px desktop max-width", () => {
+      render(<HeroSection />);
+      const { column } = getColumnAndContainer();
+
+      // Figma 5:52362 width 825.98 — without this the laptop 650px leaks to 1920.
+      expect(column.className).toContain("desktop:max-w-[825.98px]");
+
+      // 1440 (laptop) and 390 (base) tiers are untouched.
+      expect(column.className).toContain("laptop:max-w-[650px]");
+      expect(column.className).toContain("max-w-[826px]");
+    });
+
+    it("keeps the mockup and arrows geometry unchanged so the card meets the arrows", () => {
+      render(<HeroSection />);
+
+      // Figma 5:83437 width 515.02 — already correct, must not drift.
+      const mockup = screen.getByTestId("hero-mockup");
+      expect(mockup.className).toContain("desktop:max-w-[515px]");
+      expect(mockup.className).toContain("laptop:max-w-[410px]");
+
+      // Figma 5:86805 — QA-verified, must not move.
+      const arrows = screen.getByTestId("hero-abstract-illustration");
+      expect(arrows.className).toContain("desktop:right-[80.55px]");
+      expect(arrows.className).toContain("desktop:w-[417.95px]");
+      expect(arrows.className).toContain("desktop:h-[382.73px]");
+    });
+
+    it("applies the same 1920 chain to the loading skeleton", () => {
+      heroMock = { ...baseMock, data: undefined, isLoading: true };
+      render(<HeroSection />);
+
+      const { column, container } = getColumnAndContainer();
+      expect(container.className).toContain("desktop:px-[80.53px]");
+      expect(container.className).toContain("laptop:px-20");
+      expect(column.className).toContain("desktop:max-w-[825.98px]");
+      expect(column.className).toContain("laptop:max-w-[650px]");
+      expect(screen.getByTestId("hero-mockup").className).toContain(
+        "desktop:max-w-[515px]",
+      );
+    });
+  });
 });

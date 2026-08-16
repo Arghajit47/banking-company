@@ -13,7 +13,7 @@ function HeroSkeleton() {
   return (
     <>
       {/* Left text column skeleton */}
-      <div className="relative z-10 flex w-full max-w-[826px] laptop:max-w-[650px] flex-col items-center text-center md:items-start md:text-left">
+      <div className="relative z-10 flex w-full max-w-[826px] laptop:max-w-[650px] desktop:max-w-[825.98px] flex-col items-center text-center md:items-start md:text-left">
         <div
           data-testid="hero-badge"
           className="mb-6 inline-flex h-11 items-center gap-1.5 rounded-[61px] bg-[#262626] pl-3 pr-5 py-2.5"
@@ -171,7 +171,7 @@ export function HeroSection() {
         data-testid="hero-section"
         className="relative w-full overflow-hidden bg-[#1A1A1A] font-[var(--font-urbanist)]"
       >
-        <div className="relative mx-auto flex min-h-[824px] max-w-[1920px] flex-col items-center justify-center px-4 py-16 md:flex-row md:items-center md:justify-start md:px-8 lg:px-12 laptop:min-h-[621px] laptop:px-20 desktop:px-[162px]">
+        <div className="relative mx-auto flex min-h-[824px] max-w-[1920px] flex-col items-center justify-center px-4 py-16 md:flex-row md:items-center md:justify-start md:px-8 lg:px-12 laptop:min-h-[621px] laptop:px-20 desktop:px-[80.53px]">
           <HeroErrorFallback />
         </div>
       </section>
@@ -186,13 +186,13 @@ export function HeroSection() {
       data-testid="hero-section"
       className="relative w-full overflow-hidden bg-[#1A1A1A] font-[var(--font-urbanist)]"
     >
-      <div className="relative mx-auto flex min-h-[824px] max-w-[1920px] flex-col items-center justify-center px-4 py-16 md:flex-row md:items-center md:justify-start md:px-8 lg:px-12 laptop:min-h-[621px] laptop:px-20 desktop:px-[162px]">
+      <div className="relative mx-auto flex min-h-[824px] max-w-[1920px] flex-col items-center justify-center px-4 py-16 md:flex-row md:items-center md:justify-start md:px-8 lg:px-12 laptop:min-h-[621px] laptop:px-20 desktop:px-[80.53px]">
         {showSkeleton ? (
           <HeroSkeleton />
         ) : (
           <>
             {/* Left text column */}
-            <div className="relative z-10 flex w-full max-w-[826px] laptop:max-w-[650px] flex-col items-center text-center md:items-start md:text-left">
+            <div className="relative z-10 flex w-full max-w-[826px] laptop:max-w-[650px] desktop:max-w-[825.98px] flex-col items-center text-center md:items-start md:text-left">
               {/* Trust badge */}
               <div
                 data-testid="hero-badge"
@@ -251,7 +251,10 @@ export function HeroSection() {
 
             {/* Lime arrows illustration — far-right of hero, placed before mockup so mockup (z-10) paints on top.
                 At 1920 (desktop) Figma node 5:86805 sits at page (1421.5, 298): flush with the
-                Money Exchange card's right edge, 80.55px from the viewport right edge. */}
+                Money Exchange card's right edge, 80.55px from the viewport right edge.
+                Chain (children of hero frame 5:86791): 80.53 padding + 825.98 text column
+                = 906.51 card left, + 515.02 card = 1421.53 arrows left (zero gap),
+                + 417.95 arrows = 1839.48, and 1920 - 1839.48 = 80.52. */}
             <Image
               src="/assets/illustrations/abstract_design_hero_arrows.svg"
               alt=""
