@@ -126,7 +126,7 @@ export function ProtectionSection() {
                   </div>
                   <h3
                     data-testid={`protection-card-title-${idx + 1}`}
-                    className="text-[18px] font-medium leading-[150%] text-white md:text-[22px] laptop:text-[20px] laptop:font-normal"
+                    className="text-[18px] font-normal leading-[150%] text-white laptop:text-[20px] desktop:text-[24px]"
                   >
                     {feature.title}
                   </h3>

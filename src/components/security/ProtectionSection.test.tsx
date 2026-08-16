@@ -155,4 +155,46 @@ describe("ProtectionSection", () => {
     expect(heading.className).not.toMatch(/(?:^|\s)font-normal(?:\s|$)/);
     expect(heading.className).not.toMatch(/(?:sm|md|lg|xl|2xl|laptop|desktop):font-(?:thin|extralight|light|normal|medium|semibold|bold|extrabold|black)/);
   });
+
+  // BC-168 — card <h3> font-weight must be uniform across every breakpoint.
+  // Figma card headings: desktop 64:2039 / 64:2061 / 64:2073 / 64:2084,
+  // laptop 116:10955 / 116:10963 / 116:10972 / 116:10980,
+  // mobile 116:11308 / 116:11316 / 116:11325 / 116:11333 — all twelve are fontWeight 400.
+  // A `laptop:`/`desktop:` weight variant is a min-width override, so any such
+  // class would split the weight at 1440 and diverge from the design.
+  it("card titles render font-weight 400 at every breakpoint", () => {
+    render(<ProtectionSection />);
+    for (let i = 1; i <= 4; i++) {
+      const title = screen.getByTestId(`protection-card-title-${i}`);
+      expect(title.className).toMatch(/(?:^|\s)font-normal(?:\s|$)/);
+      expect(title.className).not.toMatch(/(?:^|\s)font-medium(?:\s|$)/);
+      expect(title.className).not.toMatch(/(?:sm|md|lg|xl|2xl|laptop|desktop):font-(?:thin|extralight|light|normal|medium|semibold|bold|extrabold|black)/);
+    }
+  });
+
+  // BC-168 — card <h3> sizes step UP with the viewport: mobile 18px, laptop 20px, desktop 24px.
+  // The old `md:text-[22px]` made the size DROP at 1440 (22 -> 20) and no Figma frame specifies 22px;
+  // the missing `desktop:` override also left 1920 on the laptop 20px (same class of bug as BC-162).
+  it("card titles step 18px -> laptop 20px -> desktop 24px with no 22px tablet size", () => {
+    render(<ProtectionSection />);
+    for (let i = 1; i <= 4; i++) {
+      const title = screen.getByTestId(`protection-card-title-${i}`);
+      expect(title.className).toMatch(/(?:^|\s)text-\[18px\](?:\s|$)/);
+      expect(title.className).toContain("laptop:text-[20px]");
+      expect(title.className).toContain("desktop:text-[24px]");
+      expect(title.className).not.toContain("text-[22px]");
+      expect(title.className).toContain("leading-[150%]");
+    }
+  });
+
+  // Line height must stay derived from `leading-[150%]` so it tracks each breakpoint's font size.
+  it("card titles have no hardcoded per-breakpoint pixel line-height", () => {
+    render(<ProtectionSection />);
+    for (let i = 1; i <= 4; i++) {
+      const title = screen.getByTestId(`protection-card-title-${i}`);
+      expect(title.className).not.toMatch(/laptop:leading-\[/);
+      expect(title.className).not.toMatch(/desktop:leading-\[/);
+      expect(title.className).not.toMatch(/(?:^|\s)leading-\[\d+px\]/);
+    }
+  });
 });
