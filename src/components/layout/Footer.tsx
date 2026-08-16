@@ -201,7 +201,7 @@ export function Footer() {
           </Link>
           <span
             data-testid="footer-location"
-            className="flex items-center gap-[18px] text-base text-[#E4E4E7]"
+            className="flex items-center gap-[6px] text-base text-[#E4E4E7]"
           >
             <LocationIcon />
             <SkeletonText isLoading={showSkeleton} className="min-w-[180px]">

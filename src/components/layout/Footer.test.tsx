@@ -108,14 +108,16 @@ describe("Footer", () => {
     expect(screen.getByTestId("footer-phone")).toContainElement(phone);
   });
 
-  it("spaces the email and phone icons 6px from their label", () => {
+  it("spaces every contact icon 6px from its label", () => {
     render(<Footer />);
 
-    // Figma 11:89128 (email) and 11:89132 (phone) are HORIZONTAL auto-layout
-    // frames with itemSpacing: 6. Guards against the gap-[18px] regression.
-    [screen.getByTestId("footer-email"), screen.getByTestId("footer-phone")].forEach((link) => {
-      expect(link.className).toContain("gap-[6px]");
-      expect(link.className).not.toContain("gap-[18px]");
+    // The contact row 11:89127 has three "Button" children, all HORIZONTAL
+    // auto-layout with itemSpacing: 6 — 11:89128 (email), 11:89132 (phone) and
+    // 11:89136 (location). Guards against the gap-[18px] regression.
+    ["footer-email", "footer-phone", "footer-location"].forEach((testId) => {
+      const item = screen.getByTestId(testId);
+      expect(item.className).toContain("gap-[6px]");
+      expect(item.className).not.toContain("gap-[18px]");
     });
   });
 
