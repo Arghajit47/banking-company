@@ -2,11 +2,17 @@
 
 import useSWR from "swr";
 
+export type FeatureTab =
+  | "online-banking"
+  | "financial-tools"
+  | "customer-support";
+
 export interface Feature {
   id: number;
   icon: string;
   title: string;
   description: string;
+  tab: FeatureTab;
 }
 
 export interface FeaturesResponse {

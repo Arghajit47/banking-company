@@ -13,6 +13,7 @@ const apiFeaturesData: FeaturesResponse = {
       id: 1,
       icon: "/assets/icons/icon_feature_1.svg",
       title: "24/7 Account Access",
+      tab: "online-banking",
       description:
         "Enjoy the convenience of accessing your accounts anytime, anywhere through our secure online banking platform.",
     },
@@ -20,6 +21,7 @@ const apiFeaturesData: FeaturesResponse = {
       id: 2,
       icon: "/assets/icons/icon_feature_2.svg",
       title: "Mobile Banking App",
+      tab: "online-banking",
       description:
         "Stay connected to your finances on the go with our user-friendly mobile banking app.",
     },
@@ -27,6 +29,7 @@ const apiFeaturesData: FeaturesResponse = {
       id: 3,
       icon: "/assets/icons/icon_feature_3.svg",
       title: "Secure Transactions",
+      tab: "online-banking",
       description:
         "Rest assured knowing that your transactions are protected by industry-leading security measures.",
     },
@@ -34,8 +37,73 @@ const apiFeaturesData: FeaturesResponse = {
       id: 4,
       icon: "/assets/icons/icon_feature_4.svg",
       title: "Bill Pay and Transfers",
+      tab: "online-banking",
       description:
         "Save time and avoid late fees with our convenient bill pay service.",
+    },
+    {
+      id: 5,
+      icon: "/assets/icons/icon_feature_1.svg",
+      title: "Smart Budget Planner",
+      tab: "financial-tools",
+      description:
+        "Automatically categorize your spending, set monthly limits, and track savings goals.",
+    },
+    {
+      id: 6,
+      icon: "/assets/icons/icon_feature_2.svg",
+      title: "Investment & Portfolio Tracker",
+      tab: "financial-tools",
+      description:
+        "Monitor your investments, review asset allocations, and track market performance.",
+    },
+    {
+      id: 7,
+      icon: "/assets/icons/icon_feature_3.svg",
+      title: "Loan & Mortgage Calculator",
+      tab: "financial-tools",
+      description:
+        "Estimate monthly payments, analyze amortization schedules, and evaluate extra payments.",
+    },
+    {
+      id: 8,
+      icon: "/assets/icons/icon_feature_4.svg",
+      title: "Credit Health Monitoring",
+      tab: "financial-tools",
+      description:
+        "Access your credit score updates and view key credit factors.",
+    },
+    {
+      id: 9,
+      icon: "/assets/icons/icon_feature_1.svg",
+      title: "Live Concierge Chat",
+      tab: "customer-support",
+      description:
+        "Connect directly with dedicated banking specialists within seconds.",
+    },
+    {
+      id: 10,
+      icon: "/assets/icons/icon_feature_2.svg",
+      title: "Appointment Scheduling",
+      tab: "customer-support",
+      description:
+        "Book one-on-one virtual or in-branch consultations with financial advisors.",
+    },
+    {
+      id: 11,
+      icon: "/assets/icons/icon_feature_3.svg",
+      title: "Dedicated Dispute Center",
+      tab: "customer-support",
+      description:
+        "Easily flag unauthorized charges and submit transaction disputes.",
+    },
+    {
+      id: 12,
+      icon: "/assets/icons/icon_feature_4.svg",
+      title: "Personalized Financial Advisory",
+      tab: "customer-support",
+      description:
+        "Receive tailored financial reviews and expert recommendations.",
     },
   ],
 };
@@ -170,6 +238,82 @@ describe("FeaturesSection (SWR integration)", () => {
   it("renders cards grid container", () => {
     render(<FeaturesSection />);
     expect(screen.getByTestId("features-cards-grid")).toBeDefined();
+  });
+
+  it("renders only the Online Banking cards by default", () => {
+    render(<FeaturesSection />);
+    expect(
+      document.querySelectorAll('[data-testid^="feature-card-title-"]').length
+    ).toBe(4);
+    for (const id of [1, 2, 3, 4]) {
+      expect(screen.getByTestId(`feature-card-${id}`)).toBeDefined();
+    }
+    for (const id of [5, 6, 7, 8, 9, 10, 11, 12]) {
+      expect(screen.queryByTestId(`feature-card-${id}`)).toBeNull();
+    }
+  });
+
+  it("swaps the rendered cards when the Financial Tools tab is clicked", async () => {
+    const user = userEvent.setup();
+    render(<FeaturesSection />);
+    await user.click(screen.getByTestId("features-tab-financial-tools"));
+
+    expect(
+      document.querySelectorAll('[data-testid^="feature-card-title-"]').length
+    ).toBe(4);
+    for (const id of [5, 6, 7, 8]) {
+      expect(screen.getByTestId(`feature-card-${id}`)).toBeDefined();
+    }
+    for (const id of [1, 2, 3, 4, 9, 10, 11, 12]) {
+      expect(screen.queryByTestId(`feature-card-${id}`)).toBeNull();
+    }
+    expect(screen.getByText("Smart Budget Planner")).toBeDefined();
+    expect(screen.queryByText("24/7 Account Access")).toBeNull();
+  });
+
+  it("swaps the rendered cards when the Customer Support tab is clicked", async () => {
+    const user = userEvent.setup();
+    render(<FeaturesSection />);
+    await user.click(screen.getByTestId("features-tab-customer-support"));
+
+    expect(
+      document.querySelectorAll('[data-testid^="feature-card-title-"]').length
+    ).toBe(4);
+    for (const id of [9, 10, 11, 12]) {
+      expect(screen.getByTestId(`feature-card-${id}`)).toBeDefined();
+    }
+    for (const id of [1, 2, 3, 4, 5, 6, 7, 8]) {
+      expect(screen.queryByTestId(`feature-card-${id}`)).toBeNull();
+    }
+    expect(screen.getByText("Live Concierge Chat")).toBeDefined();
+  });
+
+  it("returns to the Online Banking cards when that tab is re-selected", async () => {
+    const user = userEvent.setup();
+    render(<FeaturesSection />);
+    await user.click(screen.getByTestId("features-tab-customer-support"));
+    await user.click(screen.getByTestId("features-tab-online-banking"));
+    expect(screen.getByTestId("feature-card-1")).toBeDefined();
+    expect(screen.queryByTestId("feature-card-9")).toBeNull();
+  });
+
+  it("keeps a 2-row grid of 2 cards per row on every tab", async () => {
+    const user = userEvent.setup();
+    render(<FeaturesSection />);
+    for (const tab of [
+      "features-tab-online-banking",
+      "features-tab-financial-tools",
+      "features-tab-customer-support",
+    ]) {
+      await user.click(screen.getByTestId(tab));
+      const rows = Array.from(
+        screen.getByTestId("features-cards-grid").children
+      );
+      expect(rows.length).toBe(2);
+      for (const row of rows) {
+        expect(row.children.length).toBe(2);
+      }
+    }
   });
 
   it("nav has accessible label", () => {

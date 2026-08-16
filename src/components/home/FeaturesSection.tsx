@@ -4,10 +4,17 @@ import { useState } from "react";
 import Image from "next/image";
 import { useFeaturesData } from "@/lib/features";
 import { useMounted } from "@/lib/use-mounted";
-import type { Feature } from "@/lib/features";
+import type { Feature, FeatureTab } from "@/lib/features";
 
 const TABS = ["Online Banking", "Financial Tools", "Customer Support"] as const;
 type Tab = (typeof TABS)[number];
+
+// Display label -> API `tab` discriminator (mirrors the Product `tab` pattern).
+const TAB_KEYS: Record<Tab, FeatureTab> = {
+  "Online Banking": "online-banking",
+  "Financial Tools": "financial-tools",
+  "Customer Support": "customer-support",
+};
 
 function FeatureCardSkeleton() {
   return (
@@ -113,7 +120,9 @@ export function FeaturesSection() {
 
   const showSkeleton = !mounted || isLoading;
   const hasError = !showSkeleton && (!!error || !data);
-  const features = data?.features ?? [];
+  const features = (data?.features ?? []).filter(
+    (feature) => feature.tab === TAB_KEYS[activeTab]
+  );
 
   return (
     <section
