@@ -77,7 +77,7 @@ export function PressReleasesSection() {
         >
           <h2
             data-testid="press-releases-section-heading"
-            className="text-[36px] font-normal leading-[150%] text-[#CAFF33] md:text-[42px] lg:text-[48px] laptop:text-[38px] laptop:font-medium"
+            className="text-[36px] font-normal leading-[150%] text-[#CAFF33] md:text-[42px] lg:text-[48px] laptop:text-[38px] laptop:font-medium desktop:text-[48px]"
           >
             {SECTION_HEADING}
           </h2>

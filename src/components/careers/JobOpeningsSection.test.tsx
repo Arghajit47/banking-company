@@ -130,4 +130,25 @@ describe("JobOpeningsSection (SWR integration)", () => {
     expect(container.innerHTML).not.toContain("bg-white");
     expect(container.innerHTML).not.toContain("text-zinc-900");
   });
+
+  // BC-162 — `laptop` is a min-width variant, so the 38px laptop override kept
+  // applying at 1920. Figma "Job Openings": desktop 55:792 = 48px, laptop 113:7237 = 38px,
+  // mobile 113:9634 = 28px, lineHeight 150% at every breakpoint.
+  it("heading carries a desktop 48px override above the laptop 38px one", () => {
+    render(<JobOpeningsSection />);
+    const heading = screen.getByTestId("job-openings-section-heading");
+    expect(heading.className).toContain("laptop:text-[38px]");
+    expect(heading.className).toContain("desktop:text-[48px]");
+    expect(heading.className).toContain("leading-[150%]");
+  });
+
+  // Line height must stay derived from `leading-[150%]`; a hardcoded per-breakpoint
+  // pixel leading would desync from the font size and reintroduce BC-162.
+  it("heading has no hardcoded per-breakpoint pixel line-height", () => {
+    render(<JobOpeningsSection />);
+    const heading = screen.getByTestId("job-openings-section-heading");
+    expect(heading.className).not.toMatch(/laptop:leading-\[/);
+    expect(heading.className).not.toMatch(/desktop:leading-\[/);
+    expect(heading.className).not.toMatch(/(?:^|\s)leading-\[\d+px\]/);
+  });
 });

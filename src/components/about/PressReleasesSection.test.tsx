@@ -147,4 +147,25 @@ describe("PressReleasesSection", () => {
     render(<PressReleasesSection />);
     expect(screen.getByTestId("press-releases-section")).toBeInTheDocument();
   });
+
+  // BC-162 — `laptop` is a min-width variant, so the 38px laptop override kept
+  // applying at 1920. Figma "Press Releases": desktop 58:1314 = 48px, laptop 113:10162 = 38px,
+  // mobile 116:10563 = 28px, lineHeight 150% at every breakpoint.
+  it("heading carries a desktop 48px override above the laptop 38px one", () => {
+    render(<PressReleasesSection />);
+    const heading = screen.getByTestId("press-releases-section-heading");
+    expect(heading.className).toContain("laptop:text-[38px]");
+    expect(heading.className).toContain("desktop:text-[48px]");
+    expect(heading.className).toContain("leading-[150%]");
+  });
+
+  // Line height must stay derived from `leading-[150%]`; a hardcoded per-breakpoint
+  // pixel leading would desync from the font size and reintroduce BC-162.
+  it("heading has no hardcoded per-breakpoint pixel line-height", () => {
+    render(<PressReleasesSection />);
+    const heading = screen.getByTestId("press-releases-section-heading");
+    expect(heading.className).not.toMatch(/laptop:leading-\[/);
+    expect(heading.className).not.toMatch(/desktop:leading-\[/);
+    expect(heading.className).not.toMatch(/(?:^|\s)leading-\[\d+px\]/);
+  });
 });

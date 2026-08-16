@@ -152,4 +152,25 @@ describe("ValuesSection (SWR integration)", () => {
     expect(html).not.toMatch(/\btext-gray-/);
     expect(html).not.toMatch(/\btext-slate-/);
   });
+
+  // BC-162 — `laptop` is a min-width variant, so the 38px laptop override kept
+  // applying at 1920. Figma "Our Values": desktop 49:493 = 48px, laptop 113:7176 = 38px,
+  // mobile 113:9573 = 28px, lineHeight 150% at every breakpoint.
+  it("heading carries a desktop 48px override above the laptop 38px one", () => {
+    render(<ValuesSection />);
+    const heading = screen.getByTestId("values-section-heading");
+    expect(heading.className).toContain("laptop:text-[38px]");
+    expect(heading.className).toContain("desktop:text-[48px]");
+    expect(heading.className).toContain("leading-[150%]");
+  });
+
+  // Line height must stay derived from `leading-[150%]`; a hardcoded per-breakpoint
+  // pixel leading would desync from the font size and reintroduce BC-162.
+  it("heading has no hardcoded per-breakpoint pixel line-height", () => {
+    render(<ValuesSection />);
+    const heading = screen.getByTestId("values-section-heading");
+    expect(heading.className).not.toMatch(/laptop:leading-\[/);
+    expect(heading.className).not.toMatch(/desktop:leading-\[/);
+    expect(heading.className).not.toMatch(/(?:^|\s)leading-\[\d+px\]/);
+  });
 });

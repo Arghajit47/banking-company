@@ -123,4 +123,25 @@ describe("ProtectionSection", () => {
     render(<ProtectionSection />);
     expect(screen.getByTestId("protection-section")).toBeInTheDocument();
   });
+
+  // BC-162 — `laptop` is a min-width variant, so the 38px laptop override kept
+  // applying at 1920. Figma "How We Protect You": desktop 64:2100 = 48px, laptop 116:10944 = 38px,
+  // mobile 116:11297 = 28px, lineHeight 150% at every breakpoint.
+  it("heading carries a desktop 48px override above the laptop 38px one", () => {
+    render(<ProtectionSection />);
+    const heading = screen.getByTestId("protection-section-heading");
+    expect(heading.className).toContain("laptop:text-[38px]");
+    expect(heading.className).toContain("desktop:text-[48px]");
+    expect(heading.className).toContain("leading-[150%]");
+  });
+
+  // Line height must stay derived from `leading-[150%]`; a hardcoded per-breakpoint
+  // pixel leading would desync from the font size and reintroduce BC-162.
+  it("heading has no hardcoded per-breakpoint pixel line-height", () => {
+    render(<ProtectionSection />);
+    const heading = screen.getByTestId("protection-section-heading");
+    expect(heading.className).not.toMatch(/laptop:leading-\[/);
+    expect(heading.className).not.toMatch(/desktop:leading-\[/);
+    expect(heading.className).not.toMatch(/(?:^|\s)leading-\[\d+px\]/);
+  });
 });
