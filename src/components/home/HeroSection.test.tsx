@@ -113,6 +113,40 @@ describe("HeroSection", () => {
     expect(screen.getByTestId("hero-line-journey")).toHaveTextContent("Journey");
   });
 
+  it("heading is 28px at 390 and stays 38px from 768 through 1439 and at 1440", () => {
+    render(<HeroSection />);
+    const el = screen.getByTestId("hero-heading");
+    // Figma 108:2795 (Mobile 390) = 28px
+    expect(el).toHaveClass("text-[28px]");
+    // Figma 104:636 (Laptop 1440) = 38px; md (768) carries it unbroken up to the
+    // desktop tier, so 1024, 1280 and 1440 all resolve to 38px
+    expect(el).toHaveClass("md:text-[38px]");
+    // Figma 5:52369 (Desktop 1920) = 48px
+    expect(el).toHaveClass("desktop:text-[48px]");
+  });
+
+  it("heading ladder is monotonic — no sm/lg tier and no laptop step-down", () => {
+    render(<HeroSection />);
+    const el = screen.getByTestId("hero-heading");
+    // no Figma frame specifies a size at Tailwind's sm (640), md-as-40 (768) or lg (1024);
+    // lg:text-[44px] made 1280 render larger than the 38px at 1440
+    expect(el.className).not.toContain("sm:text-[");
+    expect(el.className).not.toContain("lg:text-[");
+    expect(el.className).not.toContain("laptop:text-[");
+    // and no per-tier pixel line-heights that could drift from the 150% ratio
+    expect(el.className).not.toContain("sm:leading-[");
+    expect(el.className).not.toContain("md:leading-[");
+    expect(el.className).not.toContain("lg:leading-[");
+    expect(el.className).not.toContain("laptop:leading-[");
+    expect(el.className).not.toContain("desktop:leading-[");
+  });
+
+  it("heading line-height is a single unprefixed 150% at every tier", () => {
+    render(<HeroSection />);
+    // 28→42, 38→57, 48→72 all derive from one ratio, matching Figma's 150%
+    expect(screen.getByTestId("hero-heading")).toHaveClass("leading-[150%]");
+  });
+
   it("renders subtext and CTA from API data", () => {
     render(<HeroSection />);
     expect(screen.getByTestId("hero-paragraph")).toHaveTextContent(

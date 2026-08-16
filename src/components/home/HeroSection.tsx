@@ -214,7 +214,7 @@ export function HeroSection() {
               {/* Heading */}
               <h1
                 data-testid="hero-heading"
-                className="mb-6 w-full text-[28px] font-medium leading-[42px] text-white sm:text-[34px] sm:leading-[51px] md:text-[40px] md:leading-[60px] lg:text-[44px] lg:leading-[66px] laptop:text-[38px] laptop:leading-[57px] desktop:text-[48px] desktop:leading-[72px]"
+                className="mb-6 w-full text-[28px] font-medium leading-[150%] text-white md:text-[38px] desktop:text-[48px]"
               >
                 <span className="block" data-testid="hero-line-welcome">
                   {hero.headline}
