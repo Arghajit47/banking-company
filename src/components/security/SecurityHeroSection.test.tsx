@@ -116,11 +116,21 @@ describe("SecurityHeroSection", () => {
   });
 
 
-  it("heading is 28px at 390 and stays 48px at 1440", () => {
+  it("heading is 28px at 390 and stays 48px from 768 through 1439 and at 1440", () => {
     render(<SecurityHeroSection />);
     const el = screen.getByTestId("security-hero-heading");
     expect(el).toHaveClass("text-[28px]");
-    expect(el).toHaveClass("laptop:text-[48px]");
+    // md (768) carries 48px unbroken up to the desktop tier, so 1280 and 1440 both resolve to 48px
+    expect(el).toHaveClass("md:text-[48px]");
+  });
+
+  it("heading ladder is monotonic — no lg tier and no laptop step-down", () => {
+    render(<SecurityHeroSection />);
+    const el = screen.getByTestId("security-hero-heading");
+    // no Figma frame specifies a size at Tailwind's lg (1024); lg:text-[58px] made 1280 render larger than 1440
+    expect(el.className).not.toContain("lg:text-[");
+    expect(el.className).not.toContain("laptop:text-[");
+    expect(el.className).not.toContain("sm:text-[");
   });
 
   it("paragraph is 14px at 390 and 16px at 1440", () => {
@@ -202,7 +212,7 @@ describe("SecurityHeroSection", () => {
     const el = screen.getByTestId("security-hero-heading");
     expect(el).toHaveClass("desktop:text-[58px]");
     expect(el).toHaveClass("text-[28px]");
-    expect(el).toHaveClass("laptop:text-[48px]");
+    expect(el).toHaveClass("md:text-[48px]");
     // line-height matches Figma 130% at every tier — single unprefixed class
     expect(el).toHaveClass("leading-[130%]");
   });

@@ -87,7 +87,7 @@ export function AboutHeroSection() {
           </p>
           <h1
             data-testid="about-hero-heading"
-            className="font-[var(--font-urbanist)] text-[28px] font-medium leading-[130%] md:text-[48px] lg:text-[58px] laptop:text-[48px] desktop:text-[58px]"
+            className="font-[var(--font-urbanist)] text-[28px] font-medium leading-[130%] md:text-[48px] desktop:text-[58px]"
           >
             <span className="text-white">{data.headline}</span>
             <span className="text-[#CAFF33]">{data.subheadline}</span>
