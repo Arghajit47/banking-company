@@ -12,10 +12,10 @@ function AboutHeroSkeleton() {
       data-testid="about-hero-section"
       className="relative mx-auto w-full max-w-[1599px] rounded-[20px] bg-[#1C1C1C] p-[14px] sm:p-[50px] laptop:p-[40px]"
     >
-      <div className="flex flex-col items-start md:flex-row">
+      <div className="flex flex-col-reverse items-start md:flex-row">
         <div
           data-testid="about-hero-text-container"
-          className="relative z-20 flex shrink-0 flex-col gap-[23px] rounded-[20px_0_80px_20px] bg-[#1A1A1A] p-8 md:w-[791px] md:p-[80px]"
+          className="relative z-20 -mt-[41px] flex shrink-0 flex-col gap-[14px] rounded-[20px] bg-[#1A1A1A] p-6 md:mt-0 md:w-[791px] md:gap-[23px] md:rounded-[20px_0_80px_20px] md:p-[80px] laptop:w-[658px] laptop:gap-[20px] laptop:rounded-[20px_0_60px_20px] laptop:p-[60px] desktop:w-[791px] desktop:gap-[23px] desktop:rounded-[20px_0_80px_20px] desktop:p-[80px]"
         >
           <div
             data-testid="about-hero-label"
@@ -38,7 +38,7 @@ function AboutHeroSkeleton() {
         </div>
         <div
           data-testid="about-hero-image-wrapper"
-          className="mt-6 flex-1 md:-ml-[260px] md:mt-0"
+          className="flex-1 md:-ml-[260px] laptop:-ml-[174px] desktop:-ml-[260px]"
         >
           <div className="h-[400px] w-full animate-pulse rounded-[16px] bg-[#333333]" />
         </div>
@@ -69,10 +69,10 @@ export function AboutHeroSection() {
         aria-hidden="true"
       />
 
-      <div className="flex flex-col items-start md:flex-row">
+      <div className="flex flex-col-reverse items-start md:flex-row">
         <div
           data-testid="about-hero-text-container"
-          className="relative z-20 flex shrink-0 flex-col gap-[23px] rounded-[20px_0_80px_20px] bg-[#1A1A1A] p-8 md:w-[791px] md:p-[80px]"
+          className="relative z-20 -mt-[41px] flex shrink-0 flex-col gap-[14px] rounded-[20px] bg-[#1A1A1A] p-6 md:mt-0 md:w-[791px] md:gap-[23px] md:rounded-[20px_0_80px_20px] md:p-[80px] laptop:w-[658px] laptop:gap-[20px] laptop:rounded-[20px_0_60px_20px] laptop:p-[60px] desktop:w-[791px] desktop:gap-[23px] desktop:rounded-[20px_0_80px_20px] desktop:p-[80px]"
         >
           {error && (
             <p className="text-sm text-red-400">
@@ -81,20 +81,20 @@ export function AboutHeroSection() {
           )}
           <p
             data-testid="about-hero-label"
-            className="font-[var(--font-urbanist)] text-[18px] font-normal leading-[150%] text-white md:text-[20px]"
+            className="font-[var(--font-urbanist)] text-[14px] font-normal leading-[150%] text-white md:text-[20px] laptop:text-[18px]"
           >
             {LABEL}
           </p>
           <h1
             data-testid="about-hero-heading"
-            className="font-[var(--font-urbanist)] text-[32px] font-medium leading-[130%] md:text-[48px] lg:text-[58px] laptop:text-[48px]"
+            className="font-[var(--font-urbanist)] text-[28px] font-medium leading-[130%] md:text-[48px] lg:text-[58px] laptop:text-[48px]"
           >
             <span className="text-white">{data.headline}</span>
             <span className="text-[#CAFF33]">{data.subheadline}</span>
           </h1>
           <p
             data-testid="about-hero-paragraph"
-            className="font-[var(--font-urbanist)] text-[16px] font-light leading-[150%] text-[#B3B3B3] md:text-[18px]"
+            className="font-[var(--font-urbanist)] text-[14px] font-light leading-[150%] text-[#B3B3B3] md:text-[18px] laptop:text-[16px]"
           >
             {data.body}
           </p>
@@ -102,7 +102,7 @@ export function AboutHeroSection() {
 
         <div
           data-testid="about-hero-image-wrapper"
-          className="relative z-10 mt-6 flex-1 md:-ml-[260px] md:mt-0"
+          className="relative z-10 flex-1 md:-ml-[260px] laptop:-ml-[174px] desktop:-ml-[260px]"
         >
           <Image
             data-testid="about-hero-image"
