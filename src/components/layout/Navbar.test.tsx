@@ -9,7 +9,7 @@ import {
 import userEvent from "@testing-library/user-event";
 import * as matchers from "@testing-library/jest-dom/matchers";
 import { SWRConfig } from "swr";
-import { Navbar } from "./Navbar";
+import { Navbar, isNavLinkActive } from "./Navbar";
 
 expect.extend(matchers);
 
@@ -43,12 +43,26 @@ vi.mock("@/lib/auth", () => ({
   useAuthStatus: () => currentMock,
 }));
 
+// BC-166: the navbar derives its active pill from the current route, so every
+// render has to declare which route it is pretending to be on.
+let currentPathname: string | null = "/";
+
+vi.mock("next/navigation", () => ({
+  usePathname: () => currentPathname,
+}));
+
 afterEach(() => {
   cleanup();
   currentMock = mockAuthLoggedOut;
+  currentPathname = "/";
 });
 
 const links = ["Home", "Careers", "About", "Security"];
+
+const activeTestIds = (container: HTMLElement) =>
+  Array.from(container.querySelectorAll('[aria-current="page"]')).map((el) =>
+    el.getAttribute("data-testid")
+  );
 
 describe("Navbar (desktop)", () => {
   it("renders all nav links on desktop", () => {
@@ -79,7 +93,8 @@ describe("Navbar (desktop)", () => {
     expect(screen.getByText("Argha")).toBeTruthy();
   });
 
-  it("Home link has active styling indicator", () => {
+  it("Home link has active styling indicator on the home route", () => {
+    currentPathname = "/";
     const { container } = renderWithSWR(<Navbar />);
     const homeLink = container.querySelector('[data-testid="nav-link-home"]');
 
@@ -94,6 +109,7 @@ describe("Navbar (desktop)", () => {
   });
 
   it("active pill uses breakpoint-specific padding for the laptop and desktop frames", () => {
+    currentPathname = "/";
     const { container } = renderWithSWR(<Navbar />);
     const homeLink = container.querySelector('[data-testid="nav-link-home"]');
 
@@ -107,6 +123,7 @@ describe("Navbar (desktop)", () => {
   });
 
   it("desktop nav links step up to 18px/27px type at the desktop breakpoint", () => {
+    currentPathname = "/";
     const { container } = renderWithSWR(<Navbar />);
     const homeLink = container.querySelector('[data-testid="nav-link-home"]');
 
@@ -117,6 +134,100 @@ describe("Navbar (desktop)", () => {
     expect(homeLink?.className).toContain("leading-[21px]");
     expect(homeLink?.className).toContain("desktop:text-lg");
     expect(homeLink?.className).toContain("desktop:leading-[27px]");
+  });
+});
+
+describe("isNavLinkActive (BC-166 matching rules)", () => {
+  it("matches / only on the exact root pathname", () => {
+    expect(isNavLinkActive("/", "/")).toBe(true);
+    expect(isNavLinkActive("/", "/careers")).toBe(false);
+    expect(isNavLinkActive("/", "/about")).toBe(false);
+    expect(isNavLinkActive("/", "/security")).toBe(false);
+    expect(isNavLinkActive("/", "/login")).toBe(false);
+  });
+
+  it("matches non-root links on their exact path", () => {
+    expect(isNavLinkActive("/careers", "/careers")).toBe(true);
+    expect(isNavLinkActive("/about", "/about")).toBe(true);
+    expect(isNavLinkActive("/security", "/security")).toBe(true);
+    expect(isNavLinkActive("/careers", "/about")).toBe(false);
+  });
+
+  it("matches non-root links on their sub-paths", () => {
+    expect(isNavLinkActive("/careers", "/careers/engineer")).toBe(true);
+    expect(isNavLinkActive("/careers", "/careers/engineer/apply")).toBe(true);
+    expect(isNavLinkActive("/about", "/about/team")).toBe(true);
+  });
+
+  it("does not treat a shared prefix as a sub-path", () => {
+    expect(isNavLinkActive("/about", "/aboutus")).toBe(false);
+    expect(isNavLinkActive("/security", "/security-policy")).toBe(false);
+  });
+
+  it("normalises trailing slashes on both sides", () => {
+    expect(isNavLinkActive("/", "//")).toBe(true);
+    expect(isNavLinkActive("/careers", "/careers/")).toBe(true);
+    expect(isNavLinkActive("/careers", "/careers/engineer/")).toBe(true);
+    expect(isNavLinkActive("/", "/careers/")).toBe(false);
+  });
+
+  it("returns false for a null or empty pathname instead of defaulting to Home", () => {
+    expect(isNavLinkActive("/", null)).toBe(false);
+    expect(isNavLinkActive("/", undefined)).toBe(false);
+    expect(isNavLinkActive("/", "")).toBe(false);
+    expect(isNavLinkActive("/careers", null)).toBe(false);
+  });
+});
+
+describe("Navbar active link follows the current route", () => {
+  it.each([
+    ["/", "nav-link-home"],
+    ["/careers", "nav-link-careers"],
+    ["/about", "nav-link-about"],
+    ["/security", "nav-link-security"],
+    ["/careers/engineer", "nav-link-careers"],
+    ["/about/", "nav-link-about"],
+  ])("marks exactly one link active on %s", (pathname, expectedTestId) => {
+    currentPathname = pathname;
+    const { container } = renderWithSWR(<Navbar />);
+
+    expect(activeTestIds(container)).toEqual([expectedTestId]);
+
+    const activeLink = container.querySelector(`[data-testid="${expectedTestId}"]`);
+    expect(activeLink?.className).toContain("rounded-[82px]");
+    expect(activeLink?.className).toContain("bg-[#262626]");
+  });
+
+  it.each(["/login", "/signup", "/privacy-policy", "/terms-of-service"])(
+    "marks no link active on %s — no Home fallback",
+    (pathname) => {
+      currentPathname = pathname;
+      const { container } = renderWithSWR(<Navbar />);
+
+      expect(activeTestIds(container)).toEqual([]);
+
+      const homeLink = container.querySelector('[data-testid="nav-link-home"]');
+      expect(homeLink?.getAttribute("aria-current")).toBeNull();
+      expect(homeLink?.className).toContain("rounded-md");
+      expect(homeLink?.className).not.toContain("bg-[#262626]");
+    }
+  );
+
+  it("marks no link active when usePathname returns null", () => {
+    currentPathname = null;
+    const { container } = renderWithSWR(<Navbar />);
+
+    expect(activeTestIds(container)).toEqual([]);
+  });
+
+  it("keeps inactive links on the compact inactive classes", () => {
+    currentPathname = "/careers";
+    const { container } = renderWithSWR(<Navbar />);
+
+    const homeLink = container.querySelector('[data-testid="nav-link-home"]');
+    expect(homeLink?.className).toContain("rounded-md");
+    expect(homeLink?.className).toContain("px-2");
+    expect(homeLink?.className).toContain("py-1");
   });
 });
 
@@ -152,6 +263,23 @@ describe("Navbar (mobile)", () => {
 
     expect(within(menu).getByTestId("mobile-sign-up")).toBeTruthy();
     expect(within(menu).getByTestId("mobile-login")).toBeTruthy();
+  });
+
+  it("mobile drawer highlights the current route, not Home", async () => {
+    currentPathname = "/security";
+    renderWithSWR(<Navbar />);
+    const user = userEvent.setup();
+
+    await user.click(screen.getByTestId("nav-mobile-toggle"));
+    const menu = screen.getByTestId("mobile-menu");
+
+    const drawerSecurity = within(menu).getByTestId("nav-link-security");
+    const drawerHome = within(menu).getByTestId("nav-link-home");
+
+    expect(drawerSecurity.getAttribute("aria-current")).toBe("page");
+    expect(drawerSecurity.className).toContain("rounded-[82px]");
+    expect(drawerHome.getAttribute("aria-current")).toBeNull();
+    expect(drawerHome.className).toContain("rounded-md");
   });
 
   it("keyboard Escape closes mobile menu", async () => {
