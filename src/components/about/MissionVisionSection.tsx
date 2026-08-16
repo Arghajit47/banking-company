@@ -102,7 +102,7 @@ export function MissionVisionSection() {
         >
           <h2
             data-testid="mission-vision-section-heading"
-            className="text-[36px] font-normal leading-[150%] text-[#CAFF33] md:text-[42px] lg:text-[48px] laptop:text-[38px] laptop:font-medium desktop:text-[48px]"
+            className="text-[36px] font-normal leading-[150%] text-[#CAFF33] md:text-[42px] lg:text-[48px] laptop:text-[38px] desktop:text-[48px]"
           >
             {SECTION_HEADING}
           </h2>

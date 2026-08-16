@@ -144,4 +144,15 @@ describe("ProtectionSection", () => {
     expect(heading.className).not.toMatch(/desktop:leading-\[/);
     expect(heading.className).not.toMatch(/(?:^|\s)leading-\[\d+px\]/);
   });
+  // BC-164 — heading font-weight must be uniform across every breakpoint.
+  // Figma "How We Protect You": desktop 64:2100, laptop 116:10944, mobile 116:11297 — all fontWeight 500.
+  // A `laptop:`/`desktop:` weight variant is a min-width override, so any such
+  // class would split the weight at 1440 and diverge from the design.
+  it("heading renders font-weight 500 at every breakpoint", () => {
+    render(<ProtectionSection />);
+    const heading = screen.getByTestId("protection-section-heading");
+    expect(heading.className).toMatch(/(?:^|\s)font-medium(?:\s|$)/);
+    expect(heading.className).not.toMatch(/(?:^|\s)font-normal(?:\s|$)/);
+    expect(heading.className).not.toMatch(/(?:sm|md|lg|xl|2xl|laptop|desktop):font-(?:thin|extralight|light|normal|medium|semibold|bold|extrabold|black)/);
+  });
 });
