@@ -3,6 +3,7 @@
 import { useState, useCallback, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import LogoIcon from "@/components/LogoIcon";
 import { useAuthStatus } from "@/lib/auth";
 
@@ -12,6 +13,45 @@ const navLinks = [
   { label: "About", href: "/about" },
   { label: "Security", href: "/security" },
 ];
+
+/**
+ * Strips any trailing slash(es) so `/careers` and `/careers/` compare equal.
+ * Returns `null` for a missing/empty pathname so callers can decide what to do
+ * rather than silently falling back to `/`.
+ */
+function normalizePathname(pathname: string | null | undefined): string | null {
+  if (!pathname) return null;
+
+  const withoutTrailingSlash = pathname.replace(/\/+$/, "");
+  return withoutTrailingSlash === "" ? "/" : withoutTrailingSlash;
+}
+
+/**
+ * BC-166: active state must come from the current route, never from the link
+ * index. Rules:
+ *  - `/` matches ONLY the exact root pathname — a `startsWith` test would light
+ *    up Home on every page, which is the defect this fixes.
+ *  - every other link matches its exact path and its sub-paths, so a future
+ *    `/careers/engineer` still highlights Careers.
+ *  - a route with no matching nav link (`/login`, `/privacy-policy`, ...) leaves
+ *    every link inactive — there is no Home fallback.
+ *  - a `null` pathname (possible in some rendering contexts) yields no active
+ *    link instead of crashing.
+ */
+export function isNavLinkActive(
+  href: string,
+  pathname: string | null | undefined
+): boolean {
+  const currentPath = normalizePathname(pathname);
+  if (!currentPath) return false;
+
+  const linkPath = normalizePathname(href);
+  if (!linkPath) return false;
+
+  if (linkPath === "/") return currentPath === "/";
+
+  return currentPath === linkPath || currentPath.startsWith(`${linkPath}/`);
+}
 
 function MenuIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
@@ -95,6 +135,7 @@ function NavbarLink({
 
 export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const pathname = usePathname();
   const { data: auth } = useAuthStatus();
 
   const isLoggedIn = auth?.isLoggedIn ?? false;
@@ -151,12 +192,12 @@ export function Navbar() {
           className="hidden items-center gap-1 md:flex"
           data-testid="desktop-nav-links"
         >
-          {navLinks.map((link, idx) => (
+          {navLinks.map((link) => (
             <NavbarLink
               key={link.label}
               label={link.label}
               href={link.href}
-              active={idx === 0}
+              active={isNavLinkActive(link.href, pathname)}
               desktop
             />
           ))}
@@ -234,12 +275,12 @@ export function Navbar() {
           aria-label="Mobile navigation menu"
         >
           <div className="flex flex-col gap-3">
-            {navLinks.map((link, idx) => (
+            {navLinks.map((link) => (
               <NavbarLink
                 key={link.label}
                 label={link.label}
                 href={link.href}
-                active={idx === 0}
+                active={isNavLinkActive(link.href, pathname)}
                 onClick={closeMenu}
               />
             ))}
