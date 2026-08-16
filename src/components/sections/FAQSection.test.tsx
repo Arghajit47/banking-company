@@ -121,6 +121,22 @@ describe("FAQSection", () => {
     expect(heading.className).not.toMatch(/(?:sm|md|lg|xl|2xl|laptop|desktop):leading-/);
   });
 
+  // BC-170 — heading font-weight must be uniform across every breakpoint.
+  // Figma "Frequently Asked Questions": desktop 41:255, laptop 108:2609,
+  // mobile 112:4890 — all fontWeight 500 (Medium). A `laptop:`/`desktop:` weight
+  // variant is a min-width override, so any such class would split the weight at
+  // 1440 and diverge from the design.
+  it("heading renders font-weight 500 at every breakpoint", () => {
+    mockUseFAQConfig.mockReturnValue(
+      baseReturn({ faqs: DEFAULT_FAQS, hasMore: false })
+    );
+    render(<FAQSection />);
+    const heading = screen.getByTestId("faq-heading");
+    expect(heading.className).toMatch(/(?:^|\s)font-medium(?:\s|$)/);
+    expect(heading.className).not.toMatch(/(?:^|\s)font-semibold(?:\s|$)/);
+    expect(heading.className).not.toMatch(/(?:sm|md|lg|xl|2xl|laptop|desktop):font-(?:thin|extralight|light|normal|medium|semibold|bold|extrabold|black)/);
+  });
+
   it("displays FAQ subheading", () => {
     mockUseFAQConfig.mockReturnValue(
       baseReturn({ faqs: DEFAULT_FAQS, hasMore: false })

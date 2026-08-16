@@ -91,7 +91,7 @@ export function FAQSection({ page = "home" }: FAQSectionProps) {
               <h2
                 id="faq-heading"
                 data-testid="faq-heading"
-                className="text-[28px] font-semibold leading-[150%] text-white md:text-[38px] desktop:text-[48px]"
+                className="text-[28px] font-medium leading-[150%] text-white md:text-[38px] desktop:text-[48px]"
               >
                 <span className="text-[#CAFF33]">Frequently</span>
                 {" Asked Questions"}
