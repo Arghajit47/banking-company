@@ -130,4 +130,15 @@ describe("MissionVisionSection", () => {
     expect(heading.className).not.toMatch(/desktop:leading-\[/);
     expect(heading.className).not.toMatch(/(?:^|\s)leading-\[\d+px\]/);
   });
+  // BC-164 — heading font-weight must be uniform across every breakpoint.
+  // Figma "Mission & Vision": desktop 62:1560, laptop 113:10137, mobile 116:10529 — all fontWeight 400.
+  // A `laptop:`/`desktop:` weight variant is a min-width override, so any such
+  // class would split the weight at 1440 and diverge from the design.
+  it("heading renders font-weight 400 at every breakpoint", () => {
+    render(<MissionVisionSection />);
+    const heading = screen.getByTestId("mission-vision-section-heading");
+    expect(heading.className).toMatch(/(?:^|\s)font-normal(?:\s|$)/);
+    expect(heading.className).not.toMatch(/(?:^|\s)font-medium(?:\s|$)/);
+    expect(heading.className).not.toMatch(/(?:sm|md|lg|xl|2xl|laptop|desktop):font-(?:thin|extralight|light|normal|medium|semibold|bold|extrabold|black)/);
+  });
 });

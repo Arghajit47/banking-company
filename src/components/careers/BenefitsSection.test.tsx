@@ -120,4 +120,15 @@ describe("BenefitsSection (SWR integration)", () => {
     expect(heading.className).not.toMatch(/desktop:leading-\[/);
     expect(heading.className).not.toMatch(/(?:^|\s)leading-\[\d+px\]/);
   });
+  // BC-164 — heading font-weight must be uniform across every breakpoint.
+  // Figma "Our Benefits": desktop 53:585, laptop 113:7195, mobile 113:9592 — all fontWeight 500.
+  // A `laptop:`/`desktop:` weight variant is a min-width override, so any such
+  // class would split the weight at 1440 and diverge from the design.
+  it("heading renders font-weight 500 at every breakpoint", () => {
+    render(<BenefitsSection />);
+    const heading = screen.getByTestId("benefits-section-heading");
+    expect(heading.className).toMatch(/(?:^|\s)font-medium(?:\s|$)/);
+    expect(heading.className).not.toMatch(/(?:^|\s)font-normal(?:\s|$)/);
+    expect(heading.className).not.toMatch(/(?:sm|md|lg|xl|2xl|laptop|desktop):font-(?:thin|extralight|light|normal|medium|semibold|bold|extrabold|black)/);
+  });
 });
