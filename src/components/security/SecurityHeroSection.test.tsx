@@ -139,9 +139,56 @@ describe("SecurityHeroSection", () => {
     expect(el).toHaveClass("-mt-[41px]");
     expect(el).toHaveClass("laptop:w-[658px]");
     expect(el).toHaveClass("laptop:p-[60px]");
+    expect(el).toHaveClass("desktop:w-[791px]");
+    expect(el).toHaveClass("desktop:p-[80px]");
+    expect(el).toHaveClass("desktop:rounded-[20px_0_80px_20px]");
     expect(el.parentElement).toHaveClass("flex-col-reverse");
     expect(screen.getByTestId("security-hero-image-wrapper")).toHaveClass(
       "laptop:-ml-[174px]",
     );
+    expect(screen.getByTestId("security-hero-image-wrapper")).toHaveClass(
+      "desktop:-ml-[260px]",
+    );
+  });
+
+  // BC-165 — `laptop:` is a min-width variant, so the 1440 overrides above would
+  // otherwise cascade into 1920 and clobber the desktop frame (About Container
+  // 58:1537 / Sub Container 58:1535, Security Container 62:1742 / Text Container
+  // 62:1743: width 791, gap 23, padding 80, radius 20/0/80/20, overlap -260).
+  // These `desktop:` counterparts pin the verified 1920 values back.
+  it("text container restores the 1920 desktop tokens over the laptop overrides", () => {
+    render(<SecurityHeroSection />);
+    const el = screen.getByTestId("security-hero-text-container");
+    expect(el).toHaveClass("desktop:w-[791px]");
+    expect(el).toHaveClass("desktop:gap-[23px]");
+    expect(el).toHaveClass("desktop:rounded-[20px_0_80px_20px]");
+    expect(el).toHaveClass("desktop:p-[80px]");
+  });
+
+  it("image wrapper restores the 1920 desktop -260 overlap over the laptop override", () => {
+    render(<SecurityHeroSection />);
+    expect(screen.getByTestId("security-hero-image-wrapper")).toHaveClass(
+      "desktop:-ml-[260px]",
+    );
+  });
+
+  it("keeps all four breakpoint tiers on the text container (390 / md / laptop / desktop)", () => {
+    render(<SecurityHeroSection />);
+    const el = screen.getByTestId("security-hero-text-container");
+    // 390 tier
+    expect(el).toHaveClass("gap-[14px]");
+    expect(el).toHaveClass("p-6");
+    // 768-1439 tier (unchanged legacy values)
+    expect(el).toHaveClass("md:gap-[23px]");
+    expect(el).toHaveClass("md:p-[80px]");
+    expect(el).toHaveClass("md:w-[791px]");
+    // 1440-1919 tier
+    expect(el).toHaveClass("laptop:gap-[20px]");
+    expect(el).toHaveClass("laptop:p-[60px]");
+    expect(el).toHaveClass("laptop:w-[658px]");
+    // >=1920 tier
+    expect(el).toHaveClass("desktop:gap-[23px]");
+    expect(el).toHaveClass("desktop:p-[80px]");
+    expect(el).toHaveClass("desktop:w-[791px]");
   });
 });
