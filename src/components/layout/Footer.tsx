@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import LogoIcon from "@/components/LogoIcon";
 import { useFooterConfig, type FooterConfig } from "@/lib/footer";
@@ -24,27 +25,41 @@ const defaultConfig: FooterConfig = {
   ],
   copyright: "YourBank All Rights Reserved",
 };
-function MailIcon(props: React.SVGProps<SVGSVGElement>) {
+/**
+ * Figma 11:89129 — a 24x24 frame with no fill of its own; the glyph 11:89130 ("Subtract") is a
+ * SOLID #CAFF33 envelope. The previous hand-drawn icon inverted this (lime rounded square with a
+ * dark glyph), which is why the icon read as "not visible" against the footer.
+ */
+function MailIcon({ className = "" }: { className?: string }) {
   return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" {...props}>
-      <rect width="24" height="24" rx="4" fill="#CAFF33" />
-      <path
-        d="M4 6H20V18H4V6ZM12 12L4 6V18H20V6L12 12ZM12 12L20 6H4L12 12Z"
-        fill="#1A1A1A"
-      />
-    </svg>
+    <Image
+      src="/assets/footer/icon-email.svg"
+      alt=""
+      width={24}
+      height={24}
+      aria-hidden="true"
+      data-testid="footer-email-icon"
+      className={`h-6 w-6 shrink-0 ${className}`.trim()}
+    />
   );
 }
 
-function PhoneIcon(props: React.SVGProps<SVGSVGElement>) {
+/**
+ * Figma 11:89133 — glyph 11:89134 is named "Vector (Stroke)" but the outline has already been
+ * converted to a filled path, so it must be rendered with `fill` (#CAFF33) and no stroke; stroking
+ * it is what made the handset render incorrectly.
+ */
+function PhoneIcon({ className = "" }: { className?: string }) {
   return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" {...props}>
-      <rect width="24" height="24" rx="4" fill="#CAFF33" />
-      <path
-        d="M6.5 4C6.5 4 8.5 4 9.5 5C10.5 6 10.5 8 10.5 8C10.5 8 10 9.5 8.5 10C8.5 10 9 11 10 12C11 13 12 13.5 12 13.5C12.5 12 14 11.5 14 11.5C14 11.5 16 11.5 17 12.5C18 13.5 18 15.5 18 15.5C18 15.5 17.5 17.5 15.5 18.5C13.5 19.5 10.5 18.5 8 16C5.5 13.5 4.5 10.5 5.5 8.5C6.5 6.5 8.5 6 8.5 6L6.5 4Z"
-        fill="#1A1A1A"
-      />
-    </svg>
+    <Image
+      src="/assets/footer/icon-phone.svg"
+      alt=""
+      width={24}
+      height={24}
+      aria-hidden="true"
+      data-testid="footer-phone-icon"
+      className={`h-6 w-6 shrink-0 ${className}`.trim()}
+    />
   );
 }
 

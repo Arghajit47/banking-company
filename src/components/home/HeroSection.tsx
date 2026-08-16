@@ -249,7 +249,9 @@ export function HeroSection() {
               </button>
             </div>
 
-            {/* Lime arrows illustration — far-right of hero, placed before mockup so mockup (z-10) paints on top */}
+            {/* Lime arrows illustration — far-right of hero, placed before mockup so mockup (z-10) paints on top.
+                At 1920 (desktop) Figma node 5:86805 sits at page (1421.5, 298): flush with the
+                Money Exchange card's right edge, 80.55px from the viewport right edge. */}
             <Image
               src="/assets/illustrations/abstract_design_hero_arrows.svg"
               alt=""
@@ -257,7 +259,7 @@ export function HeroSection() {
               height={275}
               aria-hidden="true"
               data-testid="hero-abstract-illustration"
-              className="pointer-events-none absolute right-0 top-0 z-0 hidden w-[200px] laptop:w-[300px] md:block"
+              className="pointer-events-none absolute right-0 top-0 z-0 hidden w-[200px] laptop:w-[300px] md:block desktop:right-[80.55px] desktop:top-[100px] desktop:h-[382.73px] desktop:w-[417.95px]"
             />
 
             {/* Right mockup column */}
@@ -266,12 +268,14 @@ export function HeroSection() {
               className="relative z-10 mt-12 w-full max-w-[700px] md:mt-0 lg:max-w-[780px] laptop:max-w-[410px] desktop:max-w-[515px]"
             >
               <div className="relative flex flex-col gap-4">
-                {/* Monthly Income floating badge */}
+                {/* Monthly Income floating badge — Figma 5:86738 is layoutPositioning ABSOLUTE at
+                    card-relative (-60.69, -43.35); overhanging the card's top-left corner is the
+                    intended design, not a bug. 188.5x75.61, padding 13.87/17.34, radius 10.40. */}
                 <div
                   data-testid="hero-monthly-income"
-                  className="absolute -top-[43px] left-0 z-20 flex items-center gap-[9px] rounded-[10px] bg-[#22251B] py-[9px] pr-[9px] pl-[21px] shadow-lg md:-left-[61px]"
+                  className="absolute -top-[43px] left-0 z-20 flex items-center gap-[9px] rounded-[10px] bg-[#22251B] py-[9px] pr-[9px] pl-[21px] shadow-lg md:-left-[61px] desktop:-top-[43.35px] desktop:-left-[60.69px] desktop:gap-[8.67px] desktop:rounded-[10.4px] desktop:px-[17.34px] desktop:py-[13.87px]"
                 >
-                  <div className="flex h-[38px] w-[38px] items-center justify-center rounded-full bg-[#CAFF33] p-[9px]">
+                  <div className="flex h-[38px] w-[38px] items-center justify-center rounded-full bg-[#CAFF33] p-[9px] desktop:h-[38.34px] desktop:w-[38.34px] desktop:p-[8.67px]">
                     <Image
                       src={stats?.monthlyIncome.icon ?? "/assets/icons/icon_stat_1.svg"}
                       alt=""
@@ -362,6 +366,8 @@ export function HeroSection() {
                       {stats?.exchangeRates.map((currency) => (
                         <div key={currency.id} data-testid={`hero-exchange-${currency.code}`} className="bg-[#1C1C1C]">
                           <div className="flex items-center gap-[9px] border-b border-[#262626] p-[17px]">
+                            {/* Raster flags (Figma 5:83402 / 5:83409 are ELLIPSE nodes with an
+                                IMAGE fill, scaleMode FILL) — circular-cropped 34.68px discs. */}
                             <Image
                               src={currency.icon}
                               alt=""
@@ -369,14 +375,19 @@ export function HeroSection() {
                               height={34}
                               aria-hidden="true"
                               data-testid={`hero-exchange-icon-${currency.code}`}
+                              className="h-[34px] w-[34px] shrink-0 rounded-full object-cover desktop:h-[34.68px] desktop:w-[34.68px]"
                             />
                             <div>
                               <p data-testid={`hero-exchange-code-${currency.code}`} className="text-[16px] font-normal leading-[150%] text-white">{currency.code}</p>
                               <p data-testid={`hero-exchange-name-${currency.code}`} className="text-[14px] font-light leading-[150%] text-[#E4E4E7]">{currency.name}</p>
                             </div>
                           </div>
-                          <div className="flex items-center justify-center px-[17px] py-[26px]">
-                            <p data-testid={`hero-exchange-value-${currency.code}`} className="text-[17px] font-medium leading-[150%] text-white">{currency.value}</p>
+                          {/* Amount cell (Figma 5:83430 / 5:83432): the text child is FILL width
+                              with textAlignHorizontal LEFT, so the cell's primaryAxisAlign CENTER is
+                              a no-op. The amount starts at the same left x as the flag/label row
+                              above it — 17.34px in from the half-column edge. */}
+                          <div className="flex items-center justify-start px-[17px] py-[26px]">
+                            <p data-testid={`hero-exchange-value-${currency.code}`} className="w-full text-left text-[17px] font-medium leading-[150%] text-white">{currency.value}</p>
                           </div>
                         </div>
                       ))}
@@ -391,18 +402,20 @@ export function HeroSection() {
                   </div>
                 </div>
 
-                {/* Supported Currency pill */}
+                {/* Supported Currency pill — Figma 5:86745 is layoutPositioning ABSOLUTE at
+                    card-relative (196.82, 637.01), i.e. it deliberately overhangs the card's bottom
+                    and right edges. 370.22x69.36, SPACE_BETWEEN, radius 69.36. */}
                 <div
                   data-testid="hero-supported-currency"
-                  className="mx-auto flex items-center gap-[9px] self-center rounded-[69px] bg-[#22251B] py-[9px] pr-[9px] pl-[21px] shadow-lg"
+                  className="mx-auto flex items-center gap-[9px] self-center rounded-[69px] bg-[#22251B] py-[9px] pr-[9px] pl-[21px] shadow-lg desktop:absolute desktop:left-[196.82px] desktop:top-[637.01px] desktop:mx-0 desktop:h-[69.36px] desktop:w-[370.22px] desktop:justify-between desktop:gap-[8.67px] desktop:self-auto desktop:rounded-[69.36px] desktop:py-[8.67px] desktop:pr-[8.67px] desktop:pl-[20.81px]"
                 >
                   <span
                     data-testid="hero-supported-currency-text"
-                    className="text-[16px] font-normal leading-[150%] text-white"
+                    className="text-[16px] font-normal leading-[150%] text-white desktop:whitespace-nowrap"
                   >
                     Supported Currency
                   </span>
-                  <div className="flex items-center gap-[7px] rounded-[48px] border border-[#262626] bg-[#1A1A1A] p-[9px]">
+                  <div className="flex items-center gap-[7px] rounded-[48px] border border-[#262626] bg-[#1A1A1A] p-[9px] desktop:gap-[6.94px] desktop:rounded-[47.69px] desktop:p-[8.67px]">
                     {stats?.currencies.map((currency, idx) => (
                       <Image
                         key={idx}
@@ -412,6 +425,7 @@ export function HeroSection() {
                         height={34}
                         aria-hidden="true"
                         data-testid={`hero-supported-currency-icon-${idx + 1}`}
+                        className="h-[34px] w-[34px] shrink-0 desktop:h-[34.68px] desktop:w-[34.68px]"
                       />
                     ))}
                   </div>
@@ -419,16 +433,10 @@ export function HeroSection() {
               </div>
             </div>
 
-            {/* Far-right background arrows */}
-            <Image
-              src="/assets/illustrations/abstract_design_background_group.svg"
-              alt=""
-              width={660}
-              height={499}
-              aria-hidden="true"
-              data-testid="hero-background-arrows"
-              className="pointer-events-none absolute -right-24 bottom-0 hidden w-[420px] opacity-80 [mix-blend-mode:color-dodge] md:block lg:w-[540px] desktop:w-[660px]"
-            />
+            {/* NOTE: no second arrows element. A depth-14 walk of hero frame 5:86791 returns only
+                four children (text column, Money Exchange card, arrows 5:86805, dot mesh 71:1910),
+                so the former `hero-background-arrows` was a duplicate of `hero-abstract-illustration`
+                (5:86805) with no Figma node behind it and has been removed. */}
           </>
         )}
       </div>

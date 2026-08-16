@@ -85,6 +85,29 @@ describe("Footer", () => {
     expect(screen.getByTestId("footer-location")).toHaveTextContent("Somewhere in the World");
   });
 
+  it("renders the email and phone icons from the exported Figma vectors", () => {
+    render(<Footer />);
+
+    // Figma 11:89129 / 11:89133 — 24x24 frames with a transparent fill and a
+    // SOLID #CAFF33 glyph. The phone glyph 11:89134 is named "Vector (Stroke)"
+    // but is already an outline converted to a filled path, so it is rendered
+    // with fill, never stroke.
+    const mail = screen.getByTestId("footer-email-icon");
+    const phone = screen.getByTestId("footer-phone-icon");
+
+    expect(mail.getAttribute("src")).toContain("/assets/footer/icon-email.svg");
+    expect(phone.getAttribute("src")).toContain("/assets/footer/icon-phone.svg");
+
+    [mail, phone].forEach((icon) => {
+      expect(icon.className).toContain("h-6");
+      expect(icon.className).toContain("w-6");
+      expect(icon).toHaveAttribute("aria-hidden", "true");
+    });
+
+    expect(screen.getByTestId("footer-email")).toContainElement(mail);
+    expect(screen.getByTestId("footer-phone")).toContainElement(phone);
+  });
+
   it("renders social links, copyright, and legal links", () => {
     render(<Footer />);
     expect(screen.getByTestId("footer-socials")).toBeInTheDocument();

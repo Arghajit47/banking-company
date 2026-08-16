@@ -58,22 +58,22 @@ const HERO_EXCHANGE_RATES: HeroExchangeRate[] = [
     code: "INR",
     name: "Indian Rupees",
     value: "5,0000",
-    icon: "/assets/icons/icon_feature_1.svg",
+    icon: "/assets/hero/flag-inr.png",
   },
   {
     id: 2,
     code: "USD",
     name: "United States Dollar",
     value: "12.00",
-    icon: "/assets/icons/icon_feature_2.svg",
+    icon: "/assets/hero/flag-usd.png",
   },
 ];
 
 const HERO_CURRENCIES: HeroCurrency[] = [
-  { icon: "/assets/icons/icon_feature_1.svg" },
-  { icon: "/assets/icons/icon_feature_2.svg" },
-  { icon: "/assets/icons/icon_feature_3.svg" },
-  { icon: "/assets/icons/icon_feature_4.svg" },
+  { icon: "/assets/hero/currency-dollar.svg" },
+  { icon: "/assets/hero/currency-euro.svg" },
+  { icon: "/assets/hero/currency-bitcoin.svg" },
+  { icon: "/assets/hero/currency-ethereum.svg" },
 ];
 
 const HERO_MONTHLY_INCOME: HeroMonthlyIncome = {

@@ -23,21 +23,21 @@ const apiHeroData: HeroResponse = {
         code: "INR",
         name: "Indian Rupees",
         value: "5,0000",
-        icon: "/assets/icons/icon_feature_1.svg",
+        icon: "/assets/hero/flag-inr.png",
       },
       {
         id: 2,
         code: "USD",
         name: "United States Dollar",
         value: "12.00",
-        icon: "/assets/icons/icon_feature_2.svg",
+        icon: "/assets/hero/flag-usd.png",
       },
     ],
     currencies: [
-      { icon: "/assets/icons/icon_feature_1.svg" },
-      { icon: "/assets/icons/icon_feature_2.svg" },
-      { icon: "/assets/icons/icon_feature_3.svg" },
-      { icon: "/assets/icons/icon_feature_4.svg" },
+      { icon: "/assets/hero/currency-dollar.svg" },
+      { icon: "/assets/hero/currency-euro.svg" },
+      { icon: "/assets/hero/currency-bitcoin.svg" },
+      { icon: "/assets/hero/currency-ethereum.svg" },
     ],
     monthlyIncome: {
       icon: "/assets/icons/icon_stat_1.svg",
@@ -208,12 +208,91 @@ describe("HeroSection", () => {
     expect(screen.getByTestId("hero-error-state")).toBeInTheDocument();
   });
 
-  it("keeps trust badge and decorative images unchanged", () => {
+  it("keeps trust badge and renders exactly one arrows illustration", () => {
     render(<HeroSection />);
     expect(screen.getByTestId("hero-badge")).toHaveTextContent(
       "No LLC Required, No Credit Check.",
     );
-    expect(screen.getByTestId("hero-abstract-illustration")).toBeInTheDocument();
-    expect(screen.getByTestId("hero-background-arrows")).toBeInTheDocument();
+
+    // Figma 5:86805 is the only arrows node inside hero frame 5:86791.
+    const arrows = screen.getAllByTestId("hero-abstract-illustration");
+    expect(arrows).toHaveLength(1);
+    expect(arrows[0].getAttribute("src")).toContain(
+      "abstract_design_hero_arrows.svg",
+    );
+
+    // The duplicate background arrows element had no Figma node and was removed.
+    expect(screen.queryByTestId("hero-background-arrows")).toBeNull();
+  });
+
+  it("positions the arrows illustration at the 1920 Figma coordinates", () => {
+    render(<HeroSection />);
+    const arrows = screen.getByTestId("hero-abstract-illustration");
+
+    // Page (1421.5, 298): 80.55px from the 1920 right edge, 100px below the hero top.
+    expect(arrows.className).toContain("desktop:right-[80.55px]");
+    expect(arrows.className).toContain("desktop:top-[100px]");
+    expect(arrows.className).toContain("desktop:w-[417.95px]");
+    expect(arrows.className).toContain("desktop:h-[382.73px]");
+  });
+
+  it("renders the money exchange amounts left-aligned", () => {
+    render(<HeroSection />);
+
+    apiHeroData.stats.exchangeRates.forEach((currency) => {
+      const amount = screen.getByTestId(`hero-exchange-value-${currency.code}`);
+      // Figma 5:83431 / 5:83433 are FILL width with textAlignHorizontal LEFT,
+      // which makes the cell's primaryAxisAlign CENTER a no-op.
+      expect(amount.className).toContain("text-left");
+      expect(amount.className).toContain("w-full");
+      expect(amount.parentElement?.className).toContain("justify-start");
+      expect(amount.parentElement?.className).not.toContain("justify-center");
+    });
+  });
+
+  it("renders the exchange flags as circular raster images", () => {
+    render(<HeroSection />);
+
+    const inr = screen.getByTestId("hero-exchange-icon-INR");
+    const usd = screen.getByTestId("hero-exchange-icon-USD");
+    expect(inr.getAttribute("src")).toContain("flag-inr.png");
+    expect(usd.getAttribute("src")).toContain("flag-usd.png");
+    [inr, usd].forEach((flag) => {
+      expect(flag.className).toContain("rounded-full");
+      expect(flag.className).toContain("object-cover");
+    });
+  });
+
+  it("renders the four real currency glyphs in the supported currency pill", () => {
+    render(<HeroSection />);
+
+    [
+      "currency-dollar",
+      "currency-euro",
+      "currency-bitcoin",
+      "currency-ethereum",
+    ].forEach((name, idx) => {
+      expect(
+        screen
+          .getByTestId(`hero-supported-currency-icon-${idx + 1}`)
+          .getAttribute("src"),
+      ).toContain(`${name}.svg`);
+    });
+  });
+
+  it("keeps the absolutely positioned figma containers overhanging the card at 1920", () => {
+    render(<HeroSection />);
+
+    // Figma 5:86738 — ABSOLUTE at card-relative (-60.69, -43.35).
+    const income = screen.getByTestId("hero-monthly-income");
+    expect(income.className).toContain("desktop:-left-[60.69px]");
+    expect(income.className).toContain("desktop:-top-[43.35px]");
+
+    // Figma 5:86745 — ABSOLUTE at card-relative (196.82, 637.01), 370.22x69.36.
+    const pill = screen.getByTestId("hero-supported-currency");
+    expect(pill.className).toContain("desktop:absolute");
+    expect(pill.className).toContain("desktop:left-[196.82px]");
+    expect(pill.className).toContain("desktop:top-[637.01px]");
+    expect(pill.className).toContain("desktop:w-[370.22px]");
   });
 });
