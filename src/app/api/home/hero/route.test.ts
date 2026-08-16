@@ -75,4 +75,26 @@ describe("GET /api/home/hero", () => {
     expect(typeof body.stats.monthlyIncome.value).toBe("string");
     expect(typeof body.stats.monthlyIncome.label).toBe("string");
   });
+
+  it("serves the exported Figma flag and currency assets", async () => {
+    const response = await GET();
+    const body = await response.json();
+
+    // Figma 5:83402 / 5:83409 are raster ELLIPSE nodes with an IMAGE fill.
+    expect(body.stats.exchangeRates.map((rate: { icon: string }) => rate.icon)).toEqual([
+      "/assets/hero/flag-inr.png",
+      "/assets/hero/flag-usd.png",
+    ]);
+
+    // Figma 5:86748 / 5:86751 / 5:86755 / 5:86761 are pure vector currency glyphs.
+    expect(body.stats.currencies.map((currency: { icon: string }) => currency.icon)).toEqual([
+      "/assets/hero/currency-dollar.svg",
+      "/assets/hero/currency-euro.svg",
+      "/assets/hero/currency-bitcoin.svg",
+      "/assets/hero/currency-ethereum.svg",
+    ]);
+
+    // Figma 5:86740 is byte-identical to the icon already in the repo.
+    expect(body.stats.monthlyIncome.icon).toBe("/assets/icons/icon_stat_1.svg");
+  });
 });
