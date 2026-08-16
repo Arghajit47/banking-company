@@ -108,6 +108,17 @@ describe("Footer", () => {
     expect(screen.getByTestId("footer-phone")).toContainElement(phone);
   });
 
+  it("spaces the email and phone icons 6px from their label", () => {
+    render(<Footer />);
+
+    // Figma 11:89128 (email) and 11:89132 (phone) are HORIZONTAL auto-layout
+    // frames with itemSpacing: 6. Guards against the gap-[18px] regression.
+    [screen.getByTestId("footer-email"), screen.getByTestId("footer-phone")].forEach((link) => {
+      expect(link.className).toContain("gap-[6px]");
+      expect(link.className).not.toContain("gap-[18px]");
+    });
+  });
+
   it("renders social links, copyright, and legal links", () => {
     render(<Footer />);
     expect(screen.getByTestId("footer-socials")).toBeInTheDocument();
