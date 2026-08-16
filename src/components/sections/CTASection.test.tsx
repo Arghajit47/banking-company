@@ -55,18 +55,26 @@ describe("CTASection", () => {
     expect(heading.querySelector("span")).toHaveClass("text-[#CAFF33]");
   });
 
-  // BC-160 — the CTA heading is NOT a 48/38/28 heading. Figma sizes it smaller than
-  // the other section headings: desktop (11:89110) 40px/60px, laptop (108:2701) 30px/45px.
-  // The blanket `laptop:text-[38px]` applied in BC-157 was wrong for this component.
-  it("heading carries the CTA-specific laptop 30/45 and desktop 40/60 overrides", () => {
+  // BC-167 — monotonic heading ladder. The CTA heading is NOT a 28/38/48 heading;
+  // Figma sizes it 390 = 24px, 1440 = 30px, 1920 = 40px, lineHeight 150% at all three.
+  // Resolved: < 768 -> 24px, 768-1919 -> 30px, >= 1920 -> 40px. Never apply the common
+  // section ladder here (the BC-160 trap).
+  it("heading renders the CTA-specific 24/30/40 ladder with 150% line-height", () => {
     render(<CTASection />);
     const heading = screen.getByTestId("cta-heading");
-    expect(heading.className).toContain("laptop:text-[30px]");
-    expect(heading.className).toContain("laptop:leading-[45px]");
+    expect(heading.className).toContain("text-[24px]");
+    expect(heading.className).toContain("md:text-[30px]");
     expect(heading.className).toContain("desktop:text-[40px]");
-    expect(heading.className).toContain("desktop:leading-[60px]");
-    expect(heading.className).not.toContain("laptop:text-[38px]");
-    expect(heading.className).not.toContain("laptop:leading-[48px]");
+    expect(heading.className).toContain("leading-[150%]");
+    expect(heading.className).not.toContain("text-[28px]");
+    expect(heading.className).not.toContain("md:text-[38px]");
+    expect(heading.className).not.toContain("desktop:text-[48px]");
+    expect(heading.className).not.toMatch(/(?:^|\s)text-(?:xs|sm|base|lg|xl|2xl|3xl|4xl|5xl|6xl)(?:\s|$)/);
+    expect(heading.className).not.toMatch(/(?:sm|lg|xl|2xl|laptop):text-\[/);
+    expect(heading.className).not.toMatch(/(?:sm|md|lg|xl|2xl|laptop|desktop):text-(?:xs|sm|base|lg|xl|2xl|3xl|4xl|5xl|6xl)(?:\s|$)/);
+    expect(heading.className).not.toMatch(/leading-\[\d+px\]/);
+    expect(heading.className).not.toMatch(/(?:^|\s)leading-(?:tight|snug|normal|relaxed|loose)(?:\s|$)/);
+    expect(heading.className).not.toMatch(/(?:sm|md|lg|xl|2xl|laptop|desktop):leading-/);
   });
 
   it("renders body text from API data", () => {

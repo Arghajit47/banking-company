@@ -127,7 +127,7 @@ export function JobOpeningsSection() {
         >
           <h2
             data-testid="job-openings-section-heading"
-            className="text-[36px] font-medium leading-[150%] text-[#CAFF33] md:text-[42px] lg:text-[48px] laptop:text-[38px] desktop:text-[48px]"
+            className="text-[28px] font-medium leading-[150%] text-[#CAFF33] md:text-[38px] desktop:text-[48px]"
           >
             {SECTION_HEADING}
           </h2>

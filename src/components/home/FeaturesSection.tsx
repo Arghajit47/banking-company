@@ -132,7 +132,7 @@ export function FeaturesSection() {
       <div className="mb-[50px] lg:pr-[300px]" data-testid="features-header">
         <h2
           data-testid="features-heading"
-          className="mb-[14px] font-urbanist text-2xl font-medium leading-[150%] text-white sm:text-[48px] laptop:text-[38px] desktop:text-[48px]"
+          className="mb-[14px] font-urbanist text-[28px] font-medium leading-[150%] text-white md:text-[38px] desktop:text-[48px]"
         >
           Our <span className="text-[#CAFF33]">Features</span>
         </h2>
