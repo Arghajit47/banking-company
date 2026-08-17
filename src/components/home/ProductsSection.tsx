@@ -131,7 +131,7 @@ export function ProductsSection() {
               <article
                 key={product.id}
                 data-testid={`product-card-${product.id}`}
-                className="flex flex-col rounded-2xl border border-[#262626] bg-[#1E1E1E] p-6 transition hover:border-[#333333] sm:p-8 laptop:rounded-none laptop:border-y-0 laptop:border-r-0 laptop:border-l laptop:border-l-[#262626] laptop:first:border-l-0"
+                className="flex flex-col rounded-2xl border border-[#262626] bg-[#1E1E1E] p-6 transition hover:border-[#333333] sm:p-8 laptop:rounded-none laptop:border-y-0 laptop:border-r-0 laptop:border-l laptop:border-l-[#262626] laptop:px-10 laptop:first:border-l-0 desktop:px-[50px]"
               >
                 <div className="mb-6 flex items-center gap-4">
                   <div

@@ -293,4 +293,68 @@ describe("ProductsSection", () => {
     expect(grid.className).toContain("laptop:rounded-2xl");
     expect(grid.className).not.toContain("laptop:divide-x");
   });
+
+  // BC-180 — inter-column spacing.
+  //
+  // Figma renders each column separation as a zero-width LINE node sitting as its
+  // own auto-layout item inside the grid frame, so the frame's itemSpacing lands in
+  // full on BOTH sides of the divider:
+  //   1440 (104:2415) w=1280, itemSpacing 40 — card1 ends x=373.33, LINE x=413.33,
+  //                    card2 starts x=453.33  => 40px text-edge -> divider
+  //   1920 (11:86933) w=1596, itemSpacing 50 — card1 ends x=465.33, LINE x=515.33,
+  //                    card2 starts x=565.33  => 50px text-edge -> divider
+  // The Figma card frames themselves carry padding 0/0/0/0, so that breathing room
+  // is spacing, not padding, in the design. Code implements the separation as
+  // gap-0 + `border-l` dividers (BC-155, QA-passed), which means the equivalent
+  // distance has to live in each card's horizontal padding. A fixed `sm:p-8` (32px)
+  // matched neither width and had no responsive step at all, so 1440 and 1920
+  // rendered identically where Figma steps 40 -> 50.
+  it("card horizontal padding steps 40px at laptop and 50px at desktop to match Figma divider spacing", () => {
+    render(<ProductsSection />);
+    for (const id of [1, 2, 3]) {
+      const card = screen.getByTestId(`product-card-${id}`);
+      expect(card.className).toContain("laptop:px-10");
+      expect(card.className).toContain("desktop:px-[50px]");
+    }
+  });
+
+  it("card padding below laptop is unchanged and no gap is reintroduced to carry the spacing", () => {
+    render(<ProductsSection />);
+    const card = screen.getByTestId("product-card-1");
+    // vertical inset stays on the BC-155 container value - Figma cards have no
+    // vertical padding, so only the horizontal axis is Figma-derivable here.
+    expect(card.className).toContain("p-6");
+    expect(card.className).toContain("sm:p-8");
+
+    // The spacing must NOT be delivered as a grid gap - that would break the
+    // unified bordered container BC-155 established.
+    const grid = screen.getByTestId("products-grid");
+    expect(grid.className).toContain("laptop:gap-0");
+    expect(grid.className).not.toMatch(/laptop:gap-(?!0\b)/);
+    expect(grid.className).not.toMatch(/desktop:gap-/);
+  });
+
+  // BC-155 regression guard - the container/divider contract QA measured must
+  // survive any future spacing change.
+  it("keeps the BC-155 unified container and border dividers intact", () => {
+    render(<ProductsSection />);
+    const grid = screen.getByTestId("products-grid");
+    expect(grid.className).toContain("laptop:border");
+    expect(grid.className).toContain("laptop:border-[#262626]");
+    expect(grid.className).toContain("laptop:rounded-2xl");
+    expect(grid.className).toContain("laptop:overflow-hidden");
+    expect(grid.className).toContain("laptop:gap-0");
+
+    // card 1 suppresses its divider; cards 2 and 3 draw a 1px #262626 left border
+    expect(screen.getByTestId("product-card-1").className).toContain(
+      "laptop:first:border-l-0",
+    );
+    for (const id of [2, 3]) {
+      const card = screen.getByTestId(`product-card-${id}`);
+      expect(card.className).toContain("laptop:border-l");
+      expect(card.className).toContain("laptop:border-l-[#262626]");
+      expect(card.className).toContain("laptop:border-y-0");
+      expect(card.className).toContain("laptop:border-r-0");
+    }
+  });
 });
