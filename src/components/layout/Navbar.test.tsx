@@ -139,6 +139,71 @@ describe("Navbar (desktop)", () => {
     expect(nav?.className).not.toContain("desktop:px-10");
   });
 
+  it("navbar mobile horizontal padding is asymmetric: left 24px, right 14px (BC-183)", () => {
+    const { container } = renderWithSWR(<Navbar />);
+    const nav = container.querySelector('nav[aria-label="Primary navigation"]');
+
+    expect(nav).toBeTruthy();
+
+    // BC-183: Figma mobile navbar 108:2748 -> {top:14, right:14, bottom:14,
+    // left:24}. All five sibling mobile page frames (168:10/18/26/34/42) agree.
+    // Mobile is the ONLY asymmetric tier, so the base cannot be a single `px-*`
+    // utility. The defect shipped `px-5` (20px symmetric) at the base tier.
+    expect(nav?.className).toContain("pl-6");
+    expect(nav?.className).toContain("pr-[14px]");
+
+    // The symmetric base value must be gone, or padding-inline would win over
+    // whichever of pl/pr is emitted first and re-symmetrise the mobile tier.
+    expect(nav?.className).not.toContain("px-5");
+  });
+
+  it("navbar vertical padding matches Figma per tier: 14px base, 20px desktop (BC-183)", () => {
+    const { container } = renderWithSWR(<Navbar />);
+    const nav = container.querySelector('nav[aria-label="Primary navigation"]');
+
+    // Figma vertical padding is 14/14 at mobile (108:2748) and laptop
+    // (104:600), 20/20 at desktop (5:27272). Base covers mobile + laptop.
+    expect(nav?.className).toContain("py-[14px]");
+    expect(nav?.className).toContain("desktop:py-5");
+
+    // The fixed heights own the rendered height and encode the same values
+    // (40 + 14 + 14 = 68 at mobile). Height 68 was already correct per BC-179
+    // QA and must survive the padding fix.
+    expect(nav?.className).toContain("h-[68px]");
+  });
+
+  it("BC-183 padding fix leaves the BC-158 active pill and BC-166 active state untouched", () => {
+    currentPathname = "/";
+    const { container } = renderWithSWR(<Navbar />);
+    const homeLink = container.querySelector('[data-testid="nav-link-home"]');
+
+    // The nav's own padding and the pill's padding live on different elements.
+    // BC-158 geometry: 76.63x41 @1440, 100.09x51 @1920, radius 82, bg
+    // rgb(38,38,38). BC-166: route-driven active state, Home active on "/".
+    expect(homeLink?.className).toContain("rounded-[82px]");
+    expect(homeLink?.className).toContain("bg-[#262626]");
+    expect(homeLink?.className).toContain("px-5");
+    expect(homeLink?.className).toContain("py-[10px]");
+    expect(homeLink?.className).toContain("desktop:px-[26.5px]");
+    expect(homeLink?.className).toContain("desktop:py-3");
+  });
+
+  it("BC-183 mobile fix does not re-symmetrise or alter the BC-179 laptop/desktop padding", () => {
+    const { container } = renderWithSWR(<Navbar />);
+    const nav = container.querySelector('nav[aria-label="Primary navigation"]');
+
+    // BC-179 QA measured 24px @1440 and 34px @1920. Those tiers are symmetric
+    // in Figma and must keep the `px-*` shorthand. In Tailwind v4 every
+    // responsive variant is emitted after ALL base utilities, so these still
+    // override the base `pl-6 pr-[14px]` above their breakpoints.
+    expect(nav?.className).toContain("laptop:px-6");
+    expect(nav?.className).toContain("desktop:px-[34px]");
+
+    // Guard against the asymmetry leaking upward into the symmetric tiers.
+    expect(nav?.className).not.toContain("laptop:pr-[14px]");
+    expect(nav?.className).not.toContain("desktop:pr-[14px]");
+  });
+
   it("navbar height stays 73px at laptop and 95px at desktop (BC-179 guard)", () => {
     const { container } = renderWithSWR(<Navbar />);
     const nav = container.querySelector('nav[aria-label="Primary navigation"]');
