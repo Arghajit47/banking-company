@@ -48,7 +48,7 @@ function HeroSkeleton() {
       {/* Right mockup column skeleton */}
       <div
         data-testid="hero-mockup"
-        className="relative z-10 mt-12 w-full max-w-[305.45px] md:mt-0 laptop:max-w-[410px] desktop:max-w-[515px]"
+        className="relative z-10 mt-12 w-full max-w-[305.45px] md:mt-0 md:max-w-[410px] laptop:max-w-[410px] desktop:max-w-[515px]"
       >
         <div className="relative flex flex-col gap-4">
           <div
@@ -268,10 +268,12 @@ export function HeroSection() {
             {/* Right mockup column — the width ladder is Figma-only and non-decreasing:
                 108:2799 = 305.45 @390, 104:640 = 410.19 @1440, 5:83437 = 515.02 @1920.
                 The former base 700px and lg 780px had no Figma frame behind them and made
-                1024–1439 render wider than 1440 does. */}
+                1024–1439 render wider than 1440 does. Per BC-167/BC-173/BC-174, md carries
+                the laptop value up to the desktop tier — the layout is already md:flex-row
+                there — so laptop:max-w-[410px] is a no-op kept only to pin 1440. */}
             <div
               data-testid="hero-mockup"
-              className="relative z-10 mt-12 w-full max-w-[305.45px] md:mt-0 laptop:max-w-[410px] desktop:max-w-[515px]"
+              className="relative z-10 mt-12 w-full max-w-[305.45px] md:mt-0 md:max-w-[410px] laptop:max-w-[410px] desktop:max-w-[515px]"
             >
               <div className="relative flex flex-col gap-4">
                 {/* Monthly Income floating badge — Figma 5:86738 is layoutPositioning ABSOLUTE at

@@ -375,6 +375,9 @@ describe("HeroSection", () => {
 
       // Figma 108:2799 = 305.45 @390, 104:640 = 410.19 @1440, 5:83437 = 515.02 @1920.
       expect(mockup.className).toContain("max-w-[305.45px]");
+      // md carries the 1440 value from 768 up — the BC-167/BC-173/BC-174 idiom —
+      // so 768, 1024 and 1280 resolve to 410px, not to the 390 mobile width.
+      expect(mockup.className).toContain("md:max-w-[410px]");
       expect(mockup.className).toContain("laptop:max-w-[410px]");
       expect(mockup.className).toContain("desktop:max-w-[515px]");
       // 700px and 780px have no Figma frame and made 1024–1439 wider than 1440.
@@ -388,8 +391,10 @@ describe("HeroSection", () => {
       const mockup = screen.getByTestId("hero-mockup");
 
       expect(mockup.className).toContain("max-w-[305.45px]");
+      expect(mockup.className).toContain("md:max-w-[410px]");
       expect(mockup.className).toContain("laptop:max-w-[410px]");
       expect(mockup.className).toContain("desktop:max-w-[515px]");
+      expect(mockup.className).not.toContain("max-w-[700px]");
       expect(mockup.className).not.toContain("lg:max-w-[");
     });
   });
