@@ -330,6 +330,75 @@ describe("HeroSection", () => {
     expect(pill.className).toContain("desktop:w-[370.22px]");
   });
 
+  // BC-175 — three breakpoint ladders that stopped at `laptop:` and therefore leaked
+  // the 1440 value into the 1920 tier, plus a mockup width step with no Figma frame.
+  describe("1920 vertical and type ladders (BC-175)", () => {
+    function getContainer() {
+      return screen.getByTestId("hero-badge").parentElement!.parentElement!;
+    }
+
+    it("gives the hero wrapper the Figma 824.48px min-height at 1920", () => {
+      render(<HeroSection />);
+      const container = getContainer();
+
+      // Figma 5:86791 height 824.4847 — without a desktop override the laptop
+      // 621px min-height leaked all the way to 1920.
+      expect(container.className).toContain("desktop:min-h-[824.48px]");
+      // Figma 104:615 height 621.2744 — the 1440 tier is unchanged.
+      expect(container.className).toContain("laptop:min-h-[621px]");
+      expect(container.className).toContain("min-h-[824px]");
+    });
+
+    it("applies the same wrapper min-height ladder to the loading skeleton", () => {
+      heroMock = { ...baseMock, data: undefined, isLoading: true };
+      render(<HeroSection />);
+      const container = getContainer();
+
+      expect(container.className).toContain("desktop:min-h-[824.48px]");
+      expect(container.className).toContain("laptop:min-h-[621px]");
+    });
+
+    it("restores the 18px CTA label at 1920 while keeping 14px at 1440", () => {
+      render(<HeroSection />);
+      const cta = screen.getByTestId("hero-open-account");
+
+      // Figma 5:86788 fontSize 18 @1920, 104:639 fontSize 14 @1440.
+      expect(cta.className).toContain("desktop:text-[18px]");
+      expect(cta.className).toContain("laptop:text-[14px]");
+      // 390 keeps the unprefixed 18px (Figma 108:2798).
+      expect(cta.className).toContain("text-[18px]");
+    });
+
+    it("keeps the mockup width ladder monotonic with no unfounded 1024–1439 step", () => {
+      render(<HeroSection />);
+      const mockup = screen.getByTestId("hero-mockup");
+
+      // Figma 108:2799 = 305.45 @390, 104:640 = 410.19 @1440, 5:83437 = 515.02 @1920.
+      expect(mockup.className).toContain("max-w-[305.45px]");
+      // md carries the 1440 value from 768 up — the BC-167/BC-173/BC-174 idiom —
+      // so 768, 1024 and 1280 resolve to 410px, not to the 390 mobile width.
+      expect(mockup.className).toContain("md:max-w-[410px]");
+      expect(mockup.className).toContain("laptop:max-w-[410px]");
+      expect(mockup.className).toContain("desktop:max-w-[515px]");
+      // 700px and 780px have no Figma frame and made 1024–1439 wider than 1440.
+      expect(mockup.className).not.toContain("max-w-[700px]");
+      expect(mockup.className).not.toContain("lg:max-w-[");
+    });
+
+    it("applies the same mockup width ladder to the loading skeleton", () => {
+      heroMock = { ...baseMock, data: undefined, isLoading: true };
+      render(<HeroSection />);
+      const mockup = screen.getByTestId("hero-mockup");
+
+      expect(mockup.className).toContain("max-w-[305.45px]");
+      expect(mockup.className).toContain("md:max-w-[410px]");
+      expect(mockup.className).toContain("laptop:max-w-[410px]");
+      expect(mockup.className).toContain("desktop:max-w-[515px]");
+      expect(mockup.className).not.toContain("max-w-[700px]");
+      expect(mockup.className).not.toContain("lg:max-w-[");
+    });
+  });
+
   // BC-172 — the hero horizontal chain at 1920 (children of Figma hero frame 5:86791):
   //   5:52362 left column   pageX  80.53, width 825.98
   //   5:83437 exchange card pageX 906.51, width 515.02

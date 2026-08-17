@@ -48,7 +48,7 @@ function HeroSkeleton() {
       {/* Right mockup column skeleton */}
       <div
         data-testid="hero-mockup"
-        className="relative z-10 mt-12 w-full max-w-[700px] md:mt-0 lg:max-w-[780px] laptop:max-w-[410px] desktop:max-w-[515px]"
+        className="relative z-10 mt-12 w-full max-w-[305.45px] md:mt-0 md:max-w-[410px] laptop:max-w-[410px] desktop:max-w-[515px]"
       >
         <div className="relative flex flex-col gap-4">
           <div
@@ -171,7 +171,7 @@ export function HeroSection() {
         data-testid="hero-section"
         className="relative w-full overflow-hidden bg-[#1A1A1A] font-[var(--font-urbanist)]"
       >
-        <div className="relative mx-auto flex min-h-[824px] max-w-[1920px] flex-col items-center justify-center px-4 py-16 md:flex-row md:items-center md:justify-start md:px-8 lg:px-12 laptop:min-h-[621px] laptop:px-20 desktop:px-[80.53px]">
+        <div className="relative mx-auto flex min-h-[824px] max-w-[1920px] flex-col items-center justify-center px-4 py-16 md:flex-row md:items-center md:justify-start md:px-8 lg:px-12 laptop:min-h-[621px] laptop:px-20 desktop:min-h-[824.48px] desktop:px-[80.53px]">
           <HeroErrorFallback />
         </div>
       </section>
@@ -186,7 +186,7 @@ export function HeroSection() {
       data-testid="hero-section"
       className="relative w-full overflow-hidden bg-[#1A1A1A] font-[var(--font-urbanist)]"
     >
-      <div className="relative mx-auto flex min-h-[824px] max-w-[1920px] flex-col items-center justify-center px-4 py-16 md:flex-row md:items-center md:justify-start md:px-8 lg:px-12 laptop:min-h-[621px] laptop:px-20 desktop:px-[80.53px]">
+      <div className="relative mx-auto flex min-h-[824px] max-w-[1920px] flex-col items-center justify-center px-4 py-16 md:flex-row md:items-center md:justify-start md:px-8 lg:px-12 laptop:min-h-[621px] laptop:px-20 desktop:min-h-[824.48px] desktop:px-[80.53px]">
         {showSkeleton ? (
           <HeroSkeleton />
         ) : (
@@ -243,7 +243,7 @@ export function HeroSection() {
               <button
                 type="button"
                 data-testid="hero-open-account"
-                className="rounded-[82px] bg-[#CAFF33] px-[30px] py-[18px] text-[18px] font-semibold leading-[150%] text-[#1C1C1C] transition hover:brightness-110 hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#1A1A1A] laptop:text-[14px]"
+                className="rounded-[82px] bg-[#CAFF33] px-[30px] py-[18px] text-[18px] font-semibold leading-[150%] text-[#1C1C1C] transition hover:brightness-110 hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#1A1A1A] laptop:text-[14px] desktop:text-[18px]"
               >
                 {hero.ctaLabel}
               </button>
@@ -265,10 +265,15 @@ export function HeroSection() {
               className="pointer-events-none absolute right-0 top-0 z-0 hidden w-[200px] laptop:w-[300px] md:block desktop:right-[80.55px] desktop:top-[100px] desktop:h-[382.73px] desktop:w-[417.95px]"
             />
 
-            {/* Right mockup column */}
+            {/* Right mockup column — the width ladder is Figma-only and non-decreasing:
+                108:2799 = 305.45 @390, 104:640 = 410.19 @1440, 5:83437 = 515.02 @1920.
+                The former base 700px and lg 780px had no Figma frame behind them and made
+                1024–1439 render wider than 1440 does. Per BC-167/BC-173/BC-174, md carries
+                the laptop value up to the desktop tier — the layout is already md:flex-row
+                there — so laptop:max-w-[410px] is a no-op kept only to pin 1440. */}
             <div
               data-testid="hero-mockup"
-              className="relative z-10 mt-12 w-full max-w-[700px] md:mt-0 lg:max-w-[780px] laptop:max-w-[410px] desktop:max-w-[515px]"
+              className="relative z-10 mt-12 w-full max-w-[305.45px] md:mt-0 md:max-w-[410px] laptop:max-w-[410px] desktop:max-w-[515px]"
             >
               <div className="relative flex flex-col gap-4">
                 {/* Monthly Income floating badge — Figma 5:86738 is layoutPositioning ABSOLUTE at
