@@ -140,4 +140,30 @@ describe("MissionVisionSection", () => {
     expect(heading.className).not.toMatch(/(?:^|\s)font-medium(?:\s|$)/);
     expect(heading.className).not.toMatch(/(?:sm|md|lg|xl|2xl|laptop|desktop):font-(?:thin|extralight|light|normal|medium|semibold|bold|extrabold|black)/);
   });
+  // BC-178 — mission/vision card heading ladder. Figma has exactly three frames:
+  // mobile 390 (116:10537 Mission / 116:10558 Vision) = 26px, laptop 1440
+  // (113:10145 / 113:10149) = 32px, desktop 1920 (62:1563 / 62:1570) = 38px.
+  // Resolved: < 1440 -> 26px, 1440-1919 -> 32px, >= 1920 -> 38px.
+  // The old ladder was `text-[28px] md:text-[34px] lg:text-[38px] laptop:text-[32px]`,
+  // which overshot to 38px in the 1024-1439 band and then dropped to 32px, and it
+  // never reached 38px at 1920. 28px and 34px appear in no frame for this heading.
+  it.each(["mission-card-heading", "vision-card-heading"])(
+    "%s renders the Figma 26/32/38 ladder and a 150 percent line-height",
+    (testId) => {
+      render(<MissionVisionSection />);
+      const heading = screen.getByTestId(testId);
+      expect(heading.className).toContain("text-[26px]");
+      expect(heading.className).toContain("laptop:text-[32px]");
+      expect(heading.className).toContain("desktop:text-[38px]");
+      expect(heading.className).toContain("leading-[150%]");
+      // No frame specifies these sizes.
+      expect(heading.className).not.toMatch(/text-\[28px\]/);
+      expect(heading.className).not.toMatch(/text-\[34px\]/);
+      // Steps may only occur at laptop (1440) and desktop (1920).
+      expect(heading.className).not.toMatch(/(?:sm|md|lg|xl|2xl):text-\[/);
+      expect(heading.className).not.toMatch(
+        /(?:^|\s)text-(?:xs|sm|base|lg|xl|2xl|3xl|4xl|5xl|6xl)(?:\s|$)/
+      );
+    }
+  );
 });

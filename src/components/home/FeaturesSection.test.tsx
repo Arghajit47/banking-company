@@ -330,4 +330,29 @@ describe("FeaturesSection (SWR integration)", () => {
       screen.getByRole("navigation", { name: "Feature categories" })
     ).toBeDefined();
   });
+  // BC-178 — feature card title ladder. Figma has exactly three frames: mobile 390
+  // (112:4861) = 18px, laptop 1440 (108:2571) = 18px, desktop 1920 (41:130) = 22px.
+  // Mobile and laptop are identical, so the ladder has only one step: base 18px,
+  // desktop (1920) 22px. Resolved: < 1920 -> 18px, >= 1920 -> 22px.
+  // The old ladder was `text-[22px] laptop:text-[18px]`, which started at 22px and
+  // shrank to 18px at 1440, so 1920 rendered 18px instead of 22px.
+  it("feature card titles render the Figma 18/18/22 ladder with 150% line-height", () => {
+    render(<FeaturesSection />);
+    const titles = Array.from(
+      document.querySelectorAll('[data-testid^="feature-card-title-"]')
+    );
+    expect(titles.length).toBeGreaterThan(0);
+    for (const title of titles) {
+      expect(title.className).toContain("text-[18px]");
+      expect(title.className).toContain("desktop:text-[22px]");
+      expect(title.className).toContain("leading-[150%]");
+      // 22px must not be the base size, and no frame introduces a laptop step.
+      expect(title.className).not.toMatch(/(?:^|\s)text-\[22px\]/);
+      expect(title.className).not.toMatch(/laptop:text-\[/);
+      expect(title.className).not.toMatch(/(?:sm|md|lg|xl|2xl):text-\[/);
+      expect(title.className).not.toMatch(
+        /(?:^|\s)text-(?:xs|sm|base|lg|xl|2xl|3xl|4xl|5xl|6xl)(?:\s|$)/
+      );
+    }
+  });
 });
