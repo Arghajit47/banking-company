@@ -13,7 +13,7 @@ function SecurityHeroSkeleton() {
       <div className="flex flex-col-reverse items-start md:flex-row">
         <div
           data-testid="security-hero-text-container"
-          className="relative z-20 -mt-[41px] flex shrink-0 flex-col gap-[14px] rounded-[20px] bg-[#1A1A1A] p-6 md:mt-0 md:w-full md:max-w-[791px] md:gap-[23px] md:rounded-[20px_0_80px_20px] md:p-[80px] laptop:w-[658px] laptop:gap-[20px] laptop:rounded-[20px_0_60px_20px] laptop:p-[60px] desktop:w-[791px] desktop:gap-[23px] desktop:rounded-[20px_0_80px_20px] desktop:p-[80px]"
+          className="relative z-20 -mt-[41px] flex shrink-0 flex-col gap-[14px] rounded-[20px] bg-[#1A1A1A] p-6 md:mt-0 md:shrink md:w-full md:max-w-[791px] md:gap-[23px] md:rounded-[20px_0_80px_20px] md:p-[80px] laptop:w-[658px] laptop:gap-[20px] laptop:rounded-[20px_0_60px_20px] laptop:p-[60px] desktop:w-[791px] desktop:gap-[23px] desktop:rounded-[20px_0_80px_20px] desktop:p-[80px]"
         >
           <div
             data-testid="security-hero-heading"
@@ -31,7 +31,7 @@ function SecurityHeroSkeleton() {
         </div>
         <div
           data-testid="security-hero-image-wrapper"
-          className="flex-1 md:-ml-[260px] laptop:-ml-[174px] desktop:-ml-[260px]"
+          className="flex-1 md:min-w-[260px] laptop:-ml-[174px] desktop:-ml-[260px]"
         >
           <div className="h-[400px] w-full animate-pulse rounded-[16px] bg-[#333333]" />
         </div>
@@ -65,7 +65,7 @@ export function SecurityHeroSection() {
       <div className="flex flex-col-reverse items-start md:flex-row">
         <div
           data-testid="security-hero-text-container"
-          className="relative z-20 -mt-[41px] flex shrink-0 flex-col gap-[14px] rounded-[20px] bg-[#1A1A1A] p-6 md:mt-0 md:w-full md:max-w-[791px] md:gap-[23px] md:rounded-[20px_0_80px_20px] md:p-[80px] laptop:w-[658px] laptop:gap-[20px] laptop:rounded-[20px_0_60px_20px] laptop:p-[60px] desktop:w-[791px] desktop:gap-[23px] desktop:rounded-[20px_0_80px_20px] desktop:p-[80px]"
+          className="relative z-20 -mt-[41px] flex shrink-0 flex-col gap-[14px] rounded-[20px] bg-[#1A1A1A] p-6 md:mt-0 md:shrink md:w-full md:max-w-[791px] md:gap-[23px] md:rounded-[20px_0_80px_20px] md:p-[80px] laptop:w-[658px] laptop:gap-[20px] laptop:rounded-[20px_0_60px_20px] laptop:p-[60px] desktop:w-[791px] desktop:gap-[23px] desktop:rounded-[20px_0_80px_20px] desktop:p-[80px]"
         >
           {error && (
             <p className="text-sm text-red-400">
@@ -87,9 +87,14 @@ export function SecurityHeroSection() {
           </p>
         </div>
 
+        {/* BC-186 — no negative offset in the unspecified 768-1439 band; Figma
+            specifies the horizontal overlap only at 1440 (-174) and 1920 (-260).
+            md:min-w-[260px] floors this flex-1 (basis 0) wrapper so the fluid
+            md:w-full card cannot take the whole row and render the image 0px wide;
+            md:shrink on the card is what keeps that floor from overflowing at 768. */}
         <div
           data-testid="security-hero-image-wrapper"
-          className="relative z-10 flex-1 md:-ml-[260px] laptop:-ml-[174px] desktop:-ml-[260px]"
+          className="relative z-10 flex-1 md:min-w-[260px] laptop:-ml-[174px] desktop:-ml-[260px]"
         >
           <Image
             data-testid="security-hero-image"

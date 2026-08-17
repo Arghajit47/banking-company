@@ -39,27 +39,37 @@ describe("SecurityHeroSection", () => {
 
   it("renders the text container", () => {
     render(<SecurityHeroSection />);
-    expect(screen.getByTestId("security-hero-text-container")).toBeInTheDocument();
+    expect(
+      screen.getByTestId("security-hero-text-container"),
+    ).toBeInTheDocument();
   });
 
   it("renders the heading with data from API", () => {
     render(<SecurityHeroSection />);
-    expect(screen.getByTestId("security-hero-heading").textContent).toContain("Your Security is Our");
+    expect(screen.getByTestId("security-hero-heading").textContent).toContain(
+      "Your Security is Our",
+    );
   });
 
   it("renders the heading accent 'Top Priority' from API", () => {
     render(<SecurityHeroSection />);
-    expect(screen.getByTestId("security-hero-heading").textContent).toContain("Top Priority");
+    expect(screen.getByTestId("security-hero-heading").textContent).toContain(
+      "Top Priority",
+    );
   });
 
   it("renders the body paragraph from API", () => {
     render(<SecurityHeroSection />);
-    expect(screen.getByTestId("security-hero-paragraph").textContent).toContain("At YourBank");
+    expect(screen.getByTestId("security-hero-paragraph").textContent).toContain(
+      "At YourBank",
+    );
   });
 
   it("renders the image wrapper", () => {
     render(<SecurityHeroSection />);
-    expect(screen.getByTestId("security-hero-image-wrapper")).toBeInTheDocument();
+    expect(
+      screen.getByTestId("security-hero-image-wrapper"),
+    ).toBeInTheDocument();
   });
 
   it("renders the hero image", () => {
@@ -118,7 +128,9 @@ describe("SecurityHeroSection", () => {
 
   it("stacks image above text at 390 via flex-col-reverse, keeping the laptop row order", () => {
     render(<SecurityHeroSection />);
-    const row = screen.getByTestId("security-hero-text-container").parentElement;
+    const row = screen.getByTestId(
+      "security-hero-text-container",
+    ).parentElement;
     expect(row).toHaveClass("flex-col-reverse");
     expect(row).toHaveClass("md:flex-row");
     expect(row).not.toHaveClass("flex-col");
@@ -131,6 +143,36 @@ describe("SecurityHeroSection", () => {
     expect(el).not.toHaveClass("mt-6");
   });
 
+  // BC-186 — md:-ml-[260px] bound the 1920 offset at 768, where the image wrapper
+  // is only 260px wide, so it sat exactly its own width behind the 636px text card
+  // and rendered 0px visible. Figma specifies the horizontal overlap only at 1440
+  // (itemSpacing -174, 113:7168) and 1920 (-260, 58:1538) — there is no frame
+  // between 390 and 1440, so nothing replaces it in the 768-1439 band.
+  it("image wrapper carries no negative offset in the unspecified 768-1439 band", () => {
+    render(<SecurityHeroSection />);
+    const el = screen.getByTestId("security-hero-image-wrapper");
+    expect(el).not.toHaveClass("md:-ml-[260px]");
+    expect(el.className).not.toContain("md:-ml-[");
+    expect(el).toHaveClass("laptop:-ml-[174px]");
+    expect(el).toHaveClass("desktop:-ml-[260px]");
+  });
+
+  // BC-186 — removing md:-ml-[260px] is necessary but not sufficient: BC-181 made
+  // the card md:w-full, and a shrink-0 card at 100% consumed the whole row, so the
+  // flex-1 (basis 0) image wrapper resolved to 0px wide from 768 to ~890 — still
+  // invisible, just no longer occluded. md:min-w-[260px] floors the image column and
+  // md:shrink lets the card give up that space instead of overflowing.
+  // Measured after the fix: 768 -> card 408 / image 260 fully visible, 1024 -> 664 /
+  // 260, and 1440 / 1920 unchanged at 658 / 876 and 791 / 968, no overflow anywhere.
+  it("image column has a floor in the 768-1439 band and the card yields to it", () => {
+    render(<SecurityHeroSection />);
+    expect(screen.getByTestId("security-hero-image-wrapper")).toHaveClass(
+      "md:min-w-[260px]",
+    );
+    expect(screen.getByTestId("security-hero-text-container")).toHaveClass(
+      "md:shrink",
+    );
+  });
 
   it("heading is 28px at 390 and stays 48px from 768 through 1439 and at 1440", () => {
     render(<SecurityHeroSection />);

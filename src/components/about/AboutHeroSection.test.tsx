@@ -52,7 +52,9 @@ describe("AboutHeroSection (SWR integration)", () => {
 
   it("renders label with 'Welcome to YourBank'", () => {
     render(<AboutHeroSection />);
-    expect(screen.getByTestId("about-hero-label").textContent).toBe("Welcome to YourBank");
+    expect(screen.getByTestId("about-hero-label").textContent).toBe(
+      "Welcome to YourBank",
+    );
   });
 
   it("renders heading with API headline", () => {
@@ -69,7 +71,9 @@ describe("AboutHeroSection (SWR integration)", () => {
 
   it("renders paragraph containing API body", () => {
     render(<AboutHeroSection />);
-    expect(screen.getByTestId("about-hero-paragraph").textContent).toContain("At YourBank");
+    expect(screen.getByTestId("about-hero-paragraph").textContent).toContain(
+      "At YourBank",
+    );
   });
 
   it("renders the image wrapper", () => {
@@ -85,7 +89,10 @@ describe("AboutHeroSection (SWR integration)", () => {
   it("shows loading skeleton when isLoading=true", () => {
     mockState = { data: undefined, error: undefined, isLoading: true };
     render(<AboutHeroSection />);
-    expect(screen.getByTestId("about-hero-heading")).toHaveAttribute("aria-hidden", "true");
+    expect(screen.getByTestId("about-hero-heading")).toHaveAttribute(
+      "aria-hidden",
+      "true",
+    );
   });
 
   it("uses no light-theme classes", () => {
@@ -144,6 +151,37 @@ describe("AboutHeroSection (SWR integration)", () => {
     const el = screen.getByTestId("about-hero-image-wrapper");
     expect(el).toHaveClass("laptop:-ml-[174px]");
     expect(el).not.toHaveClass("mt-6");
+  });
+
+  // BC-186 — md:-ml-[260px] bound the 1920 offset at 768, where the image wrapper
+  // is only 260px wide, so it sat exactly its own width behind the 636px text card
+  // and rendered 0px visible. Figma specifies the horizontal overlap only at 1440
+  // (itemSpacing -174, 113:9895) and 1920 (-260, 58:1537) — there is no frame
+  // between 390 and 1440, so nothing replaces it in the 768-1439 band.
+  it("image wrapper carries no negative offset in the unspecified 768-1439 band", () => {
+    render(<AboutHeroSection />);
+    const el = screen.getByTestId("about-hero-image-wrapper");
+    expect(el).not.toHaveClass("md:-ml-[260px]");
+    expect(el.className).not.toContain("md:-ml-[");
+    expect(el).toHaveClass("laptop:-ml-[174px]");
+    expect(el).toHaveClass("desktop:-ml-[260px]");
+  });
+
+  // BC-186 — removing md:-ml-[260px] is necessary but not sufficient: BC-181 made
+  // the card md:w-full, and a shrink-0 card at 100% consumed the whole row, so the
+  // flex-1 (basis 0) image wrapper resolved to 0px wide from 768 to ~890 — still
+  // invisible, just no longer occluded. md:min-w-[260px] floors the image column and
+  // md:shrink lets the card give up that space instead of overflowing.
+  // Measured after the fix: 768 -> card 408 / image 260 fully visible, 1024 -> 664 /
+  // 260, and 1440 / 1920 unchanged at 658 / 876 and 791 / 968, no overflow anywhere.
+  it("image column has a floor in the 768-1439 band and the card yields to it", () => {
+    render(<AboutHeroSection />);
+    expect(screen.getByTestId("about-hero-image-wrapper")).toHaveClass(
+      "md:min-w-[260px]",
+    );
+    expect(screen.getByTestId("about-hero-text-container")).toHaveClass(
+      "md:shrink",
+    );
   });
 
   it("label is 14px at 390 and 18px at 1440", () => {
