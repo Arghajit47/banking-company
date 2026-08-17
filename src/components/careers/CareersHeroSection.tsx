@@ -10,10 +10,10 @@ function CareersHeroSkeleton() {
       data-testid="careers-hero-section"
       className="relative mx-auto w-full max-w-[1599px] rounded-[20px] bg-[#1C1C1C] p-[14px] sm:p-[50px] laptop:p-[40px] desktop:p-[50px]"
     >
-      <div className="flex flex-col items-start md:flex-row">
+      <div className="flex flex-col-reverse items-start md:flex-row">
         <div
           data-testid="careers-hero-text-container"
-          className="relative z-20 flex shrink-0 flex-col gap-[14px] rounded-[20px] bg-[#1A1A1A] p-6 md:shrink md:w-full md:max-w-[791px] md:gap-[23px] md:rounded-[20px_0_80px_20px] md:p-[80px] laptop:w-[658px] laptop:gap-[20px] laptop:rounded-[20px_0_60px_20px] laptop:p-[60px] desktop:w-[791px] desktop:gap-[23px] desktop:rounded-[20px_0_80px_20px] desktop:p-[80px]"
+          className="relative z-20 -mt-[41px] flex shrink-0 flex-col gap-[14px] rounded-[20px] bg-[#1A1A1A] p-6 md:mt-0 md:shrink md:w-full md:max-w-[791px] md:gap-[23px] md:rounded-[20px_0_80px_20px] md:p-[80px] laptop:w-[658px] laptop:gap-[20px] laptop:rounded-[20px_0_60px_20px] laptop:p-[60px] desktop:w-[791px] desktop:gap-[23px] desktop:rounded-[20px_0_80px_20px] desktop:p-[80px]"
         >
           <div
             data-testid="careers-hero-heading"
@@ -31,7 +31,7 @@ function CareersHeroSkeleton() {
         </div>
         <div
           data-testid="careers-hero-image-wrapper"
-          className="mt-6 flex-1 md:mt-0 md:min-w-[260px] laptop:-ml-[174px] desktop:-ml-[260px]"
+          className="flex-1 md:min-w-[260px] laptop:-ml-[174px] desktop:-ml-[260px]"
         >
           <div className="h-[400px] w-full animate-pulse rounded-[16px] bg-[#333333]" />
         </div>
@@ -65,11 +65,11 @@ export function CareersHeroSection() {
       />
 
       {/* Horizontal flex container */}
-      <div className="flex flex-col items-start md:flex-row">
+      <div className="flex flex-col-reverse items-start md:flex-row">
         {/* Text card — z-20 keeps it above the hero image in the overlap zone */}
         <div
           data-testid="careers-hero-text-container"
-          className="relative z-20 flex shrink-0 flex-col gap-[14px] rounded-[20px] bg-[#1A1A1A] p-6 md:shrink md:w-full md:max-w-[791px] md:gap-[23px] md:rounded-[20px_0_80px_20px] md:p-[80px] laptop:w-[658px] laptop:gap-[20px] laptop:rounded-[20px_0_60px_20px] laptop:p-[60px] desktop:w-[791px] desktop:gap-[23px] desktop:rounded-[20px_0_80px_20px] desktop:p-[80px]"
+          className="relative z-20 -mt-[41px] flex shrink-0 flex-col gap-[14px] rounded-[20px] bg-[#1A1A1A] p-6 md:mt-0 md:shrink md:w-full md:max-w-[791px] md:gap-[23px] md:rounded-[20px_0_80px_20px] md:p-[80px] laptop:w-[658px] laptop:gap-[20px] laptop:rounded-[20px_0_60px_20px] laptop:p-[60px] desktop:w-[791px] desktop:gap-[23px] desktop:rounded-[20px_0_80px_20px] desktop:p-[80px]"
         >
           {error && (
             <p className="text-sm text-red-400">
@@ -105,7 +105,7 @@ export function CareersHeroSection() {
             md:shrink on the card is what keeps that floor from overflowing at 768. */}
         <div
           data-testid="careers-hero-image-wrapper"
-          className="relative z-10 mt-6 flex-1 md:mt-0 md:min-w-[260px] laptop:-ml-[174px] desktop:-ml-[260px]"
+          className="relative z-10 flex-1 md:min-w-[260px] laptop:-ml-[174px] desktop:-ml-[260px]"
         >
           <Image
             data-testid="careers-hero-image"

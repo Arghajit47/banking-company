@@ -136,16 +136,37 @@ describe("CareersHeroSection", () => {
     // 20-0-80-20 / padding 32). Figma mobile card 113:9566 is 329x365 with gap 14,
     // padding 24 and a uniform 20 radius — identical to About 116:10300 and
     // Security 116:11071. The md tier keeps the QA-verified 768+ values.
-    it("text container carries the 390 mobile tier: 14 / 20 uniform / 24", () => {
+    it("text container carries the 390 mobile tier: 14 / 20 uniform / 24 / -41 overlap", () => {
       renderBranch();
       const el = screen.getByTestId("careers-hero-text-container");
       expect(el).toHaveClass("gap-[14px]");
       expect(el).toHaveClass("rounded-[20px]");
       expect(el).toHaveClass("p-6");
+      expect(el).toHaveClass("-mt-[41px]");
+      expect(el).toHaveClass("md:mt-0");
       // the desktop-shaped mobile values must not come back
       expect(el).not.toHaveClass("gap-[23px]");
       expect(el).not.toHaveClass("rounded-[20px_0_80px_20px]");
       expect(el).not.toHaveClass("p-8");
+    });
+
+    // BC-187 — Figma 113:9566's parent frame 113:9565 is VERTICAL with child order
+    // Abstract Design / Image / Text Container and itemSpacing -41, i.e. image above
+    // text with a 41px overlap — the same shape as About 116:10297 and Security
+    // 116:11068. Careers stacked text-above-image via flex-col with a positive mt-6
+    // on the image wrapper, which is the opposite order and fought the -41 offset.
+    it("stacks image above text at 390 via flex-col-reverse, keeping the laptop row order", () => {
+      renderBranch();
+      const row = screen.getByTestId(
+        "careers-hero-text-container",
+      ).parentElement;
+      expect(row).toHaveClass("flex-col-reverse");
+      expect(row).toHaveClass("md:flex-row");
+      expect(row).not.toHaveClass("flex-col");
+      // the positive margin that fought the card's -41 overlap must not come back
+      const img = screen.getByTestId("careers-hero-image-wrapper");
+      expect(img).not.toHaveClass("mt-6");
+      expect(img.className).not.toContain("mt-");
     });
 
     it("md tier still pins the QA-verified 768+ values", () => {
