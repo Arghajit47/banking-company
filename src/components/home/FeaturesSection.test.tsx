@@ -355,4 +355,39 @@ describe("FeaturesSection (SWR integration)", () => {
       );
     }
   });
+
+  // BC-184 — feature card <h3> font-weight must be uniform across every breakpoint.
+  // Confirmed from the feature card's OWN Figma nodes, not by extending BC-164/BC-168:
+  // desktop 1920 41:130 / 41:133 / 41:141 / 41:148,
+  // laptop 1440 108:2571 / 108:2578 / 108:2586 / 108:2593,
+  // mobile 390  112:4861 / 112:4868 / 112:4876 / 112:4883
+  // — all twelve are fontWeight 400 (Lexend Regular).
+  // The old `font-medium laptop:font-normal` rendered 500 below 1440 and 400 at/above it.
+  // A breakpoint-prefixed weight variant is a min-width override, so any such class
+  // would re-split the weight at some viewport and diverge from the design.
+  it("feature card titles render font-weight 400 at every breakpoint", () => {
+    render(<FeaturesSection />);
+    const titles = Array.from(
+      document.querySelectorAll('[data-testid^="feature-card-title-"]')
+    );
+    expect(titles.length).toBe(4);
+    for (const title of titles) {
+      expect(title.className).toMatch(/(?:^|\s)font-normal(?:\s|$)/);
+      expect(title.className).not.toMatch(/(?:^|\s)font-medium(?:\s|$)/);
+      expect(title.className).not.toMatch(
+        /(?:sm|md|lg|xl|2xl|laptop|desktop):font-(?:thin|extralight|light|normal|medium|semibold|bold|extrabold|black)/
+      );
+    }
+  });
+
+  // The skeleton card renders no title element, so the weight is declared in exactly
+  // one place. If a second title class string appears, this stops the guard above
+  // from silently passing on only some of the rendered titles.
+  it("declares the feature card title classes exactly once", () => {
+    render(<FeaturesSection />);
+    const titles = Array.from(
+      document.querySelectorAll('[data-testid^="feature-card-title-"]')
+    );
+    expect(new Set(titles.map((title) => title.className)).size).toBe(1);
+  });
 });
