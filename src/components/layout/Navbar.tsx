@@ -170,9 +170,17 @@ export function Navbar() {
         height={353}
         className="pointer-events-none absolute left-0 top-0 z-0 hidden laptop:block"
       />
+      {/*
+        BC-179: horizontal padding is per-frame, not a shared value. Figma
+        laptop navbar 104:600 has paddingLeft/Right 24; desktop navbar
+        5:27272 has 34. The previous `laptop:px-10 desktop:px-10` was a
+        well-formed counterpart pair whose BOTH values were wrong (40px), so a
+        "does a counterpart exist?" audit passed it. Compare values against the
+        node, never just the presence of a counterpart.
+      */}
       <nav
         aria-label="Primary navigation"
-        className="relative z-10 mx-auto flex h-[68px] max-w-[1596px] items-center justify-between rounded-[100px] border border-[#262626] bg-[#1C1C1C] px-5 laptop:h-[73px] laptop:px-10 desktop:h-[95px] desktop:px-10"
+        className="relative z-10 mx-auto flex h-[68px] max-w-[1596px] items-center justify-between rounded-[100px] border border-[#262626] bg-[#1C1C1C] px-5 laptop:h-[73px] laptop:px-6 desktop:h-[95px] desktop:px-[34px]"
       >
         {/* Logo */}
         <Link
