@@ -27,21 +27,33 @@ describe("LoginForm", () => {
     expect(screen.getByTestId("login-form-heading").textContent).toBe("Login");
   });
 
-  // BC-177 — heading size ladder. Figma "Login": desktop 67:148 = 48px @1920,
-  // laptop 116:11471 = 38px @1440. `laptop:` and `desktop:` are min-width
-  // breakpoints (90rem / 120rem), so a bare `laptop:text-[38px]` with no
-  // `desktop:` counterpart leaks 38px all the way up to 1920.
-  test("heading renders the 38px/48px size ladder across breakpoints", () => {
+  // BC-182 — heading size ladder, all three Figma frames. Figma "Login":
+  // mobile 116:11682 = 28px @390, laptop 116:11471 = 38px @1440,
+  // desktop 67:148 = 48px @1920. The base class was the *desktop* 48px, so
+  // every width below 1440 rendered 48px instead of the mobile 28px.
+  // The idiom is base = mobile, `md:` (48rem) = laptop value, `desktop:`
+  // (120rem) = desktop value, giving 28 / 38 / 48 monotonically. `md:` rather
+  // than `laptop:` carries the 38px step because 38px must already apply at
+  // 768; `laptop:` (90rem) would leak 28px up to 1439.
+  test("heading renders the 28px/38px/48px size ladder across breakpoints", () => {
     render(<LoginForm />);
     const heading = screen.getByTestId("login-form-heading");
-    expect(heading.className).toContain("text-[48px]");
-    expect(heading.className).toContain("laptop:text-[38px]");
+    expect(heading.className).toContain("text-[28px]");
+    expect(heading.className).toContain("md:text-[38px]");
     expect(heading.className).toContain("desktop:text-[48px]");
     expect(heading.className).toContain("leading-[1.25]");
+    // Guard: no size step at any breakpoint Figma does not specify a frame for.
+    // Only three frames exist (390 / 1440 / 1920), so `md:` and `desktop:` are
+    // the only legal size variants — no sm/lg/xl/2xl/laptop step.
+    expect(heading.className).not.toMatch(
+      /(?:^|\s)(?:sm|lg|xl|2xl|laptop):text-\[/,
+    );
+    // Guard: the old desktop-as-base bug must not return.
+    expect(heading.className).not.toMatch(/(?:^|\s)text-\[48px\]/);
+    expect(heading.className).not.toMatch(/(?:^|\s)laptop:text-\[38px\]/);
     expect(heading.className).not.toMatch(
       /(?:^|\s)text-(?:xs|sm|base|lg|xl|2xl|3xl|4xl|5xl|6xl)(?:\s|$)/,
     );
-    expect(heading.className).not.toMatch(/(?:sm|md|lg|xl|2xl):text-\[/);
     expect(heading.className).not.toMatch(
       /(?:sm|md|lg|xl|2xl|laptop|desktop):text-(?:xs|sm|base|lg|xl|2xl|3xl|4xl|5xl|6xl)(?:\s|$)/,
     );
