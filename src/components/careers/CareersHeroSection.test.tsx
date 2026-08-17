@@ -84,6 +84,63 @@ describe("CareersHeroSection", () => {
     expect(el.className).not.toContain("sm:text-[");
   });
 
+  // Figma: text container 113:7169 (1440) = 658 / gap 20 / radius 20-0-60-20 / pad 60
+  //        58:1539 (1920) = 791 / gap 23 / radius 20-0-80-20 / pad 80
+  // Mirrors AboutHeroSection + SecurityHeroSection (BC-165) — three heroes share one shape.
+  describe.each([
+    ["loaded", false],
+    ["skeleton", true],
+  ])("%s branch responsive tiers", (_label, skeleton) => {
+    function renderBranch() {
+      if (skeleton) {
+        mockState = { data: undefined, error: undefined, isLoading: true };
+      }
+      render(<CareersHeroSection />);
+    }
+
+    it("text container carries the 1920 desktop tier: 791 / 23 / 20-0-80-20 / 80", () => {
+      renderBranch();
+      const el = screen.getByTestId("careers-hero-text-container");
+      expect(el).toHaveClass("desktop:w-[791px]");
+      expect(el).toHaveClass("desktop:gap-[23px]");
+      expect(el).toHaveClass("desktop:rounded-[20px_0_80px_20px]");
+      expect(el).toHaveClass("desktop:p-[80px]");
+    });
+
+    it("text container carries the 1440 laptop tier: 658 / 20 / 20-0-60-20 / 60", () => {
+      renderBranch();
+      const el = screen.getByTestId("careers-hero-text-container");
+      expect(el).toHaveClass("laptop:w-[658px]");
+      expect(el).toHaveClass("laptop:gap-[20px]");
+      expect(el).toHaveClass("laptop:rounded-[20px_0_60px_20px]");
+      expect(el).toHaveClass("laptop:p-[60px]");
+    });
+
+    it("text container keeps the 390 mobile base tier unchanged", () => {
+      renderBranch();
+      const el = screen.getByTestId("careers-hero-text-container");
+      expect(el).toHaveClass("gap-[23px]");
+      expect(el).toHaveClass("rounded-[20px_0_80px_20px]");
+      expect(el).toHaveClass("p-8");
+    });
+
+    it("image wrapper overlaps -174 at 1440 and -260 at 768 and 1920", () => {
+      renderBranch();
+      const el = screen.getByTestId("careers-hero-image-wrapper");
+      expect(el).toHaveClass("md:-ml-[260px]");
+      expect(el).toHaveClass("laptop:-ml-[174px]");
+      expect(el).toHaveClass("desktop:-ml-[260px]");
+    });
+
+    // Figma: 113:7168 = 40 @1440, 58:1538 = 50 @1920
+    it("section padding is 40 at 1440 and 50 at 1920", () => {
+      renderBranch();
+      const el = screen.getByTestId("careers-hero-section");
+      expect(el).toHaveClass("laptop:p-[40px]");
+      expect(el).toHaveClass("desktop:p-[50px]");
+    });
+  });
+
   it("skeleton branch renders no h1 ladder to drift from the loaded branch", () => {
     mockState = { data: undefined, error: undefined, isLoading: true };
     render(<CareersHeroSection />);

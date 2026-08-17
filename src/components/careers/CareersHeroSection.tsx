@@ -8,12 +8,12 @@ function CareersHeroSkeleton() {
   return (
     <section
       data-testid="careers-hero-section"
-      className="relative mx-auto w-full max-w-[1599px] rounded-[20px] bg-[#1C1C1C] p-[14px] sm:p-[50px] laptop:p-[40px]"
+      className="relative mx-auto w-full max-w-[1599px] rounded-[20px] bg-[#1C1C1C] p-[14px] sm:p-[50px] laptop:p-[40px] desktop:p-[50px]"
     >
       <div className="flex flex-col items-start md:flex-row">
         <div
           data-testid="careers-hero-text-container"
-          className="relative z-20 flex shrink-0 flex-col gap-[23px] rounded-[20px_0_80px_20px] bg-[#1A1A1A] p-8 md:p-[80px] md:w-[791px]"
+          className="relative z-20 flex shrink-0 flex-col gap-[23px] rounded-[20px_0_80px_20px] bg-[#1A1A1A] p-8 md:p-[80px] md:w-[791px] laptop:w-[658px] laptop:gap-[20px] laptop:rounded-[20px_0_60px_20px] laptop:p-[60px] desktop:w-[791px] desktop:gap-[23px] desktop:rounded-[20px_0_80px_20px] desktop:p-[80px]"
         >
           <div
             data-testid="careers-hero-heading"
@@ -31,7 +31,7 @@ function CareersHeroSkeleton() {
         </div>
         <div
           data-testid="careers-hero-image-wrapper"
-          className="mt-6 flex-1 md:mt-0 md:-ml-[260px]"
+          className="mt-6 flex-1 md:mt-0 md:-ml-[260px] laptop:-ml-[174px] desktop:-ml-[260px]"
         >
           <div className="h-[400px] w-full animate-pulse rounded-[16px] bg-[#333333]" />
         </div>
@@ -51,7 +51,7 @@ export function CareersHeroSection() {
   return (
     <section
       data-testid="careers-hero-section"
-      className="relative mx-auto w-full max-w-[1599px] rounded-[20px] bg-[#1C1C1C] p-[14px] sm:p-[50px] laptop:p-[40px]"
+      className="relative mx-auto w-full max-w-[1599px] rounded-[20px] bg-[#1C1C1C] p-[14px] sm:p-[50px] laptop:p-[40px] desktop:p-[50px]"
     >
       {/* Careers abstract design — Figma node 659:2, desktop only — z-0 keeps it behind the hero image */}
       <Image
@@ -69,7 +69,7 @@ export function CareersHeroSection() {
         {/* Text card — z-20 keeps it above the hero image in the overlap zone */}
         <div
           data-testid="careers-hero-text-container"
-          className="relative z-20 flex shrink-0 flex-col gap-[23px] rounded-[20px_0_80px_20px] bg-[#1A1A1A] p-8 md:p-[80px] md:w-[791px]"
+          className="relative z-20 flex shrink-0 flex-col gap-[23px] rounded-[20px_0_80px_20px] bg-[#1A1A1A] p-8 md:p-[80px] md:w-[791px] laptop:w-[658px] laptop:gap-[20px] laptop:rounded-[20px_0_60px_20px] laptop:p-[60px] desktop:w-[791px] desktop:gap-[23px] desktop:rounded-[20px_0_80px_20px] desktop:p-[80px]"
         >
           {error && (
             <p className="text-sm text-red-400">
@@ -100,7 +100,7 @@ export function CareersHeroSection() {
         {/* Hero image — z-10 keeps it above the abstract design (z-0) */}
         <div
           data-testid="careers-hero-image-wrapper"
-          className="relative z-10 mt-6 flex-1 md:mt-0 md:-ml-[260px]"
+          className="relative z-10 mt-6 flex-1 md:mt-0 md:-ml-[260px] laptop:-ml-[174px] desktop:-ml-[260px]"
         >
           <Image
             data-testid="careers-hero-image"
