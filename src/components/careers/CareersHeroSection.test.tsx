@@ -116,6 +116,22 @@ describe("CareersHeroSection", () => {
       expect(el).toHaveClass("laptop:p-[60px]");
     });
 
+    // BC-181 — real horizontal overflow at 768 (clientWidth 768 / scrollWidth 841).
+    // Figma has only 390 / 1440 / 1920 frames, so the 768-1439 band is unspecified.
+    // A fixed md:w-[791px] plus shrink-0 could not shrink inside a 768px viewport,
+    // so the card overflowed by construction. The md tier is now fluid, capped at 791.
+    it("text container is fluid in the unspecified 768-1439 band, capped at 791", () => {
+      renderBranch();
+      const el = screen.getByTestId("careers-hero-text-container");
+      expect(el).toHaveClass("md:w-full");
+      expect(el).toHaveClass("md:max-w-[791px]");
+      // the fixed md width is what overflowed at 768 — it must never come back
+      expect(el.className).not.toContain("md:w-[791px]");
+      // and the QA-passed laptop/desktop tiers stay pinned to their real frames
+      expect(el).toHaveClass("laptop:w-[658px]");
+      expect(el).toHaveClass("desktop:w-[791px]");
+    });
+
     it("text container keeps the 390 mobile base tier unchanged", () => {
       renderBranch();
       const el = screen.getByTestId("careers-hero-text-container");
