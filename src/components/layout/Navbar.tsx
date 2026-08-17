@@ -177,10 +177,31 @@ export function Navbar() {
         well-formed counterpart pair whose BOTH values were wrong (40px), so a
         "does a counterpart exist?" audit passed it. Compare values against the
         node, never just the presence of a counterpart.
+
+        BC-183: the MOBILE tier is the only asymmetric one. Figma mobile navbar
+        108:2748 (and all five sibling mobile page frames) specifies padding
+        {top:14, right:14, bottom:14, left:24} — so the base tier CANNOT be a
+        single `px-*` utility and uses `pl-6 pr-[14px]` instead. Laptop
+        (104:600 -> 24/24) and desktop (5:27272 -> 34/34) ARE symmetric and
+        deliberately keep BC-179's `px-*` shorthand.
+
+        Why mixing base `pl-`/`pr-` with `laptop:px-`/`desktop:px-` is safe in
+        Tailwind v4: within the base layer `padding-left`/`padding-right`
+        (pl/pr) are emitted AFTER `padding-inline` (px), but every responsive
+        variant is emitted in an `@media` block after ALL base utilities. So
+        `laptop:px-6` still overrides the base `pr-[14px]` at >=90rem and
+        BC-179's 24px/34px are preserved. Verified against the generated
+        stylesheet, not assumed — do not "tidy" this into base `px-*`.
+
+        Vertical: Figma is 14/14 at mobile and laptop, 20/20 at desktop, which
+        is exactly (fixed height - tallest child) / 2 for each tier
+        (40+28=68, 45+28=73, 55+40=95). The `h-*` values own the rendered
+        height; the `py-*` values state Figma's padding explicitly and are a
+        visual no-op because the content stays centered either way.
       */}
       <nav
         aria-label="Primary navigation"
-        className="relative z-10 mx-auto flex h-[68px] max-w-[1596px] items-center justify-between rounded-[100px] border border-[#262626] bg-[#1C1C1C] px-5 laptop:h-[73px] laptop:px-6 desktop:h-[95px] desktop:px-[34px]"
+        className="relative z-10 mx-auto flex h-[68px] max-w-[1596px] items-center justify-between rounded-[100px] border border-[#262626] bg-[#1C1C1C] py-[14px] pl-6 pr-[14px] laptop:h-[73px] laptop:px-6 desktop:h-[95px] desktop:px-[34px] desktop:py-5"
       >
         {/* Logo */}
         <Link
