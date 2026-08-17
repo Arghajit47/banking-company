@@ -132,20 +132,58 @@ describe("CareersHeroSection", () => {
       expect(el).toHaveClass("desktop:w-[791px]");
     });
 
-    it("text container keeps the 390 mobile base tier unchanged", () => {
+    // BC-187 — the 390 base tier carried desktop-shaped values (gap 23 / radius
+    // 20-0-80-20 / padding 32). Figma mobile card 113:9566 is 329x365 with gap 14,
+    // padding 24 and a uniform 20 radius — identical to About 116:10300 and
+    // Security 116:11071. The md tier keeps the QA-verified 768+ values.
+    it("text container carries the 390 mobile tier: 14 / 20 uniform / 24", () => {
       renderBranch();
       const el = screen.getByTestId("careers-hero-text-container");
-      expect(el).toHaveClass("gap-[23px]");
-      expect(el).toHaveClass("rounded-[20px_0_80px_20px]");
-      expect(el).toHaveClass("p-8");
+      expect(el).toHaveClass("gap-[14px]");
+      expect(el).toHaveClass("rounded-[20px]");
+      expect(el).toHaveClass("p-6");
+      // the desktop-shaped mobile values must not come back
+      expect(el).not.toHaveClass("gap-[23px]");
+      expect(el).not.toHaveClass("rounded-[20px_0_80px_20px]");
+      expect(el).not.toHaveClass("p-8");
     });
 
-    it("image wrapper overlaps -174 at 1440 and -260 at 768 and 1920", () => {
+    it("md tier still pins the QA-verified 768+ values", () => {
+      renderBranch();
+      const el = screen.getByTestId("careers-hero-text-container");
+      expect(el).toHaveClass("md:gap-[23px]");
+      expect(el).toHaveClass("md:rounded-[20px_0_80px_20px]");
+      expect(el).toHaveClass("md:p-[80px]");
+    });
+
+    // BC-186 — md:-ml-[260px] bound the 1920 offset at 768, where the image
+    // wrapper is only 260px wide, so it sat exactly its own width behind the
+    // text card and was 0px visible. Figma specifies the horizontal overlap
+    // only at 1440 (-174) and 1920 (-260); the 768-1439 band has no frame.
+    it("image wrapper overlaps -174 at 1440 and -260 at 1920, with no md offset", () => {
       renderBranch();
       const el = screen.getByTestId("careers-hero-image-wrapper");
-      expect(el).toHaveClass("md:-ml-[260px]");
+      expect(el).not.toHaveClass("md:-ml-[260px]");
+      expect(el.className).not.toContain("md:-ml-[");
       expect(el).toHaveClass("laptop:-ml-[174px]");
       expect(el).toHaveClass("desktop:-ml-[260px]");
+    });
+
+    // BC-186 — removing md:-ml-[260px] is necessary but not sufficient: BC-181 made
+    // the card md:w-full, and a shrink-0 card at 100% consumed the whole row, so the
+    // flex-1 (basis 0) image wrapper resolved to 0px wide from 768 to ~890 — still
+    // invisible, just no longer occluded. md:min-w-[260px] floors the image column and
+    // md:shrink lets the card give up that space instead of overflowing.
+    // Measured after the fix: 768 -> card 408 / image 260 fully visible, 1024 -> 664 /
+    // 260, and 1440 / 1920 unchanged at 658 / 876 and 791 / 968, no overflow anywhere.
+    it("image column has a floor in the 768-1439 band and the card yields to it", () => {
+      renderBranch();
+      expect(screen.getByTestId("careers-hero-image-wrapper")).toHaveClass(
+        "md:min-w-[260px]",
+      );
+      expect(screen.getByTestId("careers-hero-text-container")).toHaveClass(
+        "md:shrink",
+      );
     });
 
     // Figma: 113:7168 = 40 @1440, 58:1538 = 50 @1920
