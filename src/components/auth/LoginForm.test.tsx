@@ -27,6 +27,41 @@ describe("LoginForm", () => {
     expect(screen.getByTestId("login-form-heading").textContent).toBe("Login");
   });
 
+  // BC-177 — heading size ladder. Figma "Login": desktop 67:148 = 48px @1920,
+  // laptop 116:11471 = 38px @1440. `laptop:` and `desktop:` are min-width
+  // breakpoints (90rem / 120rem), so a bare `laptop:text-[38px]` with no
+  // `desktop:` counterpart leaks 38px all the way up to 1920.
+  test("heading renders the 38px/48px size ladder across breakpoints", () => {
+    render(<LoginForm />);
+    const heading = screen.getByTestId("login-form-heading");
+    expect(heading.className).toContain("text-[48px]");
+    expect(heading.className).toContain("laptop:text-[38px]");
+    expect(heading.className).toContain("desktop:text-[48px]");
+    expect(heading.className).toContain("leading-[1.25]");
+    expect(heading.className).not.toMatch(
+      /(?:^|\s)text-(?:xs|sm|base|lg|xl|2xl|3xl|4xl|5xl|6xl)(?:\s|$)/,
+    );
+    expect(heading.className).not.toMatch(/(?:sm|md|lg|xl|2xl):text-\[/);
+    expect(heading.className).not.toMatch(
+      /(?:sm|md|lg|xl|2xl|laptop|desktop):text-(?:xs|sm|base|lg|xl|2xl|3xl|4xl|5xl|6xl)(?:\s|$)/,
+    );
+  });
+
+  // BC-177 — heading font-weight must be uniform across every breakpoint.
+  // Figma confirms fontWeight 500 (Medium) at desktop 67:148, laptop 116:11471
+  // and mobile 116:11682. The base class was `font-semibold` (600), so every
+  // width below 1440 rendered 600. A `laptop:`/`desktop:` weight variant is a
+  // min-width override, so any such class would re-split the weight at 1440.
+  test("heading renders font-weight 500 at every breakpoint", () => {
+    render(<LoginForm />);
+    const heading = screen.getByTestId("login-form-heading");
+    expect(heading.className).toMatch(/(?:^|\s)font-medium(?:\s|$)/);
+    expect(heading.className).not.toMatch(/(?:^|\s)font-semibold(?:\s|$)/);
+    expect(heading.className).not.toMatch(
+      /(?:sm|md|lg|xl|2xl|laptop|desktop):font-(?:thin|extralight|light|normal|medium|semibold|bold|extrabold|black)/,
+    );
+  });
+
   test("renders Welcome back! subtext", () => {
     render(<LoginForm />);
     expect(screen.getByTestId("login-form-subtext").textContent).toBe(
