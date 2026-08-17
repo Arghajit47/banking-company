@@ -122,6 +122,54 @@ describe("Navbar (desktop)", () => {
     expect(homeLink?.className).toContain("desktop:py-3");
   });
 
+  it("navbar horizontal padding is 24px at laptop and 34px at desktop (BC-179)", () => {
+    const { container } = renderWithSWR(<Navbar />);
+    const nav = container.querySelector('nav[aria-label="Primary navigation"]');
+
+    expect(nav).toBeTruthy();
+
+    // BC-179: Figma laptop navbar 104:600 -> paddingLeft/Right 24; desktop
+    // navbar 5:27272 -> paddingLeft/Right 34. The defect shipped
+    // `laptop:px-10 desktop:px-10` (40px at BOTH tiers) — a well-formed
+    // counterpart pair whose two values were simply wrong, which is why a
+    // "does a counterpart exist?" audit did not catch it. Assert the VALUES.
+    expect(nav?.className).toContain("laptop:px-6");
+    expect(nav?.className).toContain("desktop:px-[34px]");
+    expect(nav?.className).not.toContain("laptop:px-10");
+    expect(nav?.className).not.toContain("desktop:px-10");
+  });
+
+  it("navbar height stays 73px at laptop and 95px at desktop (BC-179 guard)", () => {
+    const { container } = renderWithSWR(<Navbar />);
+    const nav = container.querySelector('nav[aria-label="Primary navigation"]');
+
+    // Already correct before BC-179 and must survive the padding fix:
+    // Figma 104:600 height 73, 5:27272 height 95.
+    expect(nav?.className).toContain("laptop:h-[73px]");
+    expect(nav?.className).toContain("desktop:h-[95px]");
+  });
+
+  it("BC-179 padding fix leaves the BC-158 active pill classes untouched", () => {
+    currentPathname = "/";
+    const { container } = renderWithSWR(<Navbar />);
+    const homeLink = container.querySelector('[data-testid="nav-link-home"]');
+
+    // Regression guard: the navbar's own padding and the pill's padding live on
+    // different elements. Changing the nav must not perturb the pill geometry
+    // QA measured in BC-158 (76.63x41 @1440, 100.09x51 @1920, radius 82,
+    // background rgb(38,38,38)).
+    expect(homeLink?.className).toContain("rounded-[82px]");
+    expect(homeLink?.className).toContain("bg-[#262626]");
+    expect(homeLink?.className).toContain("px-5");
+    expect(homeLink?.className).toContain("py-[10px]");
+    expect(homeLink?.className).toContain("desktop:px-[26.5px]");
+    expect(homeLink?.className).toContain("desktop:py-3");
+    expect(homeLink?.className).toContain("text-sm");
+    expect(homeLink?.className).toContain("leading-[21px]");
+    expect(homeLink?.className).toContain("desktop:text-lg");
+    expect(homeLink?.className).toContain("desktop:leading-[27px]");
+  });
+
   it("desktop nav links step up to 18px/27px type at the desktop breakpoint", () => {
     currentPathname = "/";
     const { container } = renderWithSWR(<Navbar />);
