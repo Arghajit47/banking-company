@@ -122,7 +122,7 @@ export function SignUpForm() {
         >
           <h1
             data-testid="signup-form-heading"
-            className="text-[48px] font-semibold leading-[1.25] text-[#CAFF33] laptop:text-[38px] laptop:font-medium"
+            className="text-[48px] font-medium leading-[1.25] text-[#CAFF33] laptop:text-[38px] desktop:text-[48px]"
           >
             {HEADING}
           </h1>
