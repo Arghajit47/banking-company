@@ -99,7 +99,7 @@ export function LoginForm() {
         >
           <h1
             data-testid="login-form-heading"
-            className="text-[48px] font-medium leading-[1.25] text-[#CAFF33] laptop:text-[38px] desktop:text-[48px]"
+            className="text-[28px] font-medium leading-[1.25] text-[#CAFF33] md:text-[38px] desktop:text-[48px]"
           >
             {HEADING}
           </h1>
