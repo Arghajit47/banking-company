@@ -43,7 +43,7 @@ function FeatureCard({ feature }: { feature: Feature }) {
       <div className="flex items-start gap-[10px]">
         <h3
           data-testid={`feature-card-title-${feature.id}`}
-          className="flex-1 text-[22px] font-medium leading-[150%] text-white laptop:text-[18px] laptop:font-normal"
+          className="flex-1 text-[18px] font-medium leading-[150%] text-white laptop:font-normal desktop:text-[22px]"
         >
           {feature.title}
         </h3>

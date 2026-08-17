@@ -178,4 +178,26 @@ describe("PressReleasesSection", () => {
     expect(heading.className).not.toMatch(/(?:^|\s)font-medium(?:\s|$)/);
     expect(heading.className).not.toMatch(/(?:sm|md|lg|xl|2xl|laptop|desktop):font-(?:thin|extralight|light|normal|medium|semibold|bold|extrabold|black)/);
   });
+  // BC-178 — press release card title ladder. Figma has exactly three frames:
+  // mobile 390 (116:10571) = 18px, laptop 1440 (113:10170) = 20px, desktop 1920
+  // (62:1629) = 24px. Resolved: < 1440 -> 18px, 1440-1919 -> 20px, >= 1920 -> 24px.
+  // The old ladder was `text-[20px] md:text-[24px] laptop:text-[20px]`, which hit
+  // 24px at 768 and then dropped back to 20px at 1440, never recovering at 1920.
+  it.each([1, 2, 3, 4])(
+    "press-release-card-title-%i renders the Figma 18/20/24 ladder and a 150 percent line-height",
+    (i) => {
+      render(<PressReleasesSection />);
+      const title = screen.getByTestId(`press-release-card-title-${i}`);
+      expect(title.className).toContain("text-[18px]");
+      expect(title.className).toContain("laptop:text-[20px]");
+      expect(title.className).toContain("desktop:text-[24px]");
+      expect(title.className).toContain("leading-[150%]");
+      // No frame specifies a step at md; 20px must not be the base size.
+      expect(title.className).not.toMatch(/(?:^|\s)text-\[20px\]/);
+      expect(title.className).not.toMatch(/(?:sm|md|lg|xl|2xl):text-\[/);
+      expect(title.className).not.toMatch(
+        /(?:^|\s)text-(?:xs|sm|base|lg|xl|2xl|3xl|4xl|5xl|6xl)(?:\s|$)/
+      );
+    }
+  );
 });

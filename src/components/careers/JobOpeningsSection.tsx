@@ -61,7 +61,7 @@ function JobCard({ job, index }: { job: JobOpening; index: number }) {
       <div className="flex flex-col gap-[20px]">
         <h3
           data-testid={`job-card-title-${index}`}
-          className="text-[24px] font-semibold leading-[150%] text-white md:text-[30px] laptop:text-[24px]"
+          className="text-[20px] font-semibold leading-[150%] text-white laptop:text-[24px] desktop:text-[30px]"
         >
           {job.title}
         </h3>

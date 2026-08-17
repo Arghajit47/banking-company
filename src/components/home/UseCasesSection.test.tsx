@@ -252,4 +252,27 @@ describe("UseCasesSection", () => {
     expect(card.className).toContain("border-[#262626]");
     expect(card.className).toContain("rounded-2xl");
   });
+  // BC-178 — audience heading ("For Individuals" / "For Business") ladder. Figma has
+  // exactly three frames: mobile 390 (108:4651 / 108:4803) = 20px, laptop 1440
+  // (108:2492) = 26px, desktop 1920 (21:69) = 30px.
+  // Resolved: < 1440 -> 20px, 1440-1919 -> 26px, >= 1920 -> 30px.
+  // The old ladder was `text-[30px] laptop:text-[26px]`, which started at 30px and
+  // shrank to 26px at 1440, so 1920 rendered 26px instead of 30px.
+  it.each(["individuals", "businesses"])(
+    "use-cases-audience-heading-%s renders the Figma 20/26/30 ladder and a 150 percent line-height",
+    (audience) => {
+      render(<UseCasesSection />);
+      const heading = screen.getByTestId(`use-cases-audience-heading-${audience}`);
+      expect(heading.className).toContain("text-[20px]");
+      expect(heading.className).toContain("laptop:text-[26px]");
+      expect(heading.className).toContain("desktop:text-[30px]");
+      expect(heading.className).toContain("leading-[150%]");
+      // 30px must not be the base size.
+      expect(heading.className).not.toMatch(/(?:^|\s)text-\[30px\]/);
+      expect(heading.className).not.toMatch(/(?:sm|md|lg|xl|2xl):text-\[/);
+      expect(heading.className).not.toMatch(
+        /(?:^|\s)text-(?:xs|sm|base|lg|xl|2xl|3xl|4xl|5xl|6xl)(?:\s|$)/
+      );
+    }
+  );
 });

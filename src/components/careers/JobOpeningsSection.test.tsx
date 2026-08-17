@@ -161,4 +161,26 @@ describe("JobOpeningsSection (SWR integration)", () => {
     expect(heading.className).not.toMatch(/(?:^|\s)font-normal(?:\s|$)/);
     expect(heading.className).not.toMatch(/(?:sm|md|lg|xl|2xl|laptop|desktop):font-(?:thin|extralight|light|normal|medium|semibold|bold|extrabold|black)/);
   });
+  // BC-178 — job card title ladder. Figma has exactly three frames: mobile 390
+  // (113:9641) = 20px, laptop 1440 (113:7244) = 24px, desktop 1920 (55:847) = 30px.
+  // Resolved: < 1440 -> 20px, 1440-1919 -> 24px, >= 1920 -> 30px.
+  // The old ladder was `text-[24px] md:text-[30px] laptop:text-[24px]`, which hit
+  // 30px at 768 and then dropped back to 24px at 1440, never recovering at 1920.
+  it.each([0, 1, 2])(
+    "job-card-title-%i renders the Figma 20/24/30 ladder and a 150 percent line-height",
+    (i) => {
+      render(<JobOpeningsSection />);
+      const title = screen.getByTestId(`job-card-title-${i}`);
+      expect(title.className).toContain("text-[20px]");
+      expect(title.className).toContain("laptop:text-[24px]");
+      expect(title.className).toContain("desktop:text-[30px]");
+      expect(title.className).toContain("leading-[150%]");
+      // No frame specifies a step at md; 24px must not be the base size.
+      expect(title.className).not.toMatch(/(?:^|\s)text-\[24px\]/);
+      expect(title.className).not.toMatch(/(?:sm|md|lg|xl|2xl):text-\[/);
+      expect(title.className).not.toMatch(
+        /(?:^|\s)text-(?:xs|sm|base|lg|xl|2xl|3xl|4xl|5xl|6xl)(?:\s|$)/
+      );
+    }
+  );
 });
