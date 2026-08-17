@@ -115,6 +115,22 @@ describe("AboutHeroSection (SWR integration)", () => {
     expect(el).toHaveClass("laptop:p-[60px]");
   });
 
+  // BC-181 — real horizontal overflow at 768 (clientWidth 768 / scrollWidth 873).
+  // Figma has only 390 / 1440 / 1920 frames, so the 768-1439 band is unspecified.
+  // A fixed md:w-[791px] plus shrink-0 could not shrink inside a 768px viewport,
+  // so the card overflowed by construction. The md tier is now fluid, capped at 791.
+  it("text container is fluid in the unspecified 768-1439 band, capped at 791", () => {
+    render(<AboutHeroSection />);
+    const el = screen.getByTestId("about-hero-text-container");
+    expect(el).toHaveClass("md:w-full");
+    expect(el).toHaveClass("md:max-w-[791px]");
+    // the fixed md width is what overflowed at 768 — it must never come back
+    expect(el.className).not.toContain("md:w-[791px]");
+    // and the QA-passed laptop/desktop tiers stay pinned to their real frames
+    expect(el).toHaveClass("laptop:w-[658px]");
+    expect(el).toHaveClass("desktop:w-[791px]");
+  });
+
   it("stacks image above text at 390 via flex-col-reverse, keeping the laptop row order", () => {
     render(<AboutHeroSection />);
     const row = screen.getByTestId("about-hero-text-container").parentElement;
@@ -209,10 +225,12 @@ describe("AboutHeroSection (SWR integration)", () => {
     // 390 tier
     expect(el).toHaveClass("gap-[14px]");
     expect(el).toHaveClass("p-6");
-    // 768-1439 tier (unchanged legacy values)
+    // 768-1439 tier — band unspecified by Figma, so width is fluid capped at 791 (BC-181)
     expect(el).toHaveClass("md:gap-[23px]");
     expect(el).toHaveClass("md:p-[80px]");
-    expect(el).toHaveClass("md:w-[791px]");
+    expect(el).toHaveClass("md:w-full");
+    expect(el).toHaveClass("md:max-w-[791px]");
+    expect(el.className).not.toContain("md:w-[791px]");
     // 1440-1919 tier
     expect(el).toHaveClass("laptop:gap-[20px]");
     expect(el).toHaveClass("laptop:p-[60px]");
