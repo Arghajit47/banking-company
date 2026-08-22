@@ -195,20 +195,45 @@ describe("Footer", () => {
     expect(email.querySelector(".animate-pulse")).toBeInTheDocument();
   });
 
-  // BC-189 AC4 — footer internal gap. Figma footer 113:5000 itemSpacing is
-  // 30 / 40 / 50 at 390 / 1440 / 1920. The defect was a flat `gap-[50px]` at
-  // base: the 1920 value bound at base, so 390 and 1440 were both wrong and
-  // only 1920 was (coincidentally) right. Same defect family as text-[58px].
-  it("logo/nav column renders the Figma 30/40/50 gap ladder", () => {
+  // BC-189 AC4 (re-QA correction) — the footer ROOT gap and the footer CHILD 0
+  // gap are two different elements with two different Figma ladders. The first
+  // fix conflated them: it wrote the root ladder onto child 0 and left the root
+  // itself untouched.
+  //
+  // Root (113:5000 / 108:2705 / 11:89193) itemSpacing = 30 / 40 / 50.
+  // The root container is `display: block` — its four inter-block gaps come
+  // from the two <hr> rules, whose Figma counterparts are zero-height LINE
+  // nodes, so the root itemSpacing lands on BOTH sides of each rule and the
+  // right mechanism is a symmetric `my-`.
+  it("footer root renders the Figma 30/40/50 ladder on both hr rules", () => {
+    render(<Footer />);
+    const rules = Array.from(
+      screen.getByTestId("footer").querySelectorAll("hr"),
+    );
+    expect(rules).toHaveLength(2);
+    for (const rule of rules) {
+      expect(rule.className).toContain("my-[30px]");
+      expect(rule.className).toContain("laptop:my-[40px]");
+      expect(rule.className).toContain("desktop:my-[50px]");
+      // The 1920 value must never be bound at base again.
+      expect(rule.className).not.toMatch(/(?:^|\s)my-\[50px\](?:\s|$)/);
+      expect(rule.className).not.toMatch(/(?:^|\s)my-\[40px\](?:\s|$)/);
+    }
+  });
+
+  // Child 0 (113:5001 / 108:2706 / 11:89192) itemSpacing = 24 / 40 / 50 —
+  // note the 390 value is 24, NOT the root's 30.
+  it("logo/nav column renders the Figma 24/40/50 gap ladder", () => {
     render(<Footer />);
     const column = screen.getByTestId("footer-logo").parentElement;
     expect(column).not.toBeNull();
-    expect(column?.className).toContain("gap-[30px]");
+    expect(column?.className).toContain("gap-[24px]");
     expect(column?.className).toContain("laptop:gap-[40px]");
     expect(column?.className).toContain("desktop:gap-[50px]");
-    // The 1920 value must never be bound at base again.
+    // Neither the 1920 value nor the root's 390 value may bind at base.
     expect(column?.className).not.toMatch(/(?:^|\s)gap-\[50px\](?:\s|$)/);
     expect(column?.className).not.toMatch(/(?:^|\s)gap-\[40px\](?:\s|$)/);
+    expect(column?.className).not.toMatch(/(?:^|\s)gap-\[30px\](?:\s|$)/);
   });
 
   // Guard the values QA already passed — footer padding is CORRECT and must not
