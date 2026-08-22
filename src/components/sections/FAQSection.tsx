@@ -98,7 +98,7 @@ export function FAQSection({ page = "home" }: FAQSectionProps) {
               </h2>
               <p
                 data-testid="faq-subheading"
-                className="mt-3 text-[14px] font-light leading-relaxed text-[#B3B3B3] md:text-[16px] desktop:text-[18px]"
+                className="mt-3 text-[14px] font-light leading-[150%] text-[#B3B3B3] md:text-[16px] desktop:text-[18px]"
               >
                 Still you have any questions? Contact our Team via{" "}
                 <a
@@ -131,7 +131,7 @@ export function FAQSection({ page = "home" }: FAQSectionProps) {
                     />
                     <p
                       data-testid="faq-answer"
-                      className="text-[14px] font-light leading-relaxed text-[#B3B3B3] md:text-[16px] desktop:text-[18px]"
+                      className="text-[14px] font-light leading-[150%] text-[#B3B3B3] md:text-[16px] desktop:text-[18px]"
                     >
                       {faq.answer}
                     </p>

@@ -194,4 +194,33 @@ describe("Footer", () => {
     expect(email).toBeInTheDocument();
     expect(email.querySelector(".animate-pulse")).toBeInTheDocument();
   });
+
+  // BC-189 AC4 — footer internal gap. Figma footer 113:5000 itemSpacing is
+  // 30 / 40 / 50 at 390 / 1440 / 1920. The defect was a flat `gap-[50px]` at
+  // base: the 1920 value bound at base, so 390 and 1440 were both wrong and
+  // only 1920 was (coincidentally) right. Same defect family as text-[58px].
+  it("logo/nav column renders the Figma 30/40/50 gap ladder", () => {
+    render(<Footer />);
+    const column = screen.getByTestId("footer-logo").parentElement;
+    expect(column).not.toBeNull();
+    expect(column?.className).toContain("gap-[30px]");
+    expect(column?.className).toContain("laptop:gap-[40px]");
+    expect(column?.className).toContain("desktop:gap-[50px]");
+    // The 1920 value must never be bound at base again.
+    expect(column?.className).not.toMatch(/(?:^|\s)gap-\[50px\](?:\s|$)/);
+    expect(column?.className).not.toMatch(/(?:^|\s)gap-\[40px\](?:\s|$)/);
+  });
+
+  // Guard the values QA already passed — footer padding is CORRECT and must not
+  // be collateral damage of the gap fix.
+  it("footer padding-top 50 / padding-bottom 30 at base is preserved", () => {
+    render(<Footer />);
+    const inner = screen.getByTestId("footer").firstElementChild;
+    expect(inner).not.toBeNull();
+    expect(inner?.className).toContain("pt-[50px]");
+    expect(inner?.className).toContain("pb-[30px]");
+    expect(inner?.className).toContain("laptop:pt-[60px]");
+    expect(inner?.className).toContain("desktop:pt-[100px]");
+    expect(inner?.className).toContain("desktop:pb-[50px]");
+  });
 });
