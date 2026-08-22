@@ -169,7 +169,7 @@ export function HeroSection() {
     return (
       <section
         data-testid="hero-section"
-        className="relative w-full overflow-hidden bg-[#1A1A1A] font-[var(--font-urbanist)]"
+        className="relative w-full overflow-hidden bg-[#1A1A1A] font-[var(--font-lexend)]"
       >
         <div className="relative mx-auto flex min-h-[824px] max-w-[1920px] flex-col items-center justify-center px-4 py-16 md:flex-row md:items-center md:justify-start md:px-8 lg:px-12 laptop:min-h-[621px] laptop:px-20 desktop:min-h-[824.48px] desktop:px-[80.53px]">
           <HeroErrorFallback />
@@ -184,7 +184,7 @@ export function HeroSection() {
   return (
     <section
       data-testid="hero-section"
-      className="relative w-full overflow-hidden bg-[#1A1A1A] font-[var(--font-urbanist)]"
+      className="relative w-full overflow-hidden bg-[#1A1A1A] font-[var(--font-lexend)]"
     >
       <div className="relative mx-auto flex min-h-[824px] max-w-[1920px] flex-col items-center justify-center px-4 py-16 md:flex-row md:items-center md:justify-start md:px-8 lg:px-12 laptop:min-h-[621px] laptop:px-20 desktop:min-h-[824.48px] desktop:px-[80.53px]">
         {showSkeleton ? (

@@ -78,7 +78,7 @@ export function CareersHeroSection() {
           )}
           <h1
             data-testid="careers-hero-heading"
-            className="font-[var(--font-urbanist)] text-[28px] font-medium leading-[130%] text-white md:text-[48px] desktop:text-[58px]"
+            className="font-[var(--font-lexend)] text-[28px] font-medium leading-[130%] text-white md:text-[48px] desktop:text-[58px]"
           >
             {data.headline.split("YourBank").map((part, i, arr) => (
               <span key={i}>
@@ -91,7 +91,7 @@ export function CareersHeroSection() {
           </h1>
           <p
             data-testid="careers-hero-paragraph"
-            className="font-[var(--font-urbanist)] text-[18px] font-light leading-[150%] text-[#B3B3B3]"
+            className="font-[var(--font-lexend)] text-[18px] font-light leading-[150%] text-[#B3B3B3]"
           >
             {data.body}
           </p>

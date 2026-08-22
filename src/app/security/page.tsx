@@ -5,7 +5,7 @@ import { Navbar } from "@/components/layout/Navbar";
 
 export default function SecurityPage() {
   return (
-    <div className="flex min-h-screen flex-col bg-[#1A1A1A] font-[var(--font-urbanist)]">
+    <div className="flex min-h-screen flex-col bg-[#1A1A1A] font-[var(--font-lexend)]">
       <Navbar />
       {/*
         BC-185: page-level container margins come straight from the Figma page

@@ -12,7 +12,7 @@ function MissionVisionSkeleton() {
   return (
     <section
       data-testid="mission-vision-section"
-      className="px-4 py-12 font-[var(--font-urbanist)] md:px-8 md:py-16 lg:px-12 lg:py-20 desktop:px-[162px]"
+      className="px-4 py-12 font-[var(--font-lexend)] md:px-8 md:py-16 lg:px-12 lg:py-20 desktop:px-[162px]"
     >
       <div className="flex flex-col gap-[80px]">
         <div
@@ -93,7 +93,7 @@ export function MissionVisionSection() {
   return (
     <section
       data-testid="mission-vision-section"
-      className="px-4 py-12 font-[var(--font-urbanist)] md:px-8 md:py-16 lg:px-12 lg:py-20 desktop:px-[162px]"
+      className="px-4 py-12 font-[var(--font-lexend)] md:px-8 md:py-16 lg:px-12 lg:py-20 desktop:px-[162px]"
     >
       <div className="flex flex-col gap-[80px]">
         <div

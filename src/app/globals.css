@@ -12,7 +12,7 @@
   --color-brand-dark: #1a1a1a;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --font-urbanist: var(--font-urbanist);
+  --font-lexend: var(--font-lexend);
   /* Breakpoints defined in ascending order so CSS cascade is correct —
      Tailwind v4 generates media queries in definition order; custom breakpoints
      must appear after the standard ones to override them at wider viewports. */
@@ -35,5 +35,5 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-urbanist), Arial, Helvetica, sans-serif;
+  font-family: var(--font-lexend), Arial, Helvetica, sans-serif;
 }

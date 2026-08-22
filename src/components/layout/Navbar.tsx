@@ -158,7 +158,7 @@ export function Navbar() {
 
   return (
     <header
-      className="relative w-full bg-transparent px-4 pt-6 font-[var(--font-urbanist)] laptop:px-20 desktop:px-[162px]"
+      className="relative w-full bg-transparent px-4 pt-6 font-[var(--font-lexend)] laptop:px-20 desktop:px-[162px]"
       data-testid="navbar"
     >
       <Image

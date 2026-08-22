@@ -93,7 +93,7 @@ export function SignUpForm() {
   return (
     <div
       data-testid="signup-form-card"
-      className="relative overflow-hidden rounded-[20px] border border-[#262626] bg-[#1C1C1C] px-6 py-8 font-[var(--font-urbanist)] sm:px-[150px] sm:py-[100px]"
+      className="relative overflow-hidden rounded-[20px] border border-[#262626] bg-[#1C1C1C] px-6 py-8 font-[var(--font-lexend)] sm:px-[150px] sm:py-[100px]"
     >
       {/* Background image overlay */}
       <div

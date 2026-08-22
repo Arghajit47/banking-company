@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Urbanist } from "next/font/google";
+import { Geist, Geist_Mono, Lexend } from "next/font/google";
 import { Footer } from "@/components/layout/Footer";
 import "./globals.css";
 
@@ -13,8 +13,12 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const urbanist = Urbanist({
-  variable: "--font-urbanist",
+// BC-189: Figma specifies Lexend across every frame (335 of 338 text nodes on the
+// home page frames report fontFamily "Lexend"). This supersedes BC-161, which had
+// accepted Urbanist. Loaded through next/font/google exactly as Urbanist was, so
+// the webfont is self-hosted and preloaded rather than silently falling back.
+const lexend = Lexend({
+  variable: "--font-lexend",
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
 });
@@ -43,7 +47,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${urbanist.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${lexend.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
         {children}
