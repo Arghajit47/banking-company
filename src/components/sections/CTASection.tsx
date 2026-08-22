@@ -68,8 +68,8 @@ export function CTASection({
       aria-labelledby="cta-heading"
       className="w-full bg-[#1A1A1A]"
     >
-      <div className="mx-auto max-w-[1920px] px-4 md:px-6 lg:px-8 xl:px-12">
-        <div className="relative flex min-h-[288px] flex-col items-center gap-8 overflow-hidden rounded-[20px] bg-[#1C1C1C] px-5 py-10 md:flex-row md:items-center md:justify-between md:px-12 md:py-0 lg:px-16">
+      <div className="mx-auto max-w-[1920px] pt-10 pb-20 laptop:pt-[60px] laptop:pb-[120px] desktop:pt-[75px] desktop:pb-[150px]">
+        <div className="cta-card relative flex min-h-[288px] flex-col items-center gap-6 overflow-hidden rounded-[20px] bg-[#1C1C1C] p-[30px] laptop:flex-row laptop:items-center laptop:justify-between laptop:gap-[150px] laptop:p-[60px] desktop:gap-[150px] desktop:p-[80px]">
           {/*
             TODO: Replace this CSS placeholder with the exported Figma SVG once the
             Local AI Bridge plugin is synced to the correct page.
@@ -79,7 +79,7 @@ export function CTASection({
           <div
             data-testid="cta-abstract-decoration"
             aria-hidden="true"
-            className="pointer-events-none absolute -left-16 -top-16 h-72 w-72 opacity-30 md:-left-12 md:-top-12 md:h-80 md:w-80 lg:h-96 lg:w-96"
+            className="pointer-events-none absolute left-0 top-0 h-[143px] w-[151px] opacity-30 laptop:h-[192px] laptop:w-[202px] desktop:h-[283px] desktop:w-[298px]"
             style={{
               backgroundImage:
                 "radial-gradient(circle at center, #CAFF33 2px, transparent 2.5px)",
@@ -113,7 +113,7 @@ export function CTASection({
                 </h2>
                 <p
                   data-testid="cta-body"
-                  className="mt-3 text-sm leading-relaxed text-[#999999] sm:text-base"
+                  className="mt-3 text-[14px] font-light leading-relaxed text-[#B3B3B3] md:text-[16px] desktop:text-[18px]"
                 >
                   {config.body}
                 </p>
@@ -131,7 +131,7 @@ export function CTASection({
             <a
               href={buttonHref}
               data-testid="cta-button"
-              className="relative z-10 inline-flex shrink-0 items-center justify-center rounded-[82px] bg-[#CAFF33] px-8 py-3.5 text-sm font-medium text-[#1A1A1A] transition-all hover:brightness-105 focus:outline-none focus:ring-2 focus:ring-[#CAFF33] focus:ring-offset-2 focus:ring-offset-[#262626] md:px-10 md:py-4"
+              className="relative z-10 inline-flex shrink-0 items-center justify-center rounded-[82px] bg-[#CAFF33] px-6 py-[14px] text-[14px] font-normal text-[#1C1C1C] transition-all hover:brightness-105 focus:outline-none focus:ring-2 focus:ring-[#CAFF33] focus:ring-offset-2 focus:ring-offset-[#262626] laptop:px-5 desktop:px-[30px] desktop:py-[18px] desktop:text-[18px]"
             >
               {config.buttonLabel}
             </a>

@@ -254,13 +254,22 @@ describe("ProductsSection", () => {
     expect(tabs.className).toContain("p-[14px]");
   });
 
-  it("active tab has lime green background, inactive tab has muted text", () => {
+  it("active tab has lime green background, inactive tab is white not grey", () => {
     render(<ProductsSection />);
     const individualsTab = screen.getByTestId("products-tab-individuals");
     const businessesTab = screen.getByTestId("products-tab-businesses");
     expect(individualsTab.className).toContain("bg-[#CAFF33]");
     expect(businessesTab.className).not.toContain("bg-[#CAFF33]");
-    expect(businessesTab.className).toContain("text-[#999999]");
+    // BC-189: the inactive tab is #FFFFFF in all three frames (108:4573 @390,
+    // 104:2413 @1440, 11:86824 @1920) — #999999 appears nowhere in the design.
+    expect(businessesTab.className).toContain("text-white");
+    expect(businessesTab.className).not.toContain("text-[#999999]");
+    // 14/14/18 @400 ladder on both tabs.
+    for (const tab of [individualsTab, businessesTab]) {
+      expect(tab.className).toContain("text-[14px]");
+      expect(tab.className).toContain("desktop:text-[18px]");
+      expect(tab.className).toContain("font-normal");
+    }
   });
 
   // BC-155 QA remediation — BUG A: vertical dividers between product cards

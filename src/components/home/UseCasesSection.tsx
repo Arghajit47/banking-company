@@ -26,10 +26,18 @@ function StatsRow({ stats }: { stats: readonly Stat[] }) {
       {stats.map((stat, i) => (
         <React.Fragment key={stat.value}>
           <div className="flex flex-col gap-[5px]">
-            <span className="text-[58px] font-medium leading-none text-[#CAFF33]">
+            <span
+              data-testid="use-cases-stat-value"
+              className="text-[40px] font-medium leading-none text-[#CAFF33] desktop:text-[58px]"
+            >
               {stat.value}
             </span>
-            <span className="text-lg font-light text-[#B3B3B3]">{stat.label}</span>
+            <span
+              data-testid="use-cases-stat-label"
+              className="text-[14px] font-light text-[#B3B3B3] md:text-[16px] desktop:text-[18px]"
+            >
+              {stat.label}
+            </span>
           </div>
           {i < stats.length - 1 && (
             <div className="hidden w-px self-stretch bg-[#262626] md:block" />
@@ -65,13 +73,15 @@ function TextPanel({
         >
           {heading}
         </h3>
-        <p className="text-lg font-light text-[#B3B3B3]">{paragraph}</p>
+        <p className="text-[14px] font-light text-[#B3B3B3] md:text-[16px] desktop:text-[18px]">
+          {paragraph}
+        </p>
       </div>
       <StatsRow stats={stats} />
       <button
         type="button"
         data-testid={btnTestId}
-        className="w-fit rounded-[82px] border border-[#262626] bg-[#1C1C1C] px-[24px] py-[18px] text-[18px] font-normal text-white transition hover:bg-[#262626]"
+        className="w-fit rounded-[82px] border border-[#262626] bg-[#1C1C1C] px-[24px] py-[18px] text-[14px] font-normal text-white transition hover:bg-[#262626] desktop:text-[18px]"
       >
         Learn More
       </button>
@@ -108,7 +118,7 @@ function UseCaseCard({ card }: { card: UseCase }) {
       />
       <p
         data-testid={`use-case-title-${card.id}`}
-        className="text-xl font-normal text-white"
+        className="text-[14px] font-normal text-white md:text-[16px] desktop:text-[20px]"
       >
         {card.title}
       </p>
@@ -143,7 +153,7 @@ function CardsPanel({
         height={213}
         aria-hidden="true"
         unoptimized
-        className={`pointer-events-none absolute z-0 ${abstractPosition === "top-left" ? "left-0 top-0" : "bottom-0 right-0"}`}
+        className={`pointer-events-none absolute z-0 h-[112px] w-[118px] laptop:h-[213px] laptop:w-[224px] ${abstractPosition === "top-left" ? "left-0 top-0" : "bottom-0 right-0"}`}
       />
       <div className="relative z-10 grid grid-cols-2 gap-5">
         {isLoading ? (
@@ -155,7 +165,7 @@ function CardsPanel({
             data-testid={`use-cases-cards-error-${audience}`}
             className="col-span-2 flex h-40 items-center justify-center"
           >
-            <p className="text-[#999999]">Unable to load use cases. Please try again later.</p>
+            <p className="text-[#B3B3B3]">Unable to load use cases. Please try again later.</p>
           </div>
         ) : (
           cards.map((card) => <UseCaseCard key={card.id} card={card} />)
@@ -178,7 +188,7 @@ export function UseCasesSection() {
   return (
     <section
       data-testid="use-cases-section"
-      className="w-full bg-[#1E1E1E] px-4 py-16 font-[var(--font-lexend)] md:px-8 lg:px-12 laptop:px-20 desktop:px-[162px]"
+      className="w-full py-10 font-[var(--font-lexend)] laptop:py-[60px] desktop:py-[75px]"
     >
       <div className="mx-auto max-w-[1920px]">
         {/* Section header */}
@@ -189,7 +199,10 @@ export function UseCasesSection() {
           >
             Use Cases
           </h2>
-          <p data-testid="use-cases-subheading" className="text-lg font-light text-[#B3B3B3]">
+          <p
+            data-testid="use-cases-subheading"
+            className="text-[14px] font-light text-[#B3B3B3] md:text-[16px] desktop:text-[18px]"
+          >
             At YourBank, we cater to the diverse needs of individuals and businesses alike,
             offering a wide range of financial solutions
           </p>

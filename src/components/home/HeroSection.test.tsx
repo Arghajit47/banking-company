@@ -358,15 +358,20 @@ describe("HeroSection", () => {
       expect(container.className).toContain("laptop:min-h-[621px]");
     });
 
-    it("restores the 18px CTA label at 1920 while keeping 14px at 1440", () => {
+    it("carries the full 14/14/18 CTA label ladder with no 1920 value at base", () => {
       render(<HeroSection />);
       const cta = screen.getByTestId("hero-open-account");
 
-      // Figma 5:86788 fontSize 18 @1920, 104:639 fontSize 14 @1440.
+      // BC-189: re-read per node. 108:2798 = 14/400 @390, 104:639 = 14/400 @1440,
+      // 5:86788 = 18/400 @1920. The previous ladder asserted an unprefixed 18px,
+      // which is the 1920 value bound at base — it made 390 and 768-1439 render
+      // 18px. Because 390 and 1440 agree, `laptop:` is not a tier here.
+      expect(cta.className).toContain("text-[14px]");
       expect(cta.className).toContain("desktop:text-[18px]");
-      expect(cta.className).toContain("laptop:text-[14px]");
-      // 390 keeps the unprefixed 18px (Figma 108:2798).
-      expect(cta.className).toContain("text-[18px]");
+      expect(cta.className).not.toContain("laptop:text-[");
+      expect(cta.className).not.toMatch(/(?:^|\s)text-\[18px\](?:\s|$)/);
+      // Figma weight is 400, not the semibold it was rendering.
+      expect(cta.className).toContain("font-normal");
     });
 
     it("keeps the mockup width ladder monotonic with no unfounded 1024–1439 step", () => {

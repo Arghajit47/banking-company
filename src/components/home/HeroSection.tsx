@@ -151,7 +151,7 @@ function HeroSkeleton() {
 function HeroErrorFallback() {
   return (
     <div className="flex h-96 w-full items-center justify-center">
-      <p data-testid="hero-error-state" className="text-[#999999]">
+      <p data-testid="hero-error-state" className="text-[#B3B3B3]">
         Unable to load hero content. Please try again later.
       </p>
     </div>
@@ -171,7 +171,7 @@ export function HeroSection() {
         data-testid="hero-section"
         className="relative w-full overflow-hidden bg-[#1A1A1A] font-[var(--font-lexend)]"
       >
-        <div className="relative mx-auto flex min-h-[824px] max-w-[1920px] flex-col items-center justify-center px-4 py-16 md:flex-row md:items-center md:justify-start md:px-8 lg:px-12 laptop:min-h-[621px] laptop:px-20 desktop:min-h-[824.48px] desktop:px-[80.53px]">
+        <div className="relative mx-auto flex min-h-[824px] max-w-[1920px] flex-col items-center justify-center px-4 pt-[50px] pb-10 md:flex-row md:items-center md:justify-start md:px-8 lg:px-12 laptop:min-h-[621px] laptop:px-20 laptop:pt-[30px] laptop:pb-[60px] desktop:min-h-[824.48px] desktop:px-[80.53px] desktop:pt-[53px] desktop:pb-[75px]">
           <HeroErrorFallback />
         </div>
       </section>
@@ -186,7 +186,7 @@ export function HeroSection() {
       data-testid="hero-section"
       className="relative w-full overflow-hidden bg-[#1A1A1A] font-[var(--font-lexend)]"
     >
-      <div className="relative mx-auto flex min-h-[824px] max-w-[1920px] flex-col items-center justify-center px-4 py-16 md:flex-row md:items-center md:justify-start md:px-8 lg:px-12 laptop:min-h-[621px] laptop:px-20 desktop:min-h-[824.48px] desktop:px-[80.53px]">
+      <div className="relative mx-auto flex min-h-[824px] max-w-[1920px] flex-col items-center justify-center px-4 pt-[50px] pb-10 md:flex-row md:items-center md:justify-start md:px-8 lg:px-12 laptop:min-h-[621px] laptop:px-20 laptop:pt-[30px] laptop:pb-[60px] desktop:min-h-[824.48px] desktop:px-[80.53px] desktop:pt-[53px] desktop:pb-[75px]">
         {showSkeleton ? (
           <HeroSkeleton />
         ) : (
@@ -206,7 +206,7 @@ export function HeroSection() {
                   aria-hidden="true"
                   data-testid="hero-badge-icon"
                 />
-                <span className="text-[18px] font-light leading-6 text-white">
+                <span className="text-[12px] font-light leading-6 text-white md:text-[14px] desktop:text-[18px]">
                   No LLC Required, No Credit Check.
                 </span>
               </div>
@@ -234,7 +234,7 @@ export function HeroSection() {
               {/* Subtext */}
               <p
                 data-testid="hero-paragraph"
-                className="mb-8 max-w-[600px] font-light text-[14px] leading-[150%] text-[#E4E4E7] sm:text-[16px] md:text-[18px]"
+                className="mb-8 max-w-[600px] text-[14px] font-light leading-[150%] text-[#E4E4E7] md:text-[16px] desktop:text-[18px]"
               >
                 {hero.subtext}
               </p>
@@ -243,7 +243,7 @@ export function HeroSection() {
               <button
                 type="button"
                 data-testid="hero-open-account"
-                className="rounded-[82px] bg-[#CAFF33] px-[30px] py-[18px] text-[18px] font-semibold leading-[150%] text-[#1C1C1C] transition hover:brightness-110 hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#1A1A1A] laptop:text-[14px] desktop:text-[18px]"
+                className="rounded-[82px] bg-[#CAFF33] px-[30px] py-[18px] text-[14px] font-normal leading-[150%] text-[#1C1C1C] transition hover:brightness-110 hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#1A1A1A] desktop:text-[18px]"
               >
                 {hero.ctaLabel}
               </button>
@@ -262,7 +262,7 @@ export function HeroSection() {
               height={275}
               aria-hidden="true"
               data-testid="hero-abstract-illustration"
-              className="pointer-events-none absolute right-0 top-0 z-0 hidden w-[200px] laptop:w-[300px] md:block desktop:right-[80.55px] desktop:top-[100px] desktop:h-[382.73px] desktop:w-[417.95px]"
+              className="pointer-events-none absolute right-0 top-0 z-0 h-[201px] w-[220px] md:h-[275px] md:w-[300px] laptop:h-[275px] laptop:w-[300px] desktop:right-[80.55px] desktop:top-[100px] desktop:h-[382.73px] desktop:w-[417.95px]"
             />
 
             {/* Right mockup column — the width ladder is Figma-only and non-decreasing:
