@@ -366,4 +366,30 @@ describe("ProductsSection", () => {
       expect(card.className).toContain("laptop:border-r-0");
     }
   });
+
+  // BC-189 AC4 — 14px body copy line-height. Figma specifies 150% at all three
+  // frames (390, 1440, 1920) for products body copy, so this is a single value
+  // and NOT a ladder. `leading-relaxed` (1.625 -> 22.75px on 14px) was the
+  // defect; any responsive `leading-` variant would invent a ladder the design
+  // does not have.
+  it("subheading body copy renders 150% line-height, not leading-relaxed", () => {
+    render(<ProductsSection />);
+    const el = screen.getByTestId("products-subheading");
+    expect(el.className).toContain("leading-[150%]");
+    expect(el.className).not.toMatch(/(?:^|\s)leading-(?:tight|snug|normal|relaxed|loose)(?:\s|$)/);
+    expect(el.className).not.toMatch(/leading-\[\d+px\]/);
+    expect(el.className).not.toMatch(/(?:sm|md|lg|xl|2xl|laptop|desktop):leading-/);
+  });
+
+  it("every product card description renders 150% line-height, not leading-relaxed", () => {
+    render(<ProductsSection />);
+    const descriptions = screen.getAllByTestId(/^product-description-/);
+    expect(descriptions.length).toBeGreaterThan(0);
+    for (const el of descriptions) {
+      expect(el.className).toContain("leading-[150%]");
+      expect(el.className).not.toMatch(/(?:^|\s)leading-(?:tight|snug|normal|relaxed|loose)(?:\s|$)/);
+      expect(el.className).not.toMatch(/leading-\[\d+px\]/);
+      expect(el.className).not.toMatch(/(?:sm|md|lg|xl|2xl|laptop|desktop):leading-/);
+    }
+  });
 });

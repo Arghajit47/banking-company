@@ -77,7 +77,7 @@ export function ProductsSection() {
             </h2>
             <p
               data-testid="products-subheading"
-              className="text-[14px] font-light leading-relaxed text-[#B3B3B3] md:text-[16px] desktop:text-[18px]"
+              className="text-[14px] font-light leading-[150%] text-[#B3B3B3] md:text-[16px] desktop:text-[18px]"
             >
               Discover a range of comprehensive and customizable banking products
               at YourBank, designed to suit your unique financial needs and
@@ -158,7 +158,7 @@ export function ProductsSection() {
                 </div>
                 <p
                   data-testid={`product-description-${product.id}`}
-                  className="text-[14px] font-light leading-relaxed text-[#B3B3B3] md:text-[16px] desktop:text-[18px]"
+                  className="text-[14px] font-light leading-[150%] text-[#B3B3B3] md:text-[16px] desktop:text-[18px]"
                 >
                   {product.description}
                 </p>

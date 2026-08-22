@@ -140,7 +140,7 @@ export function TestimonialsSection() {
               </h2>
               <p
                 data-testid="testimonials-subheading"
-                className="mt-3 text-[14px] font-light leading-relaxed text-[#B3B3B3] desktop:text-[18px]"
+                className="mt-3 text-[14px] font-light leading-[150%] text-[#B3B3B3] desktop:text-[18px]"
               >
                 Discover how YourBank has transformed lives with innovative digital
                 solutions and personalized customer service. See why our clients
@@ -244,7 +244,7 @@ export function TestimonialsSection() {
             </h2>
             <p
               data-testid="testimonials-subheading"
-              className="mt-3 text-[14px] font-light leading-relaxed text-[#B3B3B3] desktop:text-[18px]"
+              className="mt-3 text-[14px] font-light leading-[150%] text-[#B3B3B3] desktop:text-[18px]"
             >
               Discover how YourBank has transformed lives with innovative digital
               solutions and personalized customer service. See why our clients
@@ -341,7 +341,7 @@ export function TestimonialsSection() {
                   </div>
                   <p
                     data-testid="testimonials-card-quote"
-                    className={`flex-1 text-[14px] font-normal leading-relaxed md:text-[16px] desktop:text-[18px] ${
+                    className={`flex-1 text-[14px] font-normal leading-[150%] md:text-[16px] desktop:text-[18px] ${
                       isCenter ? "text-white" : "text-[#B3B3B3]"
                     }`}
                   >

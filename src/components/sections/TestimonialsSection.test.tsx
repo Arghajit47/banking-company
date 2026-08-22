@@ -383,4 +383,41 @@ describe("TestimonialsSection", () => {
       expect(inner?.className).not.toContain("xl:px-12");
     });
   });
+
+  // BC-189 AC4 — 14px body copy line-height. Figma specifies 150% at all three
+  // frames (390, 1440, 1920), so this is a single value and NOT a ladder.
+  // `leading-relaxed` (1.625 -> 22.75px on 14px) was the defect.
+  it("subheading body copy renders 150% line-height, not leading-relaxed", () => {
+    render(<TestimonialsSection />);
+    const el = screen.getByTestId("testimonials-subheading");
+    expect(el.className).toContain("leading-[150%]");
+    expect(el.className).not.toMatch(/(?:^|\s)leading-(?:tight|snug|normal|relaxed|loose)(?:\s|$)/);
+    expect(el.className).not.toMatch(/leading-\[\d+px\]/);
+    expect(el.className).not.toMatch(/(?:sm|md|lg|xl|2xl|laptop|desktop):leading-/);
+  });
+
+  // The skeleton branch renders a second subheading with the same testid. It is
+  // what the user sees on first paint, so it must carry the identical value —
+  // if only the loaded branch is fixed, first paint stays at 22.75px.
+  it("subheading renders 150% line-height in the loading skeleton branch", () => {
+    vi.mocked(useSWR).mockReturnValue({ data: undefined, isLoading: true, error: undefined } as ReturnType<typeof useSWR>);
+    render(<TestimonialsSection />);
+    const el = screen.getByTestId("testimonials-subheading");
+    expect(el.className).toContain("leading-[150%]");
+    expect(el.className).not.toMatch(/(?:^|\s)leading-(?:tight|snug|normal|relaxed|loose)(?:\s|$)/);
+    expect(el.className).not.toMatch(/leading-\[\d+px\]/);
+    expect(el.className).not.toMatch(/(?:sm|md|lg|xl|2xl|laptop|desktop):leading-/);
+  });
+
+  it("every testimonial card quote renders 150% line-height, not leading-relaxed", () => {
+    render(<TestimonialsSection />);
+    const quotes = screen.getAllByTestId("testimonials-card-quote");
+    expect(quotes.length).toBeGreaterThan(0);
+    for (const el of quotes) {
+      expect(el.className).toContain("leading-[150%]");
+      expect(el.className).not.toMatch(/(?:^|\s)leading-(?:tight|snug|normal|relaxed|loose)(?:\s|$)/);
+      expect(el.className).not.toMatch(/leading-\[\d+px\]/);
+      expect(el.className).not.toMatch(/(?:sm|md|lg|xl|2xl|laptop|desktop):leading-/);
+    }
+  });
 });

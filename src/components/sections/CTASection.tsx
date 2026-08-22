@@ -113,7 +113,7 @@ export function CTASection({
                 </h2>
                 <p
                   data-testid="cta-body"
-                  className="mt-3 text-[14px] font-light leading-relaxed text-[#B3B3B3] md:text-[16px] desktop:text-[18px]"
+                  className="mt-3 text-[14px] font-light leading-[150%] text-[#B3B3B3] md:text-[16px] desktop:text-[18px]"
                 >
                   {config.body}
                 </p>

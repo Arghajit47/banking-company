@@ -204,4 +204,16 @@ describe("CTASection", () => {
     const textContainer = heading.closest("[class*='w-full']");
     expect(textContainer?.className).not.toContain("max-w-3xl");
   });
+
+  // BC-189 AC4 — 14px body copy line-height. Figma specifies 150% at all three
+  // frames (390, 1440, 1920) for CTA body copy, so this is a single value and
+  // NOT a ladder. `leading-relaxed` (1.625 -> 22.75px on 14px) was the defect.
+  it("body copy renders 150% line-height, not leading-relaxed", () => {
+    render(<CTASection />);
+    const el = screen.getByTestId("cta-body");
+    expect(el.className).toContain("leading-[150%]");
+    expect(el.className).not.toMatch(/(?:^|\s)leading-(?:tight|snug|normal|relaxed|loose)(?:\s|$)/);
+    expect(el.className).not.toMatch(/leading-\[\d+px\]/);
+    expect(el.className).not.toMatch(/(?:sm|md|lg|xl|2xl|laptop|desktop):leading-/);
+  });
 });
