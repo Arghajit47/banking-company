@@ -141,7 +141,7 @@ export function Footer() {
     >
       <div className="mx-auto max-w-[1596px] px-4 pt-[50px] pb-[30px] laptop:px-20 laptop:pt-[60px] desktop:px-[162px] desktop:pt-[100px] desktop:pb-[50px]">
         {/* Top: logo + nav */}
-        <div className="flex flex-col items-center gap-[30px] laptop:gap-[40px] desktop:gap-[50px]">
+        <div className="flex flex-col items-center gap-[24px] laptop:gap-[40px] desktop:gap-[50px]">
           <Link
             href="/"
             data-testid="footer-logo"
@@ -172,7 +172,7 @@ export function Footer() {
           </nav>
         </div>
 
-        <hr className="my-[50px] border-[#262626]" />
+        <hr className="my-[30px] border-[#262626] laptop:my-[40px] desktop:my-[50px]" />
 
         {/* Contact row */}
         <div
@@ -210,7 +210,7 @@ export function Footer() {
           </span>
         </div>
 
-        <hr className="my-[50px] border-[#262626]" />
+        <hr className="my-[30px] border-[#262626] laptop:my-[40px] desktop:my-[50px]" />
 
         {/* Bottom row */}
         <div className="flex flex-col items-center justify-between gap-8 xl:flex-row">
