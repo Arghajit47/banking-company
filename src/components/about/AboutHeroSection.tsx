@@ -81,20 +81,20 @@ export function AboutHeroSection() {
           )}
           <p
             data-testid="about-hero-label"
-            className="font-[var(--font-urbanist)] text-[14px] font-normal leading-[150%] text-white md:text-[20px] laptop:text-[18px] desktop:text-[20px]"
+            className="font-[var(--font-lexend)] text-[14px] font-normal leading-[150%] text-white md:text-[20px] laptop:text-[18px] desktop:text-[20px]"
           >
             {LABEL}
           </p>
           <h1
             data-testid="about-hero-heading"
-            className="font-[var(--font-urbanist)] text-[28px] font-medium leading-[130%] md:text-[48px] desktop:text-[58px]"
+            className="font-[var(--font-lexend)] text-[28px] font-medium leading-[130%] md:text-[48px] desktop:text-[58px]"
           >
             <span className="text-white">{data.headline}</span>
             <span className="text-[#CAFF33]">{data.subheadline}</span>
           </h1>
           <p
             data-testid="about-hero-paragraph"
-            className="font-[var(--font-urbanist)] text-[14px] font-light leading-[150%] text-[#B3B3B3] md:text-[18px] laptop:text-[16px] desktop:text-[18px]"
+            className="font-[var(--font-lexend)] text-[14px] font-light leading-[150%] text-[#B3B3B3] md:text-[18px] laptop:text-[16px] desktop:text-[18px]"
           >
             {data.body}
           </p>
