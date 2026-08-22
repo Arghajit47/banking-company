@@ -380,6 +380,40 @@ describe("FeaturesSection (SWR integration)", () => {
     }
   });
 
+  // BC-189: the feature TAB ladder is 14/14/18 @400. Per-node reads:
+  //   390  112:4852 / 112:4854 / 112:4856 = 14/400
+  //   1440 108:2562 / 108:2564 / 108:2566 = 14/400   <- 14, NOT 16
+  //   1920 41:80    / 41:127   / 41:129   = 18/400
+  // Because 390 and 1440 agree there is no `md:` tier. `text-lg` previously pinned
+  // every width to 18px, the 1920 value.
+  it("gives the feature tabs the full 14/14/18 ladder and no invented md tier", () => {
+    render(<FeaturesSection />);
+    const tabs = Array.from(
+      document.querySelectorAll('[data-testid^="features-tab-"]')
+    );
+    expect(tabs.length).toBe(3);
+    for (const tab of tabs) {
+      expect(tab.className).toContain("text-[14px]");
+      expect(tab.className).toContain("desktop:text-[18px]");
+      expect(tab.className).not.toContain("text-lg");
+      expect(tab.className).not.toContain("md:text-[");
+      expect(tab.className).not.toContain("laptop:text-[");
+    }
+  });
+
+  // The feature CARD heading is a different node from the tab and legitimately reaches
+  // 22px at 1920 (41:130 / 41:141 = 22/400), matching 18/18/22. Guard it so the tab fix
+  // above is never "tidied" into it.
+  it("keeps the 18/18/22 card-heading ladder distinct from the tab ladder", () => {
+    render(<FeaturesSection />);
+    for (const title of Array.from(
+      document.querySelectorAll('[data-testid^="feature-card-title-"]')
+    )) {
+      expect(title.className).toContain("text-[18px]");
+      expect(title.className).toContain("desktop:text-[22px]");
+    }
+  });
+
   // The skeleton card renders no title element, so the weight is declared in exactly
   // one place. If a second title class string appears, this stops the guard above
   // from silently passing on only some of the rendered titles.

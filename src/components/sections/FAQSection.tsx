@@ -39,7 +39,7 @@ function FAQSkeleton() {
               data-testid="faq-question"
               className="h-4 w-3/4 animate-pulse rounded bg-[#333333]"
             />
-            <hr data-testid="faq-separator" className="my-4 border-[#999999]/30" />
+            <hr data-testid="faq-separator" className="my-4 border-[#B3B3B3]/30" />
             <div
               data-testid="faq-answer"
               className="h-20 w-full animate-pulse rounded bg-[#333333]"
@@ -75,12 +75,12 @@ export function FAQSection({ page = "home" }: FAQSectionProps) {
       aria-labelledby="faq-heading"
       className="w-full bg-[#1A1A1A]"
     >
-      <div className="mx-auto max-w-[1920px] px-4 py-12 md:px-6 md:py-16 lg:px-8 lg:py-20 xl:px-12">
+      <div className="mx-auto max-w-[1920px] py-10 laptop:py-[60px] desktop:py-[75px]">
         {showSkeleton ? (
           <FAQSkeleton />
         ) : isEmpty ? (
           <div className="flex h-64 items-center justify-center">
-            <p data-testid="faq-empty-state" className="text-[#999999]">
+            <p data-testid="faq-empty-state" className="text-[#B3B3B3]">
               No FAQs available at the moment.
             </p>
           </div>
@@ -98,7 +98,7 @@ export function FAQSection({ page = "home" }: FAQSectionProps) {
               </h2>
               <p
                 data-testid="faq-subheading"
-                className="mt-3 text-sm leading-relaxed text-[#999999] sm:text-base"
+                className="mt-3 text-[14px] font-light leading-relaxed text-[#B3B3B3] md:text-[16px] desktop:text-[18px]"
               >
                 Still you have any questions? Contact our Team via{" "}
                 <a
@@ -121,17 +121,17 @@ export function FAQSection({ page = "home" }: FAQSectionProps) {
                   >
                     <p
                       data-testid="faq-question"
-                      className="text-base font-medium text-white"
+                      className="text-[18px] font-medium text-white desktop:text-[20px]"
                     >
                       {faq.question}
                     </p>
                     <hr
                       data-testid="faq-separator"
-                      className="my-4 border-[#999999]/30"
+                      className="my-4 border-[#B3B3B3]/30"
                     />
                     <p
                       data-testid="faq-answer"
-                      className="text-sm leading-relaxed text-[#999999]"
+                      className="text-[14px] font-light leading-relaxed text-[#B3B3B3] md:text-[16px] desktop:text-[18px]"
                     >
                       {faq.answer}
                     </p>
@@ -152,7 +152,7 @@ export function FAQSection({ page = "home" }: FAQSectionProps) {
                 type="button"
                 data-testid="faq-load-all"
                 onClick={() => setShowAll((prev) => !prev)}
-                className="flex items-center gap-2 rounded-[82px] border border-[#CAFF33] px-8 py-4 text-sm font-medium text-[#CAFF33] transition-all hover:bg-[#CAFF33]/10 focus:outline-none focus:ring-2 focus:ring-[#CAFF33] focus:ring-offset-2 focus:ring-offset-[#1A1A1A]"
+                className="flex items-center gap-2 rounded-[82px] border border-[#CAFF33] px-8 py-4 text-[14px] font-normal text-white transition-all hover:bg-[#CAFF33]/10 focus:outline-none focus:ring-2 focus:ring-[#CAFF33] focus:ring-offset-2 focus:ring-offset-[#1A1A1A] desktop:text-[18px]"
               >
                 {showAll ? "Show Less" : "Load All FAQ's"}
                 <Image

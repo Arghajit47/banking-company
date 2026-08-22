@@ -58,7 +58,7 @@ function FeatureCard({ feature }: { feature: Feature }) {
       </div>
       <p
         data-testid={`feature-card-description-${feature.id}`}
-        className="text-lg font-light text-[#B3B3B3]"
+        className="text-[14px] font-light text-[#B3B3B3] md:text-[16px] desktop:text-[18px]"
       >
         {feature.description}
       </p>
@@ -86,7 +86,7 @@ function CardsGrid({
     return (
       <div
         data-testid="features-cards-error"
-        className="flex flex-1 items-center justify-center rounded-[20px] bg-[#1C1C1C] p-[50px] text-[#B3B3B3]"
+        className="flex flex-1 items-center justify-center rounded-[20px] bg-[#1C1C1C] p-[50px] text-[14px] font-light text-[#B3B3B3] md:text-[16px] desktop:text-[18px]"
       >
         <p>Failed to load features. Please try again later.</p>
       </div>
@@ -127,7 +127,7 @@ export function FeaturesSection() {
   return (
     <section
       data-testid="features-section"
-      className="bg-[#1A1A1A] px-4 py-16 md:px-8 lg:px-12 laptop:px-20 desktop:px-[162px]"
+      className="py-10 laptop:py-[60px] desktop:py-[75px]"
     >
       <div className="mb-[50px] lg:pr-[300px]" data-testid="features-header">
         <h2
@@ -138,7 +138,7 @@ export function FeaturesSection() {
         </h2>
         <p
           data-testid="features-subheading"
-          className="text-lg font-light text-[#B3B3B3]"
+          className="text-[14px] font-light text-[#B3B3B3] md:text-[16px] desktop:text-[18px]"
         >
           Experience a host of powerful features that redefine the way you bank.
           From intuitive account management to seamless transactions, our
@@ -160,7 +160,7 @@ export function FeaturesSection() {
                 data-testid={`features-tab-${tab.toLowerCase().replace(/\s+/g, "-")}`}
                 onClick={() => setActiveTab(tab)}
                 aria-pressed={isActive}
-                className={`rounded-[10px] px-6 py-[18px] text-left text-lg font-normal transition-colors ${
+                className={`rounded-[10px] px-6 py-[18px] text-left text-[14px] font-normal transition-colors desktop:text-[18px] ${
                   isActive
                     ? "bg-[#1A1A1A] text-[#CAFF33]"
                     : "text-white hover:text-[#CAFF33]"

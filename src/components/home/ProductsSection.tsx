@@ -41,7 +41,7 @@ function ProductsErrorFallback() {
       data-testid="products-error-state"
       className="flex h-64 w-full items-center justify-center"
     >
-      <p className="text-[#999999]">
+      <p className="text-[#B3B3B3]">
         Unable to load products. Please try again later.
       </p>
     </div>
@@ -63,7 +63,7 @@ export function ProductsSection() {
   return (
     <section
       data-testid="products-section"
-      className="w-full bg-[#1E1E1E] px-4 py-16 font-[var(--font-lexend)] md:px-8 lg:px-12 laptop:px-20 desktop:px-[162px]"
+      className="w-full py-10 font-[var(--font-lexend)] laptop:py-[60px] desktop:py-[75px]"
     >
       <div className="mx-auto max-w-[1920px]">
         {/* Header */}
@@ -77,7 +77,7 @@ export function ProductsSection() {
             </h2>
             <p
               data-testid="products-subheading"
-              className="text-sm leading-relaxed text-[#999999] sm:text-base"
+              className="text-[14px] font-light leading-relaxed text-[#B3B3B3] md:text-[16px] desktop:text-[18px]"
             >
               Discover a range of comprehensive and customizable banking products
               at YourBank, designed to suit your unique financial needs and
@@ -96,8 +96,8 @@ export function ProductsSection() {
               onClick={() => setActiveTab("individuals")}
               className={
                 activeTab === "individuals"
-                  ? "rounded-full bg-[#CAFF33] px-5 py-2 text-sm font-medium text-[#1E1E1E] transition hover:brightness-110"
-                  : "rounded-full px-5 py-2 text-sm font-medium text-[#999999] transition hover:text-white"
+                  ? "rounded-full bg-[#CAFF33] px-5 py-2 text-[14px] font-normal text-[#1C1C1C] transition hover:brightness-110 desktop:text-[18px]"
+                  : "rounded-full px-5 py-2 text-[14px] font-normal text-white transition hover:text-[#CAFF33] desktop:text-[18px]"
               }
             >
               For Individuals
@@ -108,8 +108,8 @@ export function ProductsSection() {
               onClick={() => setActiveTab("businesses")}
               className={
                 activeTab === "businesses"
-                  ? "rounded-full bg-[#CAFF33] px-5 py-2 text-sm font-medium text-[#1E1E1E] transition hover:brightness-110"
-                  : "rounded-full px-5 py-2 text-sm font-medium text-[#999999] transition hover:text-white"
+                  ? "rounded-full bg-[#CAFF33] px-5 py-2 text-[14px] font-normal text-[#1C1C1C] transition hover:brightness-110 desktop:text-[18px]"
+                  : "rounded-full px-5 py-2 text-[14px] font-normal text-white transition hover:text-[#CAFF33] desktop:text-[18px]"
               }
             >
               For Businesses
@@ -151,14 +151,14 @@ export function ProductsSection() {
                   </div>
                   <h3
                     data-testid={`product-title-${product.id}`}
-                    className="text-lg font-medium text-white sm:text-xl"
+                    className="text-[20px] font-normal text-white desktop:text-[24px]"
                   >
                     {product.title}
                   </h3>
                 </div>
                 <p
                   data-testid={`product-description-${product.id}`}
-                  className="text-sm leading-relaxed text-[#999999]"
+                  className="text-[14px] font-light leading-relaxed text-[#B3B3B3] md:text-[16px] desktop:text-[18px]"
                 >
                   {product.description}
                 </p>

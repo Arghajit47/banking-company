@@ -126,7 +126,7 @@ export function TestimonialsSection() {
         aria-busy="true"
         className="w-full bg-[#1A1A1A]"
       >
-        <div className="mx-auto max-w-[1920px] px-4 py-12 md:px-6 md:py-16 lg:px-8 lg:py-20 xl:px-12">
+        <div className="mx-auto max-w-[1920px] py-10 laptop:py-[60px] desktop:py-[75px]">
           {/* Header row */}
           <div className="mb-10 flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
             <div className="max-w-xl">
@@ -140,7 +140,7 @@ export function TestimonialsSection() {
               </h2>
               <p
                 data-testid="testimonials-subheading"
-                className="mt-3 text-sm leading-relaxed text-[#999999] sm:text-base"
+                className="mt-3 text-[14px] font-light leading-relaxed text-[#B3B3B3] desktop:text-[18px]"
               >
                 Discover how YourBank has transformed lives with innovative digital
                 solutions and personalized customer service. See why our clients
@@ -167,7 +167,7 @@ export function TestimonialsSection() {
                 ref={(el) => { tabRefs.current.individuals = el; }}
                 onKeyDown={handleTabKeyDown}
                 onClick={() => selectTab("individuals")}
-                className={`rounded-[140px] px-6 py-[14px] text-[18px] font-normal transition-all focus:outline-none focus:ring-2 focus:ring-[#CAFF33] focus:ring-offset-2 focus:ring-offset-[#1C1C1C] ${
+                className={`rounded-[140px] px-6 py-[14px] text-[14px] font-normal transition-all focus:outline-none focus:ring-2 focus:ring-[#CAFF33] focus:ring-offset-2 focus:ring-offset-[#1C1C1C] desktop:text-[18px] ${
                   activeTab === "individuals"
                     ? "bg-[#CAFF33] text-[#1C1C1C]"
                     : "bg-transparent text-white"
@@ -186,7 +186,7 @@ export function TestimonialsSection() {
                 ref={(el) => { tabRefs.current.businesses = el; }}
                 onKeyDown={handleTabKeyDown}
                 onClick={() => selectTab("businesses")}
-                className={`rounded-[140px] px-6 py-[14px] text-[18px] font-normal transition-all focus:outline-none focus:ring-2 focus:ring-[#CAFF33] focus:ring-offset-2 focus:ring-offset-[#1C1C1C] ${
+                className={`rounded-[140px] px-6 py-[14px] text-[14px] font-normal transition-all focus:outline-none focus:ring-2 focus:ring-[#CAFF33] focus:ring-offset-2 focus:ring-offset-[#1C1C1C] desktop:text-[18px] ${
                   activeTab === "businesses"
                     ? "bg-[#CAFF33] text-[#1C1C1C]"
                     : "bg-transparent text-white"
@@ -230,7 +230,7 @@ export function TestimonialsSection() {
       aria-labelledby="testimonials-heading"
       className="w-full bg-[#1A1A1A]"
     >
-      <div className="mx-auto max-w-[1920px] px-4 py-12 md:px-6 md:py-16 lg:px-8 lg:py-20 xl:px-12">
+      <div className="mx-auto max-w-[1920px] py-10 laptop:py-[60px] desktop:py-[75px]">
         {/* Header row */}
         <div className="mb-10 flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
           <div className="max-w-xl">
@@ -244,7 +244,7 @@ export function TestimonialsSection() {
             </h2>
             <p
               data-testid="testimonials-subheading"
-              className="mt-3 text-sm leading-relaxed text-[#999999] sm:text-base"
+              className="mt-3 text-[14px] font-light leading-relaxed text-[#B3B3B3] desktop:text-[18px]"
             >
               Discover how YourBank has transformed lives with innovative digital
               solutions and personalized customer service. See why our clients
@@ -271,7 +271,7 @@ export function TestimonialsSection() {
               ref={(el) => { tabRefs.current.individuals = el; }}
               onKeyDown={handleTabKeyDown}
               onClick={() => selectTab("individuals")}
-              className={`rounded-[140px] px-6 py-[14px] text-[18px] font-normal transition-all focus:outline-none focus:ring-2 focus:ring-[#CAFF33] focus:ring-offset-2 focus:ring-offset-[#1C1C1C] ${
+              className={`rounded-[140px] px-6 py-[14px] text-[14px] font-normal transition-all focus:outline-none focus:ring-2 focus:ring-[#CAFF33] focus:ring-offset-2 focus:ring-offset-[#1C1C1C] desktop:text-[18px] ${
                 activeTab === "individuals"
                   ? "bg-[#CAFF33] text-[#1C1C1C]"
                   : "bg-transparent text-white"
@@ -290,7 +290,7 @@ export function TestimonialsSection() {
               ref={(el) => { tabRefs.current.businesses = el; }}
               onKeyDown={handleTabKeyDown}
               onClick={() => selectTab("businesses")}
-              className={`rounded-[140px] px-6 py-[14px] text-[18px] font-normal transition-all focus:outline-none focus:ring-2 focus:ring-[#CAFF33] focus:ring-offset-2 focus:ring-offset-[#1C1C1C] ${
+              className={`rounded-[140px] px-6 py-[14px] text-[14px] font-normal transition-all focus:outline-none focus:ring-2 focus:ring-[#CAFF33] focus:ring-offset-2 focus:ring-offset-[#1C1C1C] desktop:text-[18px] ${
                 activeTab === "businesses"
                   ? "bg-[#CAFF33] text-[#1C1C1C]"
                   : "bg-transparent text-white"
@@ -341,15 +341,15 @@ export function TestimonialsSection() {
                   </div>
                   <p
                     data-testid="testimonials-card-quote"
-                    className={`flex-1 text-sm leading-relaxed md:text-base ${
-                      isCenter ? "font-semibold text-white" : "text-[#999999]"
+                    className={`flex-1 text-[14px] font-normal leading-relaxed md:text-[16px] desktop:text-[18px] ${
+                      isCenter ? "text-white" : "text-[#B3B3B3]"
                     }`}
                   >
                     {testimonial.quote}
                   </p>
                   <p
                     data-testid="testimonials-card-name"
-                    className="mt-6 text-sm font-medium text-[#CAFF33]"
+                    className="mt-6 text-[16px] font-medium text-[#CAFF33] desktop:text-[18px]"
                   >
                     {testimonial.name}
                   </p>

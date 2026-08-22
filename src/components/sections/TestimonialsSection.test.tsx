@@ -346,5 +346,41 @@ describe("TestimonialsSection", () => {
       expect(screen.getByTestId("testimonials-tab-businesses").className).toContain("bg-[#CAFF33]");
       expect(screen.getByTestId("testimonials-tab-individuals").className).toContain("bg-transparent");
     });
+
+    // BC-189: this component has TWO render branches that both emit
+    // data-testid="testimonials-section" (the mounting/loading branch and the loaded
+    // branch). A class fixed in only one of them leaves first paint defective, so the
+    // ladder is asserted on the branch that renders while unmounted as well.
+    it("applies the 14/14/18 tab ladder in the loading branch too", () => {
+      render(<TestimonialsSection />);
+      for (const id of ["testimonials-tab-individuals", "testimonials-tab-businesses"]) {
+        const tab = screen.getByTestId(id);
+        expect(tab.className).toContain("text-[14px]");
+        expect(tab.className).toContain("desktop:text-[18px]");
+        // unprefixed 18px (the 1920 value at base) must be gone; the desktop: form stays
+        expect(tab.className).not.toMatch(/(?:^|\s)text-\[18px\](?:\s|$)/);
+      }
+    });
+
+    it("applies the subheading ladder and the vertical rhythm in the loading branch too", () => {
+      render(<TestimonialsSection />);
+      const sub = screen.getByTestId("testimonials-subheading");
+      // Per node the testimonials subheading is 14 at BOTH 390 and 1440 (108:2645),
+      // unlike the products/FAQ subheadings which step to 16 — so no md: tier.
+      expect(sub.className).toContain("text-[14px]");
+      expect(sub.className).toContain("desktop:text-[18px]");
+      expect(sub.className).toContain("text-[#B3B3B3]");
+      expect(sub.className).not.toContain("md:text-[");
+      expect(sub.className).not.toContain("#999999");
+
+      const inner = screen.getByTestId("testimonials-section").firstElementChild;
+      // Half of the 80/120/150 inter-section gap; the section no longer carries the
+      // page gutter, which now lives once on the home page container.
+      expect(inner?.className).toContain("py-10");
+      expect(inner?.className).toContain("laptop:py-[60px]");
+      expect(inner?.className).toContain("desktop:py-[75px]");
+      expect(inner?.className).not.toContain("px-4");
+      expect(inner?.className).not.toContain("xl:px-12");
+    });
   });
 });

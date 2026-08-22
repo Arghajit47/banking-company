@@ -157,6 +157,35 @@ describe("Footer", () => {
     expect(screen.getByTestId("footer-email")).toHaveTextContent("hello@skillbridge.com");
   });
 
+  // BC-189: footer nav links are 14/16/18 @400 #E4E4E7. Per-node reads:
+  //   390  113:5007-5010 = 14/400 #E4E4E7
+  //   1440 108:2712-2715 = 16/400 #E4E4E7   <- 16, NOT 14
+  //   1920 11:89123-89126 = 18/400 #E4E4E7
+  // The 14/14/18 #FFFFFF variant belongs to the NAVBAR (104:611-614, 5:27283-27286),
+  // which is a different component and is not touched by this ticket.
+  it("gives footer nav links the full 14/16/18 ladder", () => {
+    render(<Footer />);
+    const link = screen.getByTestId("footer-nav-home");
+    expect(link.className).toContain("text-[14px]");
+    expect(link.className).toContain("md:text-[16px]");
+    expect(link.className).toContain("desktop:text-[18px]");
+    expect(link.className).not.toContain("text-base");
+  });
+
+  // Footer legal/copyright are 14/14/18 @300 #B3B3B3 — a different ladder and colour
+  // from the nav links above (they were @400 #E4E4E7).
+  it("gives footer legal copy the 14/14/18 @300 #B3B3B3 ladder", () => {
+    render(<Footer />);
+    for (const id of ["footer-copyright", "footer-legal"]) {
+      const el = screen.getByTestId(id);
+      expect(el.className).toContain("text-[14px]");
+      expect(el.className).toContain("desktop:text-[18px]");
+      expect(el.className).toContain("font-light");
+      expect(el.className).toContain("text-[#B3B3B3]");
+      expect(el.className).not.toContain("md:text-[");
+    }
+  });
+
   it("renders fallback during initial hydration guard when unmounted", () => {
     mountedMock = false;
     render(<Footer />);
